@@ -17,7 +17,7 @@
 
 ## 👥 Team Members & Contributions
 
-### Team Lead & Full-Stack Development
+### Full-Stack Development
 **Krishna Madhaparia** (ID: 166980)
 - Complete website backend architecture and API integration
 - Full frontend development with React + TypeScript
