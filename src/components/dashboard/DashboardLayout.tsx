@@ -41,11 +41,20 @@ export const DashboardLayout: React.FC = () => {
     updateTelemetry,
     alerts,
     firebaseConnected,
+    realtimeDataMode,
     addNotification
   } = useStore();
 
   // 1. TELEMETRY SIMULATOR EVENT LOOP (Ticking every 2.5s)
+  // Only run simulator if NOT using real-time data from Firebase
   useEffect(() => {
+    if (realtimeDataMode) {
+      console.log('Using real-time Firebase data, simulator disabled');
+      return;
+    }
+
+    console.log('Using simulated data mode');
+    
     // Immediate initial tick
     SIMULATED_NODES.forEach((node) => {
       const data = generateTelemetry(node);
@@ -60,15 +69,15 @@ export const DashboardLayout: React.FC = () => {
     }, 2500);
 
     return () => clearInterval(interval);
-  }, [updateTelemetry]);
+  }, [updateTelemetry, realtimeDataMode]);
 
-  // 2. DB FIRESTORE ALERTS SYNC (Listens to logged alert collection)
-  useEffect(() => {
-    const unsubscribe = dbService.subscribeToAlerts((dbAlerts) => {
-      useStore.setState({ alerts: dbAlerts });
-    });
-    return () => unsubscribe();
-  }, []);
+  // 2. DB FIRESTORE ALERTS SYNC (Disabled for now)
+  // useEffect(() => {
+  //   const unsubscribe = dbService.subscribeToAlerts((dbAlerts) => {
+  //     useStore.setState({ alerts: dbAlerts });
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
 
   const handleLogout = () => {
     setUser(null);
@@ -216,11 +225,35 @@ export const DashboardLayout: React.FC = () => {
 
           <div className="flex items-center gap-4 relative">
             {/* Connection Sync Indicator */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/5 border border-emerald-500/10">
-              <RefreshCw className="w-3.5 h-3.5 text-emerald-400 animate-spin" style={{ animationDuration: '4s' }} />
-              <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wide">
-                {firebaseConnected ? 'Firebase Live' : 'Demo Mode Sim'}
-              </span>
+            <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border ${
+              realtimeDataMode 
+                ? 'bg-emerald-500/10 border-emerald-500/20' 
+                : firebaseConnected 
+                ? 'bg-cyan-500/10 border-cyan-500/20' 
+                : 'bg-slate-500/10 border-slate-500/20'
+            }`}>
+              {realtimeDataMode ? (
+                <>
+                  <RefreshCw className="w-3.5 h-3.5 text-emerald-400 animate-spin" style={{ animationDuration: '2s' }} />
+                  <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wide">
+                    Real-Time Data
+                  </span>
+                </>
+              ) : firebaseConnected ? (
+                <>
+                  <AlertCircle className="w-3.5 h-3.5 text-cyan-400" />
+                  <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-wide">
+                    Firebase Connected
+                  </span>
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="w-3.5 h-3.5 text-slate-400 animate-spin" style={{ animationDuration: '4s' }} />
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                    Demo Mode Sim
+                  </span>
+                </>
+              )}
             </div>
 
             {/* Notifications Dropdown Toggle */}

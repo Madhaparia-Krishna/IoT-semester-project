@@ -21,10 +21,18 @@ import {
   Firestore,
   addDoc
 } from 'firebase/firestore';
+import {
+  getDatabase,
+  ref,
+  onValue,
+  off
+} from 'firebase/database';
+import type { Database } from 'firebase/database';
 
 export interface FirebaseConfigSchema {
   apiKey: string;
   authDomain: string;
+  databaseURL?: string;
   projectId: string;
   storageBucket: string;
   messagingSenderId: string;
@@ -35,6 +43,7 @@ export interface FirebaseConfigSchema {
 let appInstance: FirebaseApp | null = null;
 let authInstance: Auth | null = null;
 let dbInstance: Firestore | null = null;
+let realtimeDbInstance: Database | null = null;
 
 // Try to load config from localStorage first, then fallback to import.meta.env
 const STORAGE_KEY = 'vermiq_firebase_config';
@@ -51,6 +60,7 @@ export function getSavedFirebaseConfig(): FirebaseConfigSchema | null {
   const envConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
     authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
     projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
     storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
     messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
@@ -83,6 +93,7 @@ export function initFirebaseConnection(): boolean {
     appInstance = null;
     authInstance = null;
     dbInstance = null;
+    realtimeDbInstance = null;
     return false;
   }
 
@@ -94,6 +105,13 @@ export function initFirebaseConnection(): boolean {
     }
     authInstance = getAuth(appInstance);
     dbInstance = getFirestore(appInstance);
+    
+    // Initialize Realtime Database if databaseURL is provided
+    if (config.databaseURL) {
+      realtimeDbInstance = getDatabase(appInstance);
+      console.log('Firebase Realtime Database successfully initialized!');
+    }
+    
     console.log('Firebase successfully initialized!');
     return true;
   } catch (err) {
@@ -101,6 +119,7 @@ export function initFirebaseConnection(): boolean {
     appInstance = null;
     authInstance = null;
     dbInstance = null;
+    realtimeDbInstance = null;
     return false;
   }
 }
@@ -341,5 +360,51 @@ export const dbService = {
     if (!isFirebaseConfigured()) {
       localStorage.setItem('vermiq_mock_alerts', '[]');
     }
+  }
+};
+
+// Realtime Telemetry Service
+export interface RealtimeTelemetryReading {
+  dht22_humidity: number;
+  dht22_temp: number;
+  moisture_percent: number;
+  moisture_raw: number;
+  ph: number;
+  ph_raw: number;
+  ph_voltage: number;
+}
+
+export const realtimeTelemetryService = {
+  // Subscribe to real-time sensor data updates
+  subscribeToLatestReadings: (callback: (data: RealtimeTelemetryReading | null) => void) => {
+    if (realtimeDbInstance) {
+      const latestReadingsRef = ref(realtimeDbInstance, 'latest_readings');
+      
+      const unsubscribe = onValue(latestReadingsRef, (snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val() as RealtimeTelemetryReading;
+          callback(data);
+        } else {
+          console.warn('No data available at latest_readings');
+          callback(null);
+        }
+      }, (error) => {
+        console.error('Error subscribing to latest_readings:', error);
+        callback(null);
+      });
+
+      // Return unsubscribe function
+      return () => {
+        off(latestReadingsRef);
+      };
+    } else {
+      console.warn('Realtime Database not initialized, cannot subscribe to telemetry');
+      return () => {};
+    }
+  },
+
+  // Check if Realtime Database is available
+  isRealtimeDbAvailable: () => {
+    return realtimeDbInstance !== null;
   }
 };

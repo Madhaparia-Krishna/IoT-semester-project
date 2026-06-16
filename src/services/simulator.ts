@@ -3,6 +3,7 @@ export interface TelemetryReading {
   moisture: number | null;
   temperature: number | null;
   humidity: number | null;
+  ph?: number | null; // Optional pH value from real hardware
   daysElapsed: number;
   harvestStatus: 'Monitoring' | 'Ready Soon' | 'Harvest Ready' | 'Offline';
   status: 'online' | 'offline';

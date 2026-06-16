@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { dbService, isFirebaseConfigured } from '../services/firebase';
+import { dbService, isFirebaseConfigured, realtimeTelemetryService } from '../services/firebase';
 import type { UserSession } from '../services/firebase';
 import { SIMULATED_NODES, generateHistory } from '../services/simulator';
 import type { TelemetryReading } from '../services/simulator';
@@ -43,6 +43,7 @@ interface VermIQState {
   notifications: ToastNotification[];
   settings: ThresholdSettings;
   firebaseConnected: boolean;
+  realtimeDataMode: boolean; // Track if using real Firebase data
   
   // Actions
   setUser: (user: UserSession | null) => void;
@@ -56,6 +57,7 @@ interface VermIQState {
   updateSettings: (newSettings: Partial<ThresholdSettings>) => void;
   checkAlertThresholds: (nodeId: string, reading: TelemetryReading) => void;
   reconnectFirebase: () => void;
+  startRealtimeTelemetry: () => () => void; // Start realtime subscription and return unsubscribe function
 }
 
 const DEFAULT_SETTINGS: ThresholdSettings = {
@@ -87,6 +89,7 @@ export const useStore = create<VermIQState>((set, get) => ({
     }
   })(),
   firebaseConnected: isFirebaseConfigured(),
+  realtimeDataMode: false,
 
   setUser: (user) => set({ user }),
   setAuthLoading: (loading) => set({ authLoading: loading }),
@@ -115,10 +118,10 @@ export const useStore = create<VermIQState>((set, get) => ({
       };
     });
 
-    // Check thresholds to trigger alerts
-    if (reading.status === 'online') {
-      get().checkAlertThresholds(nodeId, reading);
-    }
+    // Alert checking disabled for now
+    // if (reading.status === 'online') {
+    //   get().checkAlertThresholds(nodeId, reading);
+    // }
   },
 
   addNotification: (message, type) => {
@@ -228,6 +231,64 @@ export const useStore = create<VermIQState>((set, get) => ({
   reconnectFirebase: () => {
     const active = isFirebaseConfigured();
     set({ firebaseConnected: active });
+  },
+
+  startRealtimeTelemetry: () => {
+    console.log('🚀 Starting realtime telemetry subscription...');
+    
+    if (!realtimeTelemetryService.isRealtimeDbAvailable()) {
+      console.warn('⚠️ Realtime Database not available, staying in simulation mode');
+      set({ realtimeDataMode: false });
+      return () => {};
+    }
+
+    set({ realtimeDataMode: true });
+    console.log('✅ Realtime Database connected! Listening for sensor updates...');
+
+    // Subscribe to real-time data from Firebase
+    const unsubscribe = realtimeTelemetryService.subscribeToLatestReadings((data) => {
+      if (!data) {
+        console.warn('⚠️ No data received from Firebase Realtime Database');
+        return;
+      }
+
+      const timestamp = new Date().toISOString();
+      console.log(`📊 [${timestamp}] Received realtime data update:`, {
+        temp: data.dht22_temp,
+        humidity: data.dht22_humidity,
+        moisture: data.moisture_percent,
+        ph: data.ph
+      });
+
+      // Map Firebase data to our telemetry format
+      // Using the first node (ESP32-NODE-01) for now, you can modify this to support multiple nodes
+      const nodeId = SIMULATED_NODES[0].id;
+      const node = SIMULATED_NODES[0];
+
+      // Calculate maturity days (you may want to store this in Firebase or calculate based on a start date)
+      const daysElapsed = 45; // You can replace this with actual calculation
+
+      const reading: TelemetryReading = {
+        timestamp: new Date().toISOString(),
+        moisture: data.moisture_percent || null,
+        temperature: data.dht22_temp || null,
+        humidity: data.dht22_humidity || null,
+        ph: data.ph || null, // Include pH from Firebase
+        daysElapsed,
+        harvestStatus: daysElapsed >= node.maturityTotalDays ? 'Harvest Ready' : 
+                      daysElapsed >= node.maturityTotalDays * 0.8 ? 'Ready Soon' : 'Monitoring',
+        status: 'online',
+        rssi: -65, // You may want to add this to your Firebase data
+        battery: 3.9, // You may want to add this to your Firebase data
+      };
+
+      // Update telemetry using existing method which handles history
+      // Alert checking is disabled for now
+      console.log('✨ Updating dashboard with new data...');
+      get().updateTelemetry(nodeId, reading);
+    });
+
+    return unsubscribe;
   }
 }));
 

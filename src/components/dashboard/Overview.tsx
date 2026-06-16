@@ -99,7 +99,7 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
       )}
 
       {/* Real-time Metric Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Moisture */}
         <GlassCard
           variant={getMoistureStatus(nodeReading.moisture) === 'critical' ? 'rose' : getMoistureStatus(nodeReading.moisture) === 'warning' ? 'cyan' : 'emerald'}
@@ -185,6 +185,30 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
             )}
           </div>
         </GlassCard>
+
+        {/* pH Level */}
+        {nodeReading.ph !== undefined && (
+          <GlassCard className="relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-purple-500/10 transition-colors" />
+            <div className="flex justify-between items-start mb-4">
+              <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/25 text-purple-400">
+                <Activity className="w-6 h-6" />
+              </div>
+              <StatusBadge status={nodeReading.status === 'online' ? 'online' : 'offline'} />
+            </div>
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest block">Soil pH Level</span>
+            <div className="flex items-baseline gap-2 mt-2">
+              <h3 className="text-4xl font-display font-extrabold text-white text-glow-purple">
+                {nodeReading.ph !== null ? nodeReading.ph.toFixed(2) : 'N/A'}
+              </h3>
+              {nodeReading.ph !== null && (
+                <span className="text-xs text-slate-400">
+                  {nodeReading.ph >= 6.0 && nodeReading.ph <= 7.5 ? 'Optimal' : 'Monitor'}
+                </span>
+              )}
+            </div>
+          </GlassCard>
+        )}
       </div>
 
       {/* Progress & Stats Details Grid */}

@@ -8,7 +8,7 @@ import ToastContainer from './components/ui/ToastContainer';
 import { Loader2 } from 'lucide-react';
 
 function App() {
-  const { user, setUser, authLoading, setAuthLoading } = useStore();
+  const { user, setUser, authLoading, setAuthLoading, startRealtimeTelemetry } = useStore();
   const [showAuth, setShowAuth] = useState(false);
 
   // Bind Firebase / Local Mock Auth Listener
@@ -25,6 +25,19 @@ function App() {
       }
     };
   }, [setUser, setAuthLoading]);
+
+  // Start real-time telemetry subscription when user is authenticated
+  useEffect(() => {
+    if (user) {
+      console.log('User authenticated, starting real-time telemetry...');
+      const unsubscribe = startRealtimeTelemetry();
+      
+      return () => {
+        console.log('Stopping real-time telemetry subscription...');
+        unsubscribe();
+      };
+    }
+  }, [user, startRealtimeTelemetry]);
 
   // Loading Screen for Authentication
   if (authLoading) {
