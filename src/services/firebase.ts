@@ -15,7 +15,7 @@ import {
   doc,
   setDoc,
   onSnapshot,
-  query,
+  query as firestoreQuery,
   orderBy,
   limit,
   Firestore,
@@ -311,7 +311,7 @@ export const dbService = {
   // Read list of active alerts
   subscribeToAlerts: (callback: (alerts: any[]) => void) => {
     if (isFirebaseConfigured() && dbInstance) {
-      const q = query(collection(dbInstance, 'alerts'), orderBy('timestamp', 'desc'), limit(50));
+      const q = firestoreQuery(collection(dbInstance, 'alerts'), orderBy('timestamp', 'desc'), limit(50));
       return onSnapshot(q, (snapshot) => {
         const list: any[] = [];
         snapshot.forEach((doc) => {
@@ -364,7 +364,10 @@ export const dbService = {
 };
 
 // Realtime Telemetry Service
-export interface RealtimeTelemetryReading {
+export interface FirebaseSensorReading {
+  timestamp_iso: string;
+  timestamp_epoch_ms: number;
+  reading_number: number;
   dht22_humidity: number;
   dht22_temp: number;
   moisture_percent: number;
@@ -372,17 +375,18 @@ export interface RealtimeTelemetryReading {
   ph: number;
   ph_raw: number;
   ph_voltage: number;
+  source: string;
 }
 
 export const realtimeTelemetryService = {
-  // Subscribe to real-time sensor data updates
-  subscribeToLatestReadings: (callback: (data: RealtimeTelemetryReading | null) => void) => {
+  // Subscribe to real-time sensor data updates from latest_readings
+  subscribeToLatestReadings: (callback: (data: FirebaseSensorReading | null) => void) => {
     if (realtimeDbInstance) {
       const latestReadingsRef = ref(realtimeDbInstance, 'latest_readings');
       
-      const unsubscribe = onValue(latestReadingsRef, (snapshot) => {
+      onValue(latestReadingsRef, (snapshot) => {
         if (snapshot.exists()) {
-          const data = snapshot.val() as RealtimeTelemetryReading;
+          const data = snapshot.val() as FirebaseSensorReading;
           callback(data);
         } else {
           console.warn('No data available at latest_readings');
@@ -403,8 +407,79 @@ export const realtimeTelemetryService = {
     }
   },
 
+  // Subscribe to historical readings from readings_history
+  subscribeToReadingsHistory: (callback: (data: FirebaseSensorReading[]) => void, limitCount: number = 200) => {
+    if (realtimeDbInstance) {
+      const historyRef = ref(realtimeDbInstance, 'readings_history');
+      
+      onValue(historyRef, (snapshot) => {
+        if (snapshot.exists()) {
+          const historyObj = snapshot.val();
+          // Convert object to array and sort by timestamp
+          const historyArray: FirebaseSensorReading[] = Object.values(historyObj);
+          
+          // Sort by timestamp_epoch_ms descending (newest first), then take the latest limitCount
+          historyArray.sort((a, b) => b.timestamp_epoch_ms - a.timestamp_epoch_ms);
+          const limitedHistory = historyArray.slice(0, limitCount);
+          
+          // Reverse to have oldest first for charts
+          callback(limitedHistory.reverse());
+        } else {
+          console.warn('No data available at readings_history');
+          callback([]);
+        }
+      }, (error) => {
+        console.error('Error subscribing to readings_history:', error);
+        callback([]);
+      });
+
+      // Return unsubscribe function
+      return () => {
+        off(historyRef);
+      };
+    } else {
+      console.warn('Realtime Database not initialized, cannot subscribe to history');
+      return () => {};
+    }
+  },
+
   // Check if Realtime Database is available
   isRealtimeDbAvailable: () => {
     return realtimeDbInstance !== null;
+  }
+};
+
+// Firestore Telemetry Service (optional backup/alternative)
+export const firestoreTelemetryService = {
+  // Subscribe to sensor_readings collection from Firestore
+  subscribeToSensorReadings: (callback: (data: FirebaseSensorReading[]) => void, limitCount: number = 200) => {
+    if (dbInstance) {
+      const readingsQuery = firestoreQuery(
+        collection(dbInstance, 'sensor_readings'),
+        orderBy('timestamp_epoch_ms', 'desc'),
+        limit(limitCount)
+      );
+      
+      return onSnapshot(readingsQuery, (snapshot) => {
+        const readings: FirebaseSensorReading[] = [];
+        snapshot.forEach((doc) => {
+          readings.push(doc.data() as FirebaseSensorReading);
+        });
+        
+        // Reverse to have oldest first for charts
+        callback(readings.reverse());
+      }, (error) => {
+        console.error('Error subscribing to Firestore sensor_readings:', error);
+        callback([]);
+      });
+    } else {
+      console.warn('Firestore not initialized, cannot subscribe to sensor_readings');
+      return () => {};
+    }
+  },
+
+  // Check if Firestore is available
+  isFirestoreAvailable: () => {
+    return dbInstance !== null;
   }
 };

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { dbService, isFirebaseConfigured, realtimeTelemetryService } from '../services/firebase';
-import type { UserSession } from '../services/firebase';
+import type { UserSession, FirebaseSensorReading } from '../services/firebase';
 import { SIMULATED_NODES, generateHistory } from '../services/simulator';
 import type { TelemetryReading } from '../services/simulator';
 
@@ -58,6 +58,7 @@ interface VermIQState {
   checkAlertThresholds: (nodeId: string, reading: TelemetryReading) => void;
   reconnectFirebase: () => void;
   startRealtimeTelemetry: () => () => void; // Start realtime subscription and return unsubscribe function
+  updateHistoryFromFirebase: (nodeId: string, readings: TelemetryReading[]) => void; // Update history with Firebase data
 }
 
 const DEFAULT_SETTINGS: ThresholdSettings = {
@@ -99,15 +100,22 @@ export const useStore = create<VermIQState>((set, get) => ({
     set((state) => {
       const updatedTelemetry = { ...state.telemetry, [nodeId]: reading };
       
-      // Update history inline by appending, keeping size capped (e.g. 50 points)
+      // Update history inline by appending, keeping size capped at 200 points for Firebase data
       const currentHistory = state.history[nodeId] || [];
       const updatedHistory = [...currentHistory];
       
-      // Avoid inserting duplicates
+      // Avoid inserting duplicates based on timestamp
       const lastPoint = currentHistory[currentHistory.length - 1];
-      if (!lastPoint || lastPoint.timestamp !== reading.timestamp) {
+      const isDuplicate = lastPoint && (
+        lastPoint.timestamp === reading.timestamp ||
+        (lastPoint.timestamp_epoch_ms && reading.timestamp_epoch_ms && lastPoint.timestamp_epoch_ms === reading.timestamp_epoch_ms)
+      );
+      
+      if (!isDuplicate) {
         updatedHistory.push(reading);
-        if (updatedHistory.length > 50) {
+        // Keep latest 200 records for Firebase mode, 50 for simulation
+        const maxSize = state.realtimeDataMode ? 200 : 50;
+        if (updatedHistory.length > maxSize) {
           updatedHistory.shift();
         }
       }
@@ -233,6 +241,12 @@ export const useStore = create<VermIQState>((set, get) => ({
     set({ firebaseConnected: active });
   },
 
+  updateHistoryFromFirebase: (nodeId, readings) => {
+    set((state) => ({
+      history: { ...state.history, [nodeId]: readings }
+    }));
+  },
+
   startRealtimeTelemetry: () => {
     console.log('🚀 Starting realtime telemetry subscription...');
     
@@ -245,50 +259,83 @@ export const useStore = create<VermIQState>((set, get) => ({
     set({ realtimeDataMode: true });
     console.log('✅ Realtime Database connected! Listening for sensor updates...');
 
-    // Subscribe to real-time data from Firebase
-    const unsubscribe = realtimeTelemetryService.subscribeToLatestReadings((data) => {
+    const nodeId = SIMULATED_NODES[0].id;
+    const node = SIMULATED_NODES[0];
+
+    // Helper function to convert Firebase reading to TelemetryReading
+    const convertFirebaseReading = (data: FirebaseSensorReading, daysElapsed: number = 45): TelemetryReading => {
+      const harvestStatus = daysElapsed >= node.maturityTotalDays ? 'Harvest Ready' : 
+                          daysElapsed >= node.maturityTotalDays * 0.8 ? 'Ready Soon' : 'Monitoring';
+      
+      return {
+        timestamp: data.timestamp_iso,
+        moisture: data.moisture_percent || null,
+        temperature: data.dht22_temp || null,
+        humidity: data.dht22_humidity || null,
+        ph: data.ph || null,
+        daysElapsed,
+        harvestStatus,
+        status: 'online',
+        rssi: -65, // Default values - can be added to Firebase if needed
+        battery: 3.9,
+        // Extended Firebase fields
+        reading_number: data.reading_number,
+        moisture_raw: data.moisture_raw,
+        ph_raw: data.ph_raw,
+        ph_voltage: data.ph_voltage,
+        source: data.source,
+        timestamp_epoch_ms: data.timestamp_epoch_ms,
+      };
+    };
+
+    // Subscribe to latest readings
+    const unsubscribeLatest = realtimeTelemetryService.subscribeToLatestReadings((data) => {
       if (!data) {
         console.warn('⚠️ No data received from Firebase Realtime Database');
         return;
       }
 
-      const timestamp = new Date().toISOString();
-      console.log(`📊 [${timestamp}] Received realtime data update:`, {
+      console.log(`📊 [${data.timestamp_iso}] Received realtime data update:`, {
+        reading: data.reading_number,
         temp: data.dht22_temp,
         humidity: data.dht22_humidity,
         moisture: data.moisture_percent,
         ph: data.ph
       });
 
-      // Map Firebase data to our telemetry format
-      // Using the first node (ESP32-NODE-01) for now, you can modify this to support multiple nodes
-      const nodeId = SIMULATED_NODES[0].id;
-      const node = SIMULATED_NODES[0];
-
       // Calculate maturity days (you may want to store this in Firebase or calculate based on a start date)
-      const daysElapsed = 45; // You can replace this with actual calculation
+      const daysElapsed = 45; // Replace with actual calculation if you have a start date in Firebase
 
-      const reading: TelemetryReading = {
-        timestamp: new Date().toISOString(),
-        moisture: data.moisture_percent || null,
-        temperature: data.dht22_temp || null,
-        humidity: data.dht22_humidity || null,
-        ph: data.ph || null, // Include pH from Firebase
-        daysElapsed,
-        harvestStatus: daysElapsed >= node.maturityTotalDays ? 'Harvest Ready' : 
-                      daysElapsed >= node.maturityTotalDays * 0.8 ? 'Ready Soon' : 'Monitoring',
-        status: 'online',
-        rssi: -65, // You may want to add this to your Firebase data
-        battery: 3.9, // You may want to add this to your Firebase data
-      };
+      const reading = convertFirebaseReading(data, daysElapsed);
 
-      // Update telemetry using existing method which handles history
-      // Alert checking is disabled for now
       console.log('✨ Updating dashboard with new data...');
       get().updateTelemetry(nodeId, reading);
     });
 
-    return unsubscribe;
+    // Subscribe to historical readings
+    const unsubscribeHistory = realtimeTelemetryService.subscribeToReadingsHistory((historyData) => {
+      if (historyData.length === 0) {
+        console.warn('⚠️ No historical data received from Firebase');
+        return;
+      }
+
+      console.log(`📚 Received ${historyData.length} historical readings from Firebase`);
+
+      // Convert all history readings
+      const historyReadings = historyData.map((data, index) => {
+        // Calculate days elapsed based on timestamp or use a default progression
+        const daysElapsed = Math.min(45 + Math.floor(index / 100), node.maturityTotalDays);
+        return convertFirebaseReading(data, daysElapsed);
+      });
+
+      get().updateHistoryFromFirebase(nodeId, historyReadings);
+    }, 200); // Load latest 200 records
+
+    // Return combined unsubscribe function
+    return () => {
+      unsubscribeLatest();
+      unsubscribeHistory();
+    };
   }
 }));
 

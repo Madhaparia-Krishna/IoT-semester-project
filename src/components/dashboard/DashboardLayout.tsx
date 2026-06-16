@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../../store/useStore';
 import { SIMULATED_NODES, generateTelemetry } from '../../services/simulator';
-import { dbService } from '../../services/firebase';
 import { Logo } from '../logo/Logo';
 import {
   LayoutDashboard,

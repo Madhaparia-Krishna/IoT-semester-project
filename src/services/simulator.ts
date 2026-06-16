@@ -9,6 +9,13 @@ export interface TelemetryReading {
   status: 'online' | 'offline';
   rssi: number;
   battery: number;
+  // Extended Firebase fields
+  reading_number?: number;
+  moisture_raw?: number;
+  ph_raw?: number;
+  ph_voltage?: number;
+  source?: string;
+  timestamp_epoch_ms?: number;
 }
 
 export interface NodeConfig {

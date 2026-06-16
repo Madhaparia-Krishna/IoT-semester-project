@@ -5,7 +5,7 @@ import { GlassCard } from '../ui/GlassCard';
 import { Download, FileJson, Filter } from 'lucide-react';
 
 export const HistoryData: React.FC = () => {
-  const { history } = useStore();
+  const { history, realtimeDataMode } = useStore();
   const [selectedNodeId, setSelectedNodeId] = useState<string>(SIMULATED_NODES[0].id);
 
   const logs = history[selectedNodeId] || [];
@@ -14,41 +14,79 @@ export const HistoryData: React.FC = () => {
   const handleExportCSV = () => {
     if (logs.length === 0) return;
 
-    const headers = ['Timestamp', 'Moisture (%)', 'Temperature (°C)', 'Humidity (%)', 'Status', 'RSSI (dBm)', 'Battery (V)'];
-    const rows = logs.map((log) => [
-      log.timestamp,
-      log.moisture ?? 'N/A',
-      log.temperature ?? 'N/A',
-      log.humidity ?? 'N/A',
-      log.status,
-      log.rssi,
-      log.battery
-    ]);
+    // Helper function to escape CSV fields (wrap in quotes if contains comma, quote, or newline)
+    const escapeCSVField = (field: any): string => {
+      const str = String(field);
+      if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
+    };
 
-    const csvContent =
-      'data:text/csv;charset=utf-8,' +
-      [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+    const headers = realtimeDataMode 
+      ? ['Reading #', 'Timestamp', 'Temperature (°C)', 'Humidity (%)', 'Moisture (%)', 'Moisture Raw', 'pH', 'pH Voltage', 'pH Raw']
+      : ['Timestamp', 'Moisture (%)', 'Temperature (°C)', 'Humidity (%)', 'Status', 'RSSI (dBm)', 'Battery (V)'];
     
-    const encodedUri = encodeURI(csvContent);
+    const rows = logs.map((log) => realtimeDataMode 
+      ? [
+          log.reading_number ?? 'N/A',
+          log.timestamp,
+          log.temperature ?? 'N/A',
+          log.humidity ?? 'N/A',
+          log.moisture ?? 'N/A',
+          log.moisture_raw ?? 'N/A',
+          log.ph ?? 'N/A',
+          log.ph_voltage ?? 'N/A',
+          log.ph_raw ?? 'N/A'
+        ]
+      : [
+          log.timestamp,
+          log.moisture ?? 'N/A',
+          log.temperature ?? 'N/A',
+          log.humidity ?? 'N/A',
+          log.status,
+          log.rssi,
+          log.battery
+        ]
+    );
+
+    // Build CSV content with proper escaping
+    const csvLines = [
+      headers.map(escapeCSVField).join(','),
+      ...rows.map(row => row.map(escapeCSVField).join(','))
+    ];
+    const csvContent = csvLines.join('\n');
+    
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
     link.setAttribute('download', `vermiq_telemetry_${selectedNodeId}_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // Helper to convert array of telemetry reading to JSON and trigger download
   const handleExportJSON = () => {
     if (logs.length === 0) return;
 
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(logs, null, 2));
+    const jsonContent = JSON.stringify(logs, null, 2);
+    
+    // Create blob and download
+    const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
     const link = document.createElement('a');
-    link.setAttribute('href', dataStr);
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
     link.setAttribute('download', `vermiq_telemetry_${selectedNodeId}_${new Date().toISOString().split('T')[0]}.json`);
+    link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -56,7 +94,14 @@ export const HistoryData: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold font-display text-white">Historical Logs</h2>
-          <p className="text-slate-400 text-sm">Download offline datasets and search historical telemetry points</p>
+          <p className="text-slate-400 text-sm">
+            Download offline datasets and search historical telemetry points
+            {realtimeDataMode && (
+              <span className="ml-2 text-emerald-400 font-semibold">
+                ({logs.length} Firebase records)
+              </span>
+            )}
+          </p>
         </div>
 
         {/* Exporters */}
@@ -111,7 +156,58 @@ export const HistoryData: React.FC = () => {
           <div className="text-center py-16 text-xs text-slate-500">
             No historical logs compiled yet.
           </div>
+        ) : realtimeDataMode ? (
+          // Firebase data view with extended fields
+          <table className="w-full text-left text-xs min-w-[1000px]">
+            <thead>
+              <tr className="border-b border-white/5 text-slate-500 font-bold uppercase tracking-wider bg-white/[0.01]">
+                <th className="py-4 px-6">Reading #</th>
+                <th className="py-4 px-6">Timestamp</th>
+                <th className="py-4 px-6 text-center">Temp (°C)</th>
+                <th className="py-4 px-6 text-center">Humidity (%)</th>
+                <th className="py-4 px-6 text-center">Moisture (%)</th>
+                <th className="py-4 px-6 text-center">Moisture Raw</th>
+                <th className="py-4 px-6 text-center">pH</th>
+                <th className="py-4 px-6 text-center">pH Voltage</th>
+                <th className="py-4 px-6 text-center">pH Raw</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5 font-mono text-slate-350">
+              {logs.map((log, index) => (
+                <tr key={index} className="hover:bg-white/[0.01] transition-colors">
+                  <td className="py-3.5 px-6 text-slate-400 font-bold">
+                    #{log.reading_number ?? 'N/A'}
+                  </td>
+                  <td className="py-3.5 px-6 font-sans text-slate-200">
+                    {new Date(log.timestamp).toLocaleString()}
+                  </td>
+                  <td className={`py-3.5 px-6 text-center font-bold ${log.temperature ? 'text-amber-500' : 'text-slate-600'}`}>
+                    {log.temperature !== null ? `${log.temperature}°C` : 'N/A'}
+                  </td>
+                  <td className={`py-3.5 px-6 text-center ${log.humidity ? 'text-emerald-400' : 'text-slate-600'}`}>
+                    {log.humidity !== null ? `${log.humidity}%` : 'N/A'}
+                  </td>
+                  <td className={`py-3.5 px-6 text-center font-bold ${log.moisture ? 'text-cyan-400' : 'text-slate-600'}`}>
+                    {log.moisture !== null ? `${log.moisture}%` : 'N/A'}
+                  </td>
+                  <td className="py-3.5 px-6 text-center text-slate-400">
+                    {log.moisture_raw ?? 'N/A'}
+                  </td>
+                  <td className={`py-3.5 px-6 text-center font-bold ${log.ph ? 'text-purple-400' : 'text-slate-600'}`}>
+                    {log.ph !== null && log.ph !== undefined ? log.ph.toFixed(2) : 'N/A'}
+                  </td>
+                  <td className="py-3.5 px-6 text-center text-slate-400">
+                    {log.ph_voltage !== null && log.ph_voltage !== undefined ? log.ph_voltage.toFixed(3) : 'N/A'}
+                  </td>
+                  <td className="py-3.5 px-6 text-center text-slate-400">
+                    {log.ph_raw ?? 'N/A'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         ) : (
+          // Demo mode view
           <table className="w-full text-left text-xs min-w-[600px]">
             <thead>
               <tr className="border-b border-white/5 text-slate-500 font-bold uppercase tracking-wider bg-white/[0.01]">

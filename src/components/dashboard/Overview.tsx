@@ -19,7 +19,7 @@ interface OverviewProps {
 }
 
 export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
-  const { activeNodeId, setActiveNodeId, telemetry, settings } = useStore();
+  const { activeNodeId, setActiveNodeId, telemetry, settings, realtimeDataMode } = useStore();
 
   const activeNode = SIMULATED_NODES.find((n) => n.id === activeNodeId) || SIMULATED_NODES[0];
   const nodeReading = telemetry[activeNodeId] || {
@@ -54,7 +54,15 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2">
         <div>
           <h2 className="text-2xl font-bold font-display text-white">System Overview</h2>
-          <p className="text-slate-400 text-xs sm:text-sm">Real-time telemetry and biological compost maturity tracking</p>
+          <p className="text-slate-400 text-xs sm:text-sm">
+            Real-time telemetry and biological compost maturity tracking
+            {realtimeDataMode && (
+              <span className="ml-2 inline-flex items-center gap-1 text-emerald-400 font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Live Firebase Data
+              </span>
+            )}
+          </p>
         </div>
         
         {/* Dropdown Node Switcher */}
@@ -281,10 +289,25 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
 
           <div className="space-y-4">
             <div className="flex justify-between items-center text-xs">
-              <span className="text-slate-400 font-medium">MQTT Broker Status</span>
-              <span className="text-emerald-400 font-bold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                CONNECTED
+              <span className="text-slate-400 font-medium">Data Source</span>
+              <span className={`font-bold flex items-center gap-1 ${realtimeDataMode ? 'text-emerald-400' : 'text-cyan-400'}`}>
+                {realtimeDataMode ? (
+                  <>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                    FIREBASE LIVE
+                  </>
+                ) : (
+                  <>
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                    DEMO MODE
+                  </>
+                )}
+              </span>
+            </div>
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-slate-400 font-medium">Last Updated</span>
+              <span className="text-slate-200 font-mono text-[10px]">
+                {nodeReading.timestamp ? new Date(nodeReading.timestamp).toLocaleTimeString() : 'N/A'}
               </span>
             </div>
             <div className="flex justify-between items-center text-xs">
