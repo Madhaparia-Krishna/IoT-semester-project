@@ -87,13 +87,9 @@
 9. [Results & Data Analysis](#results--data-analysis)
 10. [How to Run the Project](#how-to-run-the-project)
 11. [Conclusions & Future Work](#conclusions--future-work)
-12. [Project Status Summary](#project-status-summary)
-13. [Security and Data Protection](#security-and-data-protection)
-14. [References](#references)
-15. [Appendix](#appendix)
-16. [Acknowledgments](#acknowledgments)
-17. [License](#license)
-18. [Contact and Support](#contact-and-support)
+12. [Security and Data Protection](#security-and-data-protection)
+13. [References](#references)
+14. [Appendix](#appendix)
 
 ---
 
@@ -312,7 +308,7 @@ VermIQ-Lite is an enterprise-grade IoT monitoring platform designed for precisio
 
 ### 3.2 Circuit Schematic
 
-![Circuit Schematic](./pictures/Schematic.png)
+![Circuit Schematic](./pictures/Schematic.svg)
 
 **Schematic PDF:** [View Full Schematic](./Schematic/VermIQ.pdf)
 
@@ -359,44 +355,85 @@ The custom PCB was designed to integrate all components in a compact form factor
 - Mounting holes for enclosure
 - Clear component labeling
 
-### 3.5 Physical Implementation
-
-<table>
-  <tr>
-    <td>
-      <img src="./pictures/Full_physical_lab_1.jpeg" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 3.5.1: Complete physical hardware setup</em></p>
-    </td>
-    <td>
-      <img src="./pictures/Full_physical_lab_2.jpeg" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 3.5.2: ESP32 with sensors during testing</em></p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="./pictures/Full_physical_lab_3.jpeg" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 3.5.3: OLED display showing real-time readings</em></p>
-    </td>
-    <td>
-      <img src="./pictures/OLED_display.jpeg" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 3.5.4: Close-up of OLED showing IoT sensor data</em></p>
-    </td>
-  </tr>
-</table>
-
-
-### 3.6 Wokwi Simulation
+### 3.5 Wokwi Circuit Simulation
 
 Before physical implementation, the circuit was simulated on Wokwi platform to verify connectivity and code logic.
 
 **Live Simulation Link:** https://wokwi.com/projects/465181219780428801
 
-The Wokwi simulation allowed us to:
+<table>
+  <tr>
+    <td align="center">
+      <img src="./pictures/Wowki-simulation VScode.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 3.5.1: Wokwi simulation running in VSCode with ESP32 circuit</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="./pictures/enlarged wowki-simulation.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 3.5.2: Detailed view of simulated circuit with sensor connections</em></p>
+    </td>
+  </tr>
+</table>
+
+**Simulation Benefits:**
 - Test sensor reading logic without physical hardware
-- Verify I2C communication with OLED
-- Debug ADC reading issues
-- Validate WiFi connection flow
-- Test Firebase API integration
+- Verify I2C communication with OLED display
+- Debug ADC reading issues in controlled environment
+- Validate WiFi connection flow and Firebase API integration
+- Rapid prototyping and code iteration
+- Share live circuit with team members for collaboration
+
+### 3.6 Physical Hardware Implementation
+
+After successful simulation validation, the system was assembled with physical components.
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="./pictures/Full_physical_lab_1.jpeg" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 3.6.1: Complete physical hardware setup with breadboard and sensors</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="./pictures/Full_physical_lab_2.jpeg" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 3.6.2: ESP32 with DHT22, moisture, and pH sensors during testing</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="./pictures/Full_physical_lab_3.jpeg" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 3.6.3: Close-up view of breadboard connections and sensor placement</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="./pictures/OLED_display.jpeg" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 3.6.4: SH1106 OLED display showing real-time IoT sensor readings</em></p>
+    </td>
+  </tr>
+</table>
+
+### 3.7 MQTT Communication Protocol
+
+The system supports MQTT protocol for lightweight, efficient IoT communication between ESP32 nodes and cloud services.
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="./pictures/MQTT response.jpeg" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 3.7.1: MQTT broker response showing successful message publish/subscribe</em></p>
+    </td>
+  </tr>
+</table>
+
+**MQTT Implementation:**
+- Topic structure: `vermiq/{node_id}/{sensor_type}`
+- QoS Level 1 (at least once delivery)
+- JSON payload format for sensor data
+- Retained messages for latest readings
+- Last Will and Testament (LWT) for connection monitoring
 
 ---
 
@@ -452,15 +489,24 @@ ph = 7 + ((PH_NEUTRAL_VOLTAGE - voltage) / PH_SLOPE)
 
 
 ### 4.4 Firmware Testing Results
+
 <table>
   <tr>
-    <td>
+    <td align="center">
       <img src="./pictures/Error_data_recorded_01.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.4.1: DHT22 sensor error detection and handling</em></p>
+      <p><em>Figure 4.4.1: DHT22 sensor error detection and graceful handling</em></p>
     </td>
-    <td>
+  </tr>
+  <tr>
+    <td align="center">
       <img src="./pictures/Error_data_recorded_02.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.4.2: System continuing operation despite sensor errors</em></p>
+      <p><em>Figure 4.4.2: System continuing operation despite sensor timeouts</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="./pictures/Screenshot_pH_Data_and_error.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.4.3: pH sensor data with intermittent error handling</em></p>
     </td>
   </tr>
 </table>
@@ -478,31 +524,45 @@ ph = 7 + ((PH_NEUTRAL_VOLTAGE - voltage) / PH_SLOPE)
 
 <table>
   <tr>
-    <td>
+    <td align="center">
       <img src="./pictures/Screenshot_Moisture_Data_1.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.5.1: Moisture sensor calibration</em></p>
-    </td>
-    <td>
-      <img src="./pictures/Screenshot_pH_Data_07.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.5.2: pH sensor readings</em></p>
-    </td>
-    <td>
-      <img src="./pictures/Screenshot_OLED_Reset.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.5.3: OLED setup</em></p>
+      <p><em>Figure 4.5.1: Moisture sensor raw ADC values and calibration testing</em></p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td align="center">
+      <img src="./pictures/Screenshot_Moisture_Data_2.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.5.2: Moisture percentage calculations and consistency validation</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="./pictures/Screenshot_pH_Data_07.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.5.3: pH sensor voltage readings and calculated pH values</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="./pictures/Screenshot_OLED_Reset.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.5.4: OLED display initialization and I2C communication setup</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
       <img src="./pictures/all_sensor_reading_1.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.5.4: Complete sensor cycle</em></p>
+      <p><em>Figure 4.5.5: Complete sensor reading cycle with all parameters</em></p>
     </td>
-    <td>
+  </tr>
+  <tr>
+    <td align="center">
       <img src="./pictures/all_sensor_reading_2.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.5.5: Multiple cycles consistency</em></p>
+      <p><em>Figure 4.5.6: Multiple consecutive cycles showing data consistency</em></p>
     </td>
-    <td>
+  </tr>
+  <tr>
+    <td align="center">
       <img src="./pictures/all_sensor_reading_3.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.5.6: Extended logging validation</em></p>
+      <p><em>Figure 4.5.7: Extended logging session for stability validation</em></p>
     </td>
   </tr>
 </table>
@@ -562,16 +622,20 @@ iot-vermiq-default-rtdb/
 
 ### 5.3 Firebase Database Screenshots
 
-<div style="display:flex; flex-wrap:wrap; gap:10px;">
-  <div style="flex:1; min-width:300px;">
-    <img src="./pictures/Firebase_Realtime_Database_with_historical_DB_data.png" style="width:100%; height:auto;"/>
-    <p><em>Figure 5.3.1: Firebase Realtime Database showing latest_readings and readings_history</em></p>
-  </div>
-  <div style="flex:1; min-width:300px;">
-    <img src="./pictures/Firebase_FireStore_DB_Data.png" style="width:100%; height:auto;"/>
-    <p><em>Figure 5.3.2: Firestore collection containing sensor readings backup</em></p>
-  </div>
-</div>
+<table>
+  <tr>
+    <td align="center">
+      <img src="./pictures/Firebase_Realtime_Database_with_historical_DB_data.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 5.3.1: Firebase Realtime Database showing latest_readings and extensive readings_history</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="./pictures/Firebase_FireStore_DB_Data.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 5.3.2: Firestore collection containing timestamped sensor readings for advanced querying</em></p>
+    </td>
+  </tr>
+</table>
 
 
 
@@ -629,8 +693,14 @@ src/
 
 #### 6.2.1 Login & Authentication
 
-![Login Page](./pictures/VermIQ_Login_Page_18.png)
-*Figure 6.2.1: VermIQ-Lite authentication page with Firebase login*
+<table>
+  <tr>
+    <td align="center">
+      <img src="./pictures/VermIQ_Login_Page_18.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 6.2.1: VermIQ-Lite authentication page with Firebase login and demo mode</em></p>
+    </td>
+  </tr>
+</table>
 
 **Features:**
 - Secure email/password authentication
@@ -641,8 +711,14 @@ src/
 
 #### 6.2.2 System Overview Dashboard
 
-![Dashboard Overview](./pictures/Dashboard_Homepage.png)
-*Figure 6.2.2: Main dashboard showing real-time sensor readings and Live Firebase Data indicator*
+<table>
+  <tr>
+    <td align="center">
+      <img src="./pictures/Dashboard_Homepage.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 6.2.2: Main dashboard showing real-time sensor readings, Live Firebase Data indicator, and node status</em></p>
+    </td>
+  </tr>
+</table>
 
 **Key Elements:**
 - **Live Firebase Data Indicator**: Shows connection status with animated pulse
@@ -659,8 +735,14 @@ src/
 
 #### 6.2.3 Analytics Dashboard
 
-![Analytics Dashboard](./pictures/Dashboard_analytics.png)
-*Figure 6.2.3: Sensor analytics page with trend graphs and multi-sensor comparison*
+<table>
+  <tr>
+    <td align="center">
+      <img src="./pictures/Dashboard_analytics.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 6.2.3: Sensor analytics page with interactive trend graphs and multi-parameter comparison</em></p>
+    </td>
+  </tr>
+</table>
 
 **Visualization Features:**
 - **Moisture Trend Graph**: Real-time area chart with gradient fill
@@ -672,8 +754,14 @@ src/
 
 #### 6.2.4 Historical Data Logs
 
-![Historical Data](./pictures/Dashboard_Settings_Historical_DB_data.png)
-*Figure 6.2.4: Historical logs page showing 200 Firebase records with export options*
+<table>
+  <tr>
+    <td align="center">
+      <img src="./pictures/Dashboard_Settings_Historical_DB_data.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 6.2.4: Historical logs page showing 200+ Firebase records with CSV/JSON export functionality</em></p>
+    </td>
+  </tr>
+</table>
 
 **Data Table Columns:**
 - Reading # - Sequential record number
@@ -695,8 +783,14 @@ src/
 
 #### 6.2.5 ESP32 Node Management
 
-![Node Management](./pictures/Dashboard_pH_Data_ESP32_Nodes_1.png)  
-*Figure 6.2.5: ESP32 Hardware Registry showing node details and connection parameters*
+<table>
+  <tr>
+    <td align="center">
+      <img src="./pictures/Dashboard_pH_Data_ESP32_Nodes_1.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 6.2.5: ESP32 Hardware Registry showing node details, connection status, and communication parameters</em></p>
+    </td>
+  </tr>
+</table>
 
 **Node Information Display:**
 - Node identification and bed allocation
