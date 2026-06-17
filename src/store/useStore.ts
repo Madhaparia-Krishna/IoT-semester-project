@@ -3,6 +3,8 @@ import { dbService, isFirebaseConfigured, realtimeTelemetryService } from '../se
 import type { UserSession, FirebaseSensorReading } from '../services/firebase';
 import { SIMULATED_NODES, generateHistory } from '../services/simulator';
 import type { TelemetryReading } from '../services/simulator';
+import { runPrediction, generateMLReading, DEFAULT_SIM_VALUES } from '../ml';
+import type { PredictionResult, SensorReading, MLSimValues } from '../ml';
 
 interface AlertItem {
   id: string;
@@ -44,6 +46,13 @@ interface VermIQState {
   settings: ThresholdSettings;
   firebaseConnected: boolean;
   realtimeDataMode: boolean; // Track if using real Firebase data
+
+  // ── ML State ────────────────────────────────────────────────────────────────
+  mlMode: 'live' | 'simulation';
+  mlSimValues: MLSimValues;
+  mlSimScenario: string | null;
+  predictionResult: PredictionResult | null;
+  historicalPredictions: Array<PredictionResult & { timestamp: string }>;
   
   // Actions
   setUser: (user: UserSession | null) => void;
@@ -59,6 +68,13 @@ interface VermIQState {
   reconnectFirebase: () => void;
   startRealtimeTelemetry: () => () => void; // Start realtime subscription and return unsubscribe function
   updateHistoryFromFirebase: (nodeId: string, readings: TelemetryReading[]) => void; // Update history with Firebase data
+
+  // ── ML Actions ──────────────────────────────────────────────────────────────
+  setMLMode: (mode: 'live' | 'simulation') => void;
+  setMLSimValues: (vals: Partial<MLSimValues>) => void;
+  setMLSimScenario: (name: string | null) => void;
+  runMLPrediction: () => void;
+  storePrediction: (result: PredictionResult) => void;
 }
 
 const DEFAULT_SETTINGS: ThresholdSettings = {
@@ -91,6 +107,13 @@ export const useStore = create<VermIQState>((set, get) => ({
   })(),
   firebaseConnected: isFirebaseConfigured(),
   realtimeDataMode: false,
+
+  // ── ML Initial State ──────────────────────────────────────────────────────
+  mlMode: 'simulation',
+  mlSimValues: DEFAULT_SIM_VALUES,
+  mlSimScenario: 'Normal Conditions',
+  predictionResult: null,
+  historicalPredictions: [],
 
   setUser: (user) => set({ user }),
   setAuthLoading: (loading) => set({ authLoading: loading }),
@@ -245,6 +268,80 @@ export const useStore = create<VermIQState>((set, get) => ({
     set((state) => ({
       history: { ...state.history, [nodeId]: readings }
     }));
+  },
+
+  // ── ML Actions ─────────────────────────────────────────────────────────────
+
+  setMLMode: (mode) => set({ mlMode: mode }),
+
+  setMLSimValues: (vals) => set((state) => ({
+    mlSimValues: { ...state.mlSimValues, ...vals },
+    mlSimScenario: null, // Clear preset when manually adjusting sliders
+  })),
+
+  setMLSimScenario: (name) => set({ mlSimScenario: name }),
+
+  runMLPrediction: () => {
+    const state = get();
+    let reading: SensorReading;
+    let mlHistory: SensorReading[] = [];
+
+    if (state.mlMode === 'live') {
+      // Build SensorReading from the active node's live telemetry
+      const activeNodeId = state.activeNodeId;
+      const liveReading = state.telemetry[activeNodeId];
+
+      if (!liveReading) {
+        console.warn('ML: No live reading available for active node');
+        return;
+      }
+
+      reading = {
+        dht22_temp:      liveReading.temperature ?? 25,
+        dht22_humidity:  liveReading.humidity ?? 70,
+        moisture_percent: liveReading.moisture ?? 65,
+        ph:              liveReading.ph ?? 6.8,
+        timestamp:       liveReading.timestamp,
+      };
+
+      // Convert history for stability calculations
+      const nodeHistory = state.history[activeNodeId] || [];
+      mlHistory = nodeHistory
+        .filter(h => h.temperature != null && h.moisture != null)
+        .map(h => ({
+          dht22_temp:      h.temperature as number,
+          dht22_humidity:  h.humidity ?? 70,
+          moisture_percent: h.moisture as number,
+          ph:              h.ph ?? 6.8,
+          timestamp:       h.timestamp,
+        }));
+    } else {
+      // Simulation mode — use slider values
+      reading = generateMLReading(state.mlSimValues);
+
+      // Build a small synthetic history for confidence calculation
+      mlHistory = state.historicalPredictions.slice(-10).map(p => ({
+        dht22_temp:      p.timestamp ? state.mlSimValues.temp : state.mlSimValues.temp,
+        dht22_humidity:  state.mlSimValues.humidity,
+        moisture_percent: state.mlSimValues.moisture,
+        ph:              state.mlSimValues.ph,
+        timestamp:       p.timestamp,
+      }));
+    }
+
+    const result = runPrediction(reading, mlHistory);
+    get().storePrediction(result);
+  },
+
+  storePrediction: (result) => {
+    set((state) => {
+      const withTimestamp = { ...result, timestamp: result.timestamp || new Date().toISOString() };
+      const updated = [...state.historicalPredictions, withTimestamp].slice(-50);
+      return {
+        predictionResult: result,
+        historicalPredictions: updated,
+      };
+    });
   },
 
   startRealtimeTelemetry: () => {
