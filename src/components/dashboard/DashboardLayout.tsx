@@ -16,7 +16,8 @@ import {
   X,
   Search,
   RefreshCw,
-  AlertCircle
+  AlertCircle,
+  Brain
 } from 'lucide-react';
 
 // Subcomponents to be loaded
@@ -27,9 +28,10 @@ import { Alerts } from './Alerts';
 import { Nodes } from './Nodes';
 import { HistoryData } from './History';
 import { SettingsPage } from './Settings';
+import { MLAnalytics } from './MLAnalytics';
 
 export const DashboardLayout: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'beds' | 'analytics' | 'alerts' | 'nodes' | 'history' | 'settings'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'beds' | 'analytics' | 'alerts' | 'nodes' | 'history' | 'settings' | 'ml-analytics'>('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -99,6 +101,8 @@ export const DashboardLayout: React.FC = () => {
         return <HistoryData />;
       case 'settings':
         return <SettingsPage />;
+      case 'ml-analytics':
+        return <MLAnalytics />;
       case 'overview':
       default:
         return <Overview setActiveTab={setActiveTab} />;
@@ -109,6 +113,7 @@ export const DashboardLayout: React.FC = () => {
     { id: 'overview', name: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
     { id: 'beds', name: 'Beds', icon: <Database className="w-5 h-5" /> },
     { id: 'analytics', name: 'Analytics', icon: <LineChart className="w-5 h-5" /> },
+    { id: 'ml-analytics', name: 'Machine Learning', icon: <Brain className="w-5 h-5" /> },
     { id: 'alerts', name: 'Alerts', icon: (
       <div className="relative">
         <Bell className="w-5 h-5" />
