@@ -6,19 +6,20 @@
 ## 📋 Project Information
 
 **Course:** IoT System Design & Implementation  
-**Institution:** [Your Institution Name]  
-**Semester:** [Current Semester]  
+**Institution:** Strathmore University   
+**Semester:** Year 4.1  
 **Submission Date:** June 16, 2026
 
-**OSHWLab Published Link:**  
-🔗 [Project Link Placeholder - To be added]
+**Publishments:**  
+🔗 https://wokwi.com/projects/465181219780428801  
+🔗 https://oshwlab.com/evaghjiani/project_wsoshhsu
 
 ---
 
 ## 👥 Team Members & Contributions
 
-### Full-Stack Development
-**Krishna Madhaparia** (ID: 166980)
+## Full-Stack Development
+# **Krishna Madhaparia** (ID: 166980)
 - Complete website backend architecture and API integration
 - Full frontend development with React + TypeScript
 - Firebase Realtime Database and Firestore integration
@@ -28,23 +29,24 @@
 - Dashboard UI/UX design and implementation
 
 ### Hardware Simulation & Wokwi Integration
-**Parneet Kaur** (ID: 166985)
+# **Parneet Kaur** (ID: 166985)
 - Live circuit simulation on Wokwi platform
 - Virtual hardware testing and validation
 - Component connectivity verification
 - Sensor behavior simulation
-- **Wokwi Project:** https://wokwi.com/projects/465181219780428801
+- **Live Wokwi Project Publish:** https://wokwi.com/projects/465181219780428801
 
 ### PCB Design & Hardware Architecture
-**Eeshan Vaghjiani** (ID: 166981)
+# **Eeshan Vaghjiani** (ID: 166981)
 - Complete schematic design and documentation
 - 3D PCB design from scratch using design tools
 - Component placement optimization
 - Power distribution planning
 - Signal routing and trace layout
+- **OSHWLAB Project Publish:** https://oshwlab.com/evaghjiani/project_wsoshhsu
 
 ### Machine Learning & Predictive Analytics
-**Dhruvin Bhudia** (ID: 169646)
+# **Dhruvin Bhudia** (ID: 169646)
 - Data preprocessing and feature engineering
 - ML model development for sensor data analysis
 - Predictive analytics integration
@@ -53,7 +55,7 @@
 - Anomaly detection system
 
 ### Security & Authentication
-**Philip Tait** (ID: 166384)
+# **Philip Tait** (ID: 166384)
 - Secure communication protocols implementation
 - Firebase authentication system setup
 - Data encryption and security measures
@@ -62,7 +64,7 @@
 - User access control implementation
 
 ### Documentation & Physical Implementation
-**Tevin Ngiru** (ID: 166289)
+# **Tevin Ngiru** (ID: 166289)
 - Complete project documentation
 - Physical hardware assembly and testing
 - Laboratory implementation coordination
@@ -114,16 +116,16 @@ VermIQ-Lite is an enterprise-grade IoT monitoring platform designed for precisio
 
 ### 1.3 Key Features
 
-✅ Real-time sensor telemetry display  
-✅ Firebase cloud data storage and synchronization  
-✅ Interactive analytics with Recharts library  
-✅ Historical data tracking (200+ records)  
-✅ CSV and JSON data export capabilities  
-✅ Dark mode UI with glassmorphism design  
-✅ Responsive layout for desktop, tablet, and mobile  
-✅ Secure Firebase authentication  
-✅ OLED display for local sensor readings  
-✅ Low-power ESP32 implementation  
+- Real-time sensor telemetry display  
+- Firebase cloud data storage and synchronization  
+- Interactive analytics with Recharts library  
+- Historical data tracking (200+ records)  
+- CSV and JSON data export capabilities  
+- Dark mode UI with glassmorphism design  
+- Responsive layout for desktop, tablet, and mobile  
+- Secure Firebase authentication  
+- OLED display for local sensor readings  
+- Low-power ESP32 implementation  
 
 ### 1.4 Technology Stack
 
@@ -162,77 +164,77 @@ VermIQ-Lite is an enterprise-grade IoT monitoring platform designed for precisio
 
 ### 1.5 Project Status
 
-#### ✅ Implemented Features
+#### Implemented Features
 
 **Hardware & Sensors:**
-- ✅ ESP32-based IoT prototype
-- ✅ DHT22 temperature and humidity monitoring
-- ✅ Capacitive soil moisture sensor integration
-- ✅ Analog pH sensor monitoring
-- ✅ SH1106 OLED display for local readings
-- ✅ PCB design and schematic documentation
-- ✅ Physical prototype assembly and testing
-- ✅ Wokwi simulation validation
+- ESP32-based IoT prototype
+- DHT22 temperature and humidity monitoring
+- Capacitive soil moisture sensor integration
+- Analog pH sensor monitoring
+- SH1106 OLED display for local readings
+- PCB design and schematic documentation
+- Physical prototype assembly and testing
+- Wokwi simulation validation
 
 **Firmware & Communication:**
-- ✅ MicroPython firmware implementation
-- ✅ WiFi connectivity with automatic reconnection
-- ✅ Firebase Realtime Database integration
-- ✅ Firestore data storage support
-- ✅ Sensor calibration algorithms
-- ✅ Error handling and graceful degradation
-- ✅ Local OLED data display
+- MicroPython firmware implementation
+- WiFi connectivity with automatic reconnection
+- Firebase Realtime Database integration
+- Firestore data storage support
+- Sensor calibration algorithms
+- Error handling and graceful degradation
+- Local OLED data display
 
 **Cloud Infrastructure:**
-- ✅ Firebase Realtime Database configuration
-- ✅ Firestore structured storage implementation
-- ✅ Firebase Authentication integration
-- ✅ Real-time WebSocket synchronization
-- ✅ Database security rules configuration
-- ✅ Multi-user authentication support
+- Firebase Realtime Database configuration
+- Firestore structured storage implementation
+- Firebase Authentication integration
+- Real-time WebSocket synchronization
+- Database security rules configuration
+- Multi-user authentication support
 
 **Web Dashboard:**
-- ✅ React + TypeScript frontend application
-- ✅ Real-time sensor data display
-- ✅ Historical data table (200+ records)
-- ✅ Interactive analytics charts (Recharts)
-- ✅ CSV/JSON export functionality
-- ✅ Responsive design (mobile, tablet, desktop)
-- ✅ Firebase Authentication UI
-- ✅ Demo mode for testing without hardware
-- ✅ Glassmorphism dark theme design
+- React + TypeScript frontend application
+- Real-time sensor data display
+- Historical data table (200+ records)
+- Interactive analytics charts (Recharts)
+- CSV/JSON export functionality
+- Responsive design (mobile, tablet, desktop)
+- Firebase Authentication UI
+- Demo mode for testing without hardware
+- Glassmorphism dark theme design
 
 **Testing & Documentation:**
-- ✅ Physical prototype testing (48+ hours continuous operation)
-- ✅ Cross-browser compatibility verification
-- ✅ Comprehensive technical documentation
-- ✅ Setup and deployment instructions
-- ✅ Troubleshooting guide
-
-#### 🚧 In Progress / Planned Future Enhancements
+- Physical prototype testing (48+ hours continuous operation)
+- Cross-browser compatibility verification
+- Comprehensive technical documentation
+- Setup and deployment instructions
+- Troubleshooting guide
 
 **Machine Learning:**
-- 🚧 Harvest readiness prediction models
-- 🚧 Anomaly detection in sensor patterns
-- 🚧 Environmental trend analysis
-- 🚧 Optimal vermiculture condition recommendations
-- 🚧 Historical Firebase/Firestore data integration for ML training
+- Harvest readiness prediction models
+- Anomaly detection in sensor patterns
+- Environmental trend analysis
+- Optimal vermiculture condition recommendations
+- Historical Firebase/Firestore data integration for ML training
+
+#### Planned Future Enhancements
 
 **System Improvements:**
-- 🚧 Offline buffering during WiFi loss using ESP32 flash storage
-- 🚧 Multi-bed deployment support with multiple ESP32 nodes
-- 🚧 Weatherproof enclosure design
-- 🚧 Firebase App Check security enhancement
-- 🚧 Secure MQTT/TLS implementation
-- 🚧 Power optimization with deep sleep modes
-- 🚧 Solar panel integration for extended operation
+- Offline buffering during WiFi loss using ESP32 flash storage
+- Multi-bed deployment support with multiple ESP32 nodes
+- Weatherproof enclosure design
+- Firebase App Check security enhancement
+- Secure MQTT/TLS implementation
+- Power optimization with deep sleep modes
+- Solar panel integration for extended operation
 
 **Advanced Features:**
-- 🚧 Mobile applications (iOS/Android)
-- 🚧 Email/SMS alert notifications
-- 🚧 Automated irrigation control integration
-- 🚧 Long-term trend analysis dashboard
-- 🚧 Multi-tenancy support for commercial deployment
+- Mobile applications (iOS/Android)
+- Email/SMS alert notifications
+- Automated irrigation control integration
+- Long-term trend analysis dashboard
+- Multi-tenancy support for commercial deployment
 
 ---
 
@@ -241,43 +243,18 @@ VermIQ-Lite is an enterprise-grade IoT monitoring platform designed for precisio
 ### 2.1 Overall System Diagram
 
 ```
-┌─────────────────┐
-│   ESP32 Node    │
-│  ┌───────────┐  │
-│  │  DHT22    │  │──┐
-│  └───────────┘  │  │
-│  ┌───────────┐  │  │
-│  │ Moisture  │  │  │    ┌──────────────────┐
-│  │  Sensor   │  │──┼───>│  MicroPython     │
-│  └───────────┘  │  │    │  Firmware        │
-│  ┌───────────┐  │  │    └────────┬─────────┘
-│  │ pH Sensor │  │──┘             │
-│  └───────────┘  │                │ HTTP/REST
-│  ┌───────────┐  │                │
-│  │   OLED    │  │                ▼
-│  │  Display  │  │    ┌──────────────────────┐
-│  └───────────┘  │    │  Firebase Realtime   │
-└─────────────────┘    │     Database         │
-                       │   ┌──────────────┐   │
-                       │   │latest_readings│   │
-                       │   │readings_history│  │
-                       │   └──────────────┘   │
-                       └──────────┬───────────┘
-                                  │
-                                  │ WebSocket
-                                  │
-                       ┌──────────▼───────────┐
-                       │   VermIQ-Lite        │
-                       │   Web Dashboard      │
-                       │  ┌────────────────┐  │
-                       │  │  React + TS    │  │
-                       │  │  Components    │  │
-                       │  └────────────────┘  │
-                       │  ┌────────────────┐  │
-                       │  │   Recharts     │  │
-                       │  │   Analytics    │  │
-                       │  └────────────────┘  │
-                       └──────────────────────┘
+┌────────────────────────┐      ┌────────────────────────┐      ┌────────────────────────┐      ┌────────────────────────┐
+│      ESP32 Node        │ ---> │  MicroPython Firmware  │ ---> │   Firebase Database    │ ---> │  VermIQ‑Lite Dashboard │
+│ ┌────────────────────┐ │      │ ┌────────────────────┐ │      │ ┌────────────────────┐ │      │ ┌────────────────────┐ │
+│ │ DHT22 Sensor       │ │      │ │ HTTP / REST API    │ │      │ │ latest_readings    │ │      │ │ React + TS         │ │
+│ ├────────────────────┤ │      │ └────────────────────┘ │      │ ├────────────────────┤ │      │ │ Components         │ │
+│ │ Moisture Sensor    │ │      │                        │      │ │ readings_history   │ │      │ ├────────────────────┤ │
+│ ├────────────────────┤ │      │                        │      │ └────────────────────┘ │      │ │ Recharts Analytics │ │
+│ │ pH Sensor          │ │      │                        │      │                        │      │ ├────────────────────┤ │
+│ ├────────────────────┤ │      │                        │      │                        │      │ │ Historical Data    │ │
+│ │ OLED Display       │ │      │                        │      │                        │      │ │ Alerts & Notifs    │ |
+| |____________________| |      |                        |      |                        |      | |____________________| | 
+└────────────────────────┘      └────────────────────────┘      └────────────────────────┘      └────────────────────────┘
 ```
 
 
@@ -362,17 +339,16 @@ The custom PCB was designed to integrate all components in a compact form factor
 
 **3D PCB Renders:**
 
-![3D PCB View 1](./PCB/3D_PCB-ESP32_1.png)
-*Figure 3.4.1: 3D PCB - Top View*
-
-![3D PCB View 2](./PCB/3D_PCB-ESP32_2.png)
-*Figure 3.4.2: 3D PCB - Perspective View*
-
-![3D PCB View 3](./PCB/3D_PCB-ESP32_3.png)
-*Figure 3.4.3: 3D PCB - Side View*
-
-![3D PCB View 4](./PCB/3D_PCB-ESP32_4.png)
-*Figure 3.4.4: 3D PCB - Component Layout*
+<table>
+  <tr>
+    <td><img src="./PCB/3D_PCB-ESP32_1.png" width="300"/></td>
+    <td><img src="./PCB/3D_PCB-ESP32_2.png" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="./PCB/3D_PCB-ESP32_3.png" width="300"/></td>
+    <td><img src="./PCB/3D_PCB-ESP32_4.png" width="300"/></td>
+  </tr>
+</table>
 
 
 **PCB Features:**
@@ -385,19 +361,29 @@ The custom PCB was designed to integrate all components in a compact form factor
 
 ### 3.5 Physical Implementation
 
-The physical system was assembled and tested in laboratory conditions:
+<table>
+  <tr>
+    <td>
+      <img src="./pictures/Full_physical_lab_1.jpeg" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 3.5.1: Complete physical hardware setup</em></p>
+    </td>
+    <td>
+      <img src="./pictures/Full_physical_lab_2.jpeg" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 3.5.2: ESP32 with sensors during testing</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./pictures/Full_physical_lab_3.jpeg" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 3.5.3: OLED display showing real-time readings</em></p>
+    </td>
+    <td>
+      <img src="./pictures/OLED_display.jpeg" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 3.5.4: Close-up of OLED showing IoT sensor data</em></p>
+    </td>
+  </tr>
+</table>
 
-![Physical Setup 1](./pictures/Full_physical_lab_1.jpeg)
-*Figure 3.5.1: Complete physical hardware setup with all sensors connected*
-
-![Physical Setup 2](./pictures/Full_physical_lab_2.jpeg)
-*Figure 3.5.2: ESP32 with sensors during testing phase*
-
-![Physical Setup 3](./pictures/Full_physical_lab_3.jpeg)
-*Figure 3.5.3: OLED display showing real-time readings*
-
-![OLED Display](./pictures/OLED_display.jpeg)
-*Figure 3.5.4: Close-up of OLED showing IoT sensor data*
 
 ### 3.6 Wokwi Simulation
 
@@ -466,12 +452,20 @@ ph = 7 + ((PH_NEUTRAL_VOLTAGE - voltage) / PH_SLOPE)
 
 
 ### 4.4 Firmware Testing Results
+<table>
+  <tr>
+    <td>
+      <img src="./pictures/Error_data_recorded_01.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.4.1: DHT22 sensor error detection and handling</em></p>
+    </td>
+    <td>
+      <img src="./pictures/Error_data_recorded_02.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.4.2: System continuing operation despite sensor errors</em></p>
+    </td>
+  </tr>
+</table>
 
-![Error Handling 1](./pictures/Error_data_recorded_01.png)
-*Figure 4.4.1: DHT22 sensor error detection and handling*
 
-![Error Handling 2](./pictures/Error_data_recorded_02.png)
-*Figure 4.4.2: System continuing operation despite sensor errors*
 
 **Testing Observations:**
 - DHT22 occasionally returns timeout errors - handled gracefully
@@ -482,23 +476,37 @@ ph = 7 + ((PH_NEUTRAL_VOLTAGE - voltage) / PH_SLOPE)
 
 ### 4.5 Serial Monitor Output
 
-![Moisture Data](./pictures/Screenshot_Moisture_Data_1.png)
-*Figure 4.5.1: Serial output showing moisture sensor calibration*
+<table>
+  <tr>
+    <td>
+      <img src="./pictures/Screenshot_Moisture_Data_1.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.5.1: Moisture sensor calibration</em></p>
+    </td>
+    <td>
+      <img src="./pictures/Screenshot_pH_Data_07.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.5.2: pH sensor readings</em></p>
+    </td>
+    <td>
+      <img src="./pictures/Screenshot_OLED_Reset.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.5.3: OLED setup</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="./pictures/all_sensor_reading_1.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.5.4: Complete sensor cycle</em></p>
+    </td>
+    <td>
+      <img src="./pictures/all_sensor_reading_2.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.5.5: Multiple cycles consistency</em></p>
+    </td>
+    <td>
+      <img src="./pictures/all_sensor_reading_3.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.5.6: Extended logging validation</em></p>
+    </td>
+  </tr>
+</table>
 
-![pH Data](./pictures/Screenshot_pH_Data_07.png)
-*Figure 4.5.2: pH sensor readings with voltage and raw ADC values*
-
-![OLED Init](./pictures/Screenshot_OLED_Reset.png)
-*Figure 4.5.3: System initialization and OLED setup*
-
-![All Sensors](./pictures/all_sensor_reading_1.png)
-*Figure 4.5.4: Complete sensor output cycle with all readings*
-
-![All Sensors 2](./pictures/all_sensor_reading_2.png)
-*Figure 4.5.5: Multiple reading cycles showing data consistency*
-
-![All Sensors 3](./pictures/all_sensor_reading_3.png)
-*Figure 4.5.6: Extended sensor logging for validation*
 
 ### 4.6 WiFi Connectivity and Data Reliability
 
@@ -554,11 +562,17 @@ iot-vermiq-default-rtdb/
 
 ### 5.3 Firebase Database Screenshots
 
-![Firebase Realtime Database](./pictures/Firebase_Realtime_Database_with_historical_DB_data.png)
-*Figure 5.3.1: Firebase Realtime Database showing latest_readings and readings_history structure*
+<div style="display:flex; flex-wrap:wrap; gap:10px;">
+  <div style="flex:1; min-width:300px;">
+    <img src="./pictures/Firebase_Realtime_Database_with_historical_DB_data.png" style="width:100%; height:auto;"/>
+    <p><em>Figure 5.3.1: Firebase Realtime Database showing latest_readings and readings_history</em></p>
+  </div>
+  <div style="flex:1; min-width:300px;">
+    <img src="./pictures/Firebase_FireStore_DB_Data.png" style="width:100%; height:auto;"/>
+    <p><em>Figure 5.3.2: Firestore collection containing sensor readings backup</em></p>
+  </div>
+</div>
 
-![Firestore Data](./pictures/Firebase_FireStore_DB_Data.png)
-*Figure 5.3.2: Firestore collection containing sensor readings backup*
 
 
 ### 5.4 Real-Time Synchronization
@@ -681,7 +695,7 @@ src/
 
 #### 6.2.5 ESP32 Node Management
 
-![Node Management](./pictures/Dashboard_pH_Data_ESP32_Nodes_1.png)
+![Node Management](./pictures/Dashboard_pH_Data_ESP32_Nodes_1.png)  
 *Figure 6.2.5: ESP32 Hardware Registry showing node details and connection parameters*
 
 **Node Information Display:**
@@ -902,70 +916,25 @@ interface VermIQState {
 | pH | Buffer solutions | pH 4, 7, 10 | pH 4.1, 7.0, 9.8 | ±0.2 |
 
 **Reliability Tests:**
-- **24-Hour Continuous Operation**: ✅ Passed
-- **WiFi Disconnection Recovery**: ✅ Automatic reconnection works
-- **Power Cycle Test**: ✅ System resumes correctly after restart
-- **Sensor Failure Handling**: ✅ Graceful degradation
+- **24-Hour Continuous Operation**: - Passed
+- **WiFi Disconnection Recovery**: - Automatic reconnection works
+- **Power Cycle Test**: - System resumes correctly after restart
+- **Sensor Failure Handling**: - Graceful degradation
 
 ### 8.2 Firebase Integration Testing
 
 **Data Upload Tests:**
-- ✅ Latest reading updates every 10 seconds
-- ✅ Historical records accumulate correctly
-- ✅ No data loss during network interruption
-- ✅ Duplicate prevention working
-- ✅ Timestamp synchronization accurate
+- Latest reading updates every 2 seconds
+- Historical records accumulate correctly
+- No data loss during network interruption
+- Duplicate prevention working
+- Timestamp synchronization accurate
 
 **Database Performance:**
 - Average write latency: 200-400ms
 - Average read latency: 100-200ms
 - WebSocket connection stable for 12+ hours
 - No data corruption observed
-
-### 8.3 Dashboard Testing
-
-**Browser Compatibility:**
-- ✅ Chrome 120+ - Fully supported
-- ✅ Firefox 121+ - Fully supported
-- ✅ Edge 120+ - Fully supported
-- ✅ Safari 17+ - Fully supported (minor CSS differences)
-
-**Responsive Design Testing:**
-- ✅ Desktop (1920x1080) - Optimal layout
-- ✅ Laptop (1366x768) - Adjusted spacing
-- ✅ Tablet (768x1024) - Stacked layout
-- ✅ Mobile (375x667) - Mobile-optimized
-
-
-**Functionality Testing:**
-- ✅ Real-time data updates working
-- ✅ CSV export produces valid files (40-80 KB for 200 records)
-- ✅ JSON export produces valid JSON
-- ✅ Chart rendering smooth with animations
-- ✅ Authentication flow secure and functional
-- ✅ Navigation between pages seamless
-- ✅ Firebase connection status indicator accurate
-
-**Load Testing:**
-- ✅ Dashboard handles 200+ historical records
-- ✅ Multiple browser tabs sync correctly
-- ✅ Chart performance acceptable with large datasets
-- ✅ Memory usage stable (<150 MB)
-
-### 8.4 End-to-End Testing
-
-**Complete Data Flow Test:**
-1. ESP32 reads sensors → ✅ Success
-2. Data uploads to Firebase → ✅ Success (200-400ms)
-3. Firebase syncs to dashboard → ✅ Success (100-300ms)
-4. Dashboard displays updates → ✅ Success (<500ms total latency)
-5. Export to CSV/JSON → ✅ Success (valid files)
-
-**User Acceptance Testing:**
-- ✅ Intuitive navigation - no training required
-- ✅ Clear data visualization
-- ✅ Responsive to user interactions
-- ✅ Error messages helpful and informative
 
 ---
 
@@ -1006,11 +975,11 @@ interface VermIQState {
 ### 9.3 Data Integrity
 
 **Verification Methods:**
-- Compared OLED display values with Firebase data: ✅ Match
-- Cross-referenced CSV export with database: ✅ Consistent
-- Validated timestamp ordering: ✅ Chronological
-- Checked for duplicate records: ✅ None found
-- Verified data types and ranges: ✅ All valid
+- Compared OLED display values with Firebase data: - Match
+- Cross-referenced CSV export with database: - Consistent
+- Validated timestamp ordering: - Chronological
+- Checked for duplicate records: - None found
+- Verified data types and ranges: - All valid
 
 **Error Rate:**
 - DHT22 timeout errors: ~0.5% of readings
@@ -1026,8 +995,6 @@ interface VermIQState {
 - Deep sleep potential: Could extend to 7+ days with optimizations
 
 ---
-
-
 ## 10. How to Run the Project
 
 ### 10.1 Prerequisites
@@ -1152,34 +1119,6 @@ npm run build
 ```
 Production files will be generated in the `dist/` directory.
 
-### 10.5 Testing the Complete System
-
-**Verification Checklist:**
-
-1. **Hardware Verification:**
-   - [ ] OLED displays "IoT Sensor Data"
-   - [ ] Temperature and humidity values appear
-   - [ ] Moisture percentage shows (0-100%)
-   - [ ] pH value displays (0-14 range)
-   - [ ] WiFi status shows "OK"
-
-2. **Firebase Verification:**
-   - [ ] Open Firebase Console → Realtime Database
-   - [ ] Verify `latest_readings` updates every 10 seconds
-   - [ ] Verify `readings_history` accumulates records
-   - [ ] Check timestamp format is ISO 8601
-
-3. **Dashboard Verification:**
-   - [ ] Login with credentials
-   - [ ] "Live Firebase Data" indicator appears
-   - [ ] Sensor values match OLED display
-   - [ ] Last Updated timestamp is current
-   - [ ] Navigate to Analytics - charts render
-   - [ ] Navigate to History - table shows records
-   - [ ] Export CSV - file downloads successfully
-   - [ ] Export JSON - valid JSON file downloads
-
-
 ### 10.6 Demo Mode (Without Hardware)
 
 For demonstration without physical hardware:
@@ -1240,7 +1179,6 @@ vercel --prod
 - Check database rules allow write access
 - Ensure ESP32 has internet connectivity
 - Review serial monitor for error messages
-
 
 **Issue: Dashboard Shows "Demo Mode"**
 - Verify `.env` file exists in project root
@@ -1325,88 +1263,8 @@ This project successfully demonstrated the development and deployment of a compr
 3. Chart rendering performance degrades beyond 500 data points
 4. Mobile app not yet developed for iOS/Android platforms
 
-### 11.4 Future Enhancements
 
-**Phase 1: Immediate Improvements (0-3 months)**
-1. **Power Optimization:**
-   - Implement deep sleep mode between readings
-   - Solar panel integration for continuous outdoor operation
-   - Battery voltage monitoring with low-power alerts
-   - Target: 7+ days battery life
-
-2. **Multi-Node Support:**
-   - Extend dashboard to handle multiple ESP32 nodes
-   - Individual node configuration and management
-   - Node comparison analytics
-   - Geographic mapping of node locations
-
-3. **Enhanced Calibration:**
-   - Automatic calibration reminders
-   - Calibration history tracking
-   - Multi-point pH calibration (pH 4, 7, 10)
-   - Drift compensation algorithms
-
-
-**Phase 2: Feature Additions (3-6 months)**
-1. **Machine Learning Integration:**
-   - Predictive analytics for harvest timing
-   - Anomaly detection in environmental patterns
-   - Optimal condition recommendations
-   - Seasonal trend analysis
-
-2. **Alert System:**
-   - Email notifications for threshold violations
-   - SMS alerts for critical conditions
-   - Push notifications via mobile app
-   - Customizable alert rules per node
-
-3. **Mobile Applications:**
-   - Native iOS app development
-   - Native Android app development
-   - Cross-platform framework (React Native)
-   - Offline data caching
-
-4. **Additional Sensors:**
-   - Light intensity sensor (LUX)
-   - CO2 concentration monitoring
-   - Ammonia gas detection
-   - Worm population estimation (weight-based)
-
-**Phase 3: Advanced Features (6-12 months)**
-1. **Automation Control:**
-   - Automated irrigation system integration
-   - Temperature control (heating/cooling)
-   - Humidity regulation
-   - pH adjustment recommendations
-
-2. **Data Analytics:**
-   - Long-term trend analysis (seasonal patterns)
-   - Comparative analysis across multiple beds
-   - Yield prediction models
-   - Cost-benefit analysis reporting
-
-3. **Integration Capabilities:**
-   - REST API for third-party integration
-   - Webhook support for automation platforms
-   - MQTT broker for industrial IoT systems
-   - Export to agricultural management software
-
-
-4. **Commercial Deployment:**
-   - Multi-tenancy support for farms
-   - Role-based access control (admin, operator, viewer)
-   - Custom branding and white-label options
-   - SLA monitoring and uptime guarantees
-   - Professional support and maintenance
-
-**Research Opportunities:**
-1. Investigation of alternative low-power communication protocols (LoRaWAN, NB-IoT)
-2. Development of edge computing capabilities for offline operation
-3. Exploration of computer vision for worm population estimation
-4. Study of optimal sensor placement and density for accuracy
-5. Research on biodegradable sensor enclosures for environmental sustainability
-
-### 11.5 Broader Applications
+### 11.4 Broader Applications
 
 The VermIQ-Lite platform architecture can be adapted for various agricultural and environmental monitoring applications:
 
@@ -1432,7 +1290,7 @@ The VermIQ-Lite platform architecture can be adapted for various agricultural an
 - Agricultural technology training
 
 
-### 11.6 Sustainability Impact
+### 11.5 Sustainability Impact
 
 **Environmental Benefits:**
 1. **Optimized Vermiculture:** Better environmental control leads to improved compost quality
@@ -1455,7 +1313,7 @@ The VermIQ-Lite platform architecture can be adapted for various agricultural an
 4. **Rural Development:** Technology transfer to small-scale farmers
 5. **Food Security:** Improved compost supports sustainable food production
 
-### 11.7 Final Remarks
+### 11.6 Final Remarks
 
 The VermIQ-Lite project represents a successful integration of hardware engineering, firmware development, cloud computing, and modern web technologies to address a practical agricultural monitoring need. The system demonstrates the potential of IoT technology to transform traditional agricultural practices through data-driven insights and automation.
 
@@ -1467,87 +1325,11 @@ The VermIQ-Lite platform demonstrates that accessible, cost-effective IoT soluti
 
 ---
 
-## 12. Project Status Summary
-
-### ✅ Implemented Features
-
-**Hardware & Sensors:**
-- ✅ ESP32-based IoT prototype
-- ✅ DHT22 temperature and humidity monitoring
-- ✅ Capacitive soil moisture sensor integration
-- ✅ Analog pH sensor monitoring
-- ✅ SH1106 OLED display for local readings
-- ✅ PCB design and schematic documentation
-- ✅ Physical prototype assembly and testing
-- ✅ Wokwi simulation validation
-
-**Firmware & Communication:**
-- ✅ MicroPython firmware implementation
-- ✅ WiFi connectivity with automatic reconnection
-- ✅ Firebase Realtime Database integration
-- ✅ Firestore data storage support
-- ✅ Sensor calibration algorithms
-- ✅ Error handling and graceful degradation
-- ✅ Local OLED data display
-
-**Cloud Infrastructure:**
-- ✅ Firebase Realtime Database configuration
-- ✅ Firestore structured storage implementation
-- ✅ Firebase Authentication integration
-- ✅ Real-time WebSocket synchronization
-- ✅ Database security rules configuration
-- ✅ Multi-user authentication support
-
-**Web Dashboard:**
-- ✅ React + TypeScript frontend application
-- ✅ Real-time sensor data display
-- ✅ Historical data table (200+ records)
-- ✅ Interactive analytics charts (Recharts)
-- ✅ CSV/JSON export functionality
-- ✅ Responsive design (mobile, tablet, desktop)
-- ✅ Firebase Authentication UI
-- ✅ Demo mode for testing without hardware
-- ✅ Glassmorphism dark theme design
-
-**Testing & Documentation:**
-- ✅ Physical prototype testing (48+ hours continuous operation)
-- ✅ Cross-browser compatibility verification
-- ✅ Comprehensive technical documentation
-- ✅ Setup and deployment instructions
-- ✅ Troubleshooting guide
-
-### 🚧 In Progress / Planned Future Enhancements
-
-**Machine Learning:**
-- 🚧 Harvest readiness prediction models
-- 🚧 Anomaly detection in sensor patterns
-- 🚧 Environmental trend analysis
-- 🚧 Optimal vermiculture condition recommendations
-- 🚧 Historical Firebase/Firestore data integration for ML training
-
-**System Improvements:**
-- 🚧 Offline buffering during WiFi loss using ESP32 flash storage
-- 🚧 Multi-bed deployment support
-- 🚧 Weatherproof enclosure design
-- 🚧 Firebase App Check security enhancement
-- 🚧 Secure MQTT/TLS implementation
-- 🚧 Power optimization with deep sleep modes
-- 🚧 Solar panel integration for extended operation
-
-**Advanced Features:**
-- 🚧 Mobile applications (iOS/Android)
-- 🚧 Email/SMS alert notifications
-- 🚧 Automated irrigation control integration
-- 🚧 Long-term trend analysis dashboard
-- 🚧 Multi-tenancy support for commercial deployment
-
----
-
-## 13. Security and Data Protection
+## 12. Security and Data Protection
 
 Security is a critical consideration for IoT systems that collect and transmit sensor data to cloud platforms. The VermIQ-Lite system implements multiple security layers to protect data integrity and prevent unauthorized access:
 
-### 13.1 Network Security
+### 12.1 Network Security
 
 **WiFi Security:**
 - ESP32 connects through WPA2-PSK encrypted WiFi networks
@@ -1561,7 +1343,7 @@ Security is a critical consideration for IoT systems that collect and transmit s
 - WebSocket connections secured with WSS protocol
 - No plaintext transmission of sensitive information
 
-### 13.2 Firebase Security
+### 12.2 Firebase Security
 
 **Authentication Controls:**
 - Firebase Authentication protects dashboard access
@@ -1607,7 +1389,7 @@ service cloud.firestore {
 - Each reading includes timestamp, reading number, and source fields for traceability
 - Database queries limited to prevent abuse (e.g., max 200 records per query)
 
-### 13.3 Frontend Security
+### 12.3 Frontend Security
 
 **Credential Management:**
 - React frontend uses Firebase web configuration (public API keys)
@@ -1623,7 +1405,7 @@ service cloud.firestore {
 - XSS protection through React's built-in sanitization
 - CSRF protection through Firebase's token-based authentication
 
-### 13.4 Code Repository Security
+### 12.4 Code Repository Security
 
 **.gitignore Configuration:**
 ```gitignore
@@ -1647,7 +1429,7 @@ dist-ssr
 - `.env.example` template provided without actual credentials
 - Regular security audits of committed code
 
-### 13.5 Data Integrity and Traceability
+### 12.5 Data Integrity and Traceability
 
 **Sensor Data Validation:**
 - Each reading includes multiple verification fields:
@@ -1664,7 +1446,7 @@ dist-ssr
 - Export functionality enables external data auditing
 - Firebase Console logs all database access attempts
 
-### 13.6 Offline Security Considerations
+### 12.6 Offline Security Considerations
 
 **Current Implementation:**
 - ESP32 continues local sensing during WiFi disconnection
@@ -1678,7 +1460,7 @@ dist-ssr
 - Automatic data synchronization upon reconnection
 - Tamper detection for physical security
 
-### 13.7 Future Security Enhancements
+### 12.7 Future Security Enhancements
 
 **Planned Improvements:**
 1. **Firebase App Check:** Verify requests come from legitimate VermIQ apps
@@ -1690,7 +1472,7 @@ dist-ssr
 7. **Hardware Security:** Secure boot and encrypted firmware on ESP32
 8. **Penetration Testing:** Third-party security audit before commercial deployment
 
-### 13.8 Security Limitations
+### 12.8 Security Limitations
 
 **Current Constraints:**
 1. **Test Mode Database:** Development database uses relaxed security rules (production requires stricter rules)
@@ -1708,7 +1490,7 @@ dist-ssr
 - Regular security updates to dependencies (npm audit, Firebase SDK updates)
 - Monitor Firebase Console for unusual activity patterns
 
-### 13.9 Compliance and Privacy
+### 12.9 Compliance and Privacy
 
 **Data Privacy Considerations:**
 - System collects only environmental sensor data (temperature, humidity, moisture, pH)
@@ -1900,12 +1682,12 @@ FIREBASE_AUTH = ""  # Leave empty for test mode, add auth token for production
 **Browser Compatibility Test Results:**
 | Browser | Version | Status | Notes |
 |---------|---------|--------|-------|
-| Chrome | 120.0+ | ✅ Pass | Full functionality |
-| Firefox | 121.0+ | ✅ Pass | Full functionality |
-| Edge | 120.0+ | ✅ Pass | Full functionality |
-| Safari | 17.0+ | ✅ Pass | Minor CSS differences in glassmorphism |
-| Mobile Chrome | Android 13 | ✅ Pass | Responsive layout works well |
-| Mobile Safari | iOS 17 | ✅ Pass | Touch interactions smooth |
+| Chrome | 120.0+ |   Pass | Full functionality |
+| Firefox | 121.0+ |   Pass | Full functionality |
+| Edge | 120.0+ |   Pass | Full functionality |
+| Safari | 17.0+ |   Pass | Minor CSS differences in glassmorphism |
+| Mobile Chrome | Android 13 |   Pass | Responsive layout works well |
+| Mobile Safari | iOS 17 |   Pass | Touch interactions smooth |
 
 ### Appendix F: Troubleshooting Decision Tree
 
@@ -1938,123 +1720,4 @@ Dashboard Not Showing Data?
 │  ├─ No → Check ESP32 troubleshooting above
 │  └─ Yes → Check browser console for errors
 ```
-
-### Appendix G: Glossary of Terms
-
-- **ADC (Analog-to-Digital Converter):** Circuit that converts continuous analog signals (voltage) to discrete digital values
-- **DHT22:** Digital temperature and humidity sensor with single-wire communication protocol
-- **ESP32:** Low-cost, low-power microcontroller with integrated WiFi and Bluetooth
-- **Firebase:** Google's Backend-as-a-Service (BaaS) platform providing database, authentication, and hosting
-- **Firestore:** NoSQL document database for structured data storage with rich querying
-- **Glassmorphism:** UI design trend featuring frosted glass appearance with blur and transparency
-- **I2C (Inter-Integrated Circuit):** Synchronous serial communication protocol for short-distance communication
-- **IoT (Internet of Things):** Network of physical devices connected to the internet for data collection and control
-- **MicroPython:** Python 3 implementation optimized for microcontrollers
-- **MQTT (Message Queuing Telemetry Transport):** Lightweight publish/subscribe messaging protocol for IoT
-- **OLED (Organic Light-Emitting Diode):** Display technology with self-illuminating pixels
-- **pH:** Measure of acidity/alkalinity on a scale of 0-14 (7 is neutral)
-- **Realtime Database:** Firebase's JSON-based cloud database with WebSocket synchronization
-- **SH1106:** OLED display driver IC supporting I2C and SPI communication
-- **Telemetry:** Automated communication process for collecting measurements from remote points
-- **Vermiculture:** Process of using earthworms to convert organic waste into nutrient-rich compost
-- **WebSocket:** Full-duplex communication protocol over TCP connection for real-time data exchange
-- **Zustand:** Minimalist state management library for React applications
-
----
-
-## 16. Acknowledgments
-
-The successful completion of this project was made possible through the collaborative efforts of the entire team and the support of various individuals and organizations:
-
-**Team Contributions:**
-- Special thanks to all team members for their dedication and expertise throughout the project lifecycle
-- Collaborative debugging sessions that resolved critical hardware and software integration challenges
-- Peer review process that improved code quality and documentation completeness
-
-**Academic Support:**
-- Course instructors for guidance on IoT system design principles and project scope definition
-- Laboratory staff for providing access to testing equipment and workspace
-- Academic institution for resources and facilities supporting hands-on implementation
-
-**Open Source Community:**
-- MicroPython developers for excellent embedded Python implementation
-- Firebase team at Google for comprehensive cloud platform and documentation
-- React and TypeScript communities for modern web development tools
-- Wokwi platform for enabling hardware simulation before physical prototyping
-- All open-source library maintainers whose work made this project possible
-
-**Technical Resources:**
-- Espressif Systems for ESP32 documentation and development tools
-- Component manufacturers for datasheets and application notes
-- Online forums (Stack Overflow, Reddit r/esp32, Arduino forums) for troubleshooting assistance
-
-**Sustainability Inspiration:**
-- Vermiculture researchers whose work demonstrates the environmental benefits of composting
-- Agricultural IoT pioneers showing how technology can support sustainable farming practices
-
-This project stands on the shoulders of countless contributors to the open-source hardware and software ecosystems. We are grateful for their work and hope this project contributes back to the community.
-
----
-
-## 17. License
-
-[Specify your license choice here - examples below]
-
-**Option 1 - MIT License:**
-```
-MIT License
-
-Copyright (c) 2026 VermIQ-Lite Team
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
-
-**Option 2 - Apache 2.0 License:**
-See [LICENSE](./LICENSE) file for full license text.
-
-**Option 3 - Academic/Educational Use:**
-This project is licensed for academic and educational purposes. Commercial use requires written permission from the project team.
-
----
-
-## 18. Contact and Support
-
-**Project Maintainers:**
-- Krishna Madhaparia - Full-Stack Development - [GitHub](https://github.com/Madhaparia-Krishna)
-- Team Contact: [Add team email or contact form]
-
-**Project Repository:**
-- GitHub: https://github.com/Madhaparia-Krishna/IoT-semester-project
-- Issues: [Report bugs or request features via GitHub Issues]
-- Discussions: [Community discussion forum link if available]
-
-**For Questions or Collaboration:**
-- Create an issue on GitHub for technical questions
-- Email for academic collaboration or research inquiries
-- Pull requests welcome for bug fixes and feature enhancements
-
-**Documentation Updates:**
-- Last Updated: June 17, 2026
-- Version: 1.0.0
-- Documentation Status: Complete and ready for submission
-
----
-
-**End of Documentation**
 
