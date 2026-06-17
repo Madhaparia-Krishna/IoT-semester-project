@@ -15,6 +15,9 @@ dist-ssr
 # Environment variables (contains sensitive Firebase credentials)
 .env
 serviceAccountKey.json
+*.key
+*.pem
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
