@@ -492,24 +492,19 @@ ph = 7 + ((PH_NEUTRAL_VOLTAGE - voltage) / PH_SLOPE)
 
 <table>
   <tr>
-    <td align="center">
-      <img src="./pictures/Error_data_recorded_01.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.4.1: DHT22 sensor error detection and graceful handling</em></p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="./pictures/Error_data_recorded_02.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.4.2: System continuing operation despite sensor timeouts</em></p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="./pictures/Screenshot_pH_Data_and_error.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.4.3: pH sensor data with intermittent error handling</em></p>
-    </td>
-  </tr>
+  <td align="center">
+    <img src="./pictures/Error_data_recorded_01.png" style="max-width:100%; height:auto;"/>
+    <p><em>Figure 4.4.1: DHT22 sensor error detection and graceful handling</em></p>
+    <img src="./pictures/Error_data_recorded_02.png" style="max-width:100%; height:auto;"/>
+    <p><em>Figure 4.4.2: System continuing operation despite sensor timeouts</em></p>
+   </td>
+<td align="center" valign="middle">
+    <img src="./pictures/Screenshot_pH_Data_and_error.png" style="max-width:100%; height:auto;"/>
+  <p><em>Figure 4.4.3: pH sensor data with intermittent error handling</em></p>
+</td>
+</tr>
 </table>
+
 
 
 
@@ -524,45 +519,32 @@ ph = 7 + ((PH_NEUTRAL_VOLTAGE - voltage) / PH_SLOPE)
 
 <table>
   <tr>
-    <td align="center">
+    <!-- Column 1 -->
+    <td align="center" valign="top">
       <img src="./pictures/Screenshot_Moisture_Data_1.png" style="max-width:100%; height:auto;"/>
       <p><em>Figure 4.5.1: Moisture sensor raw ADC values and calibration testing</em></p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="./pictures/Screenshot_Moisture_Data_2.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.5.2: Moisture percentage calculations and consistency validation</em></p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="./pictures/Screenshot_pH_Data_07.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.5.3: pH sensor voltage readings and calculated pH values</em></p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="./pictures/Screenshot_OLED_Reset.png" style="max-width:100%; height:auto;"/>
+
+  <img src="./pictures/Screenshot_pH_Data_07.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.5.2: pH sensor voltage readings and calculated pH values</em></p>
+
+  <img src="./pictures/all_sensor_reading_1.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.5.3: Complete sensor reading cycle with all parameters</em></p>
+
+  
+   <img src="./pictures/Screenshot_OLED_Reset.png" style="max-width:100%; height:auto;"/>
       <p><em>Figure 4.5.4: OLED display initialization and I2C communication setup</em></p>
     </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="./pictures/all_sensor_reading_1.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.5.5: Complete sensor reading cycle with all parameters</em></p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="./pictures/all_sensor_reading_2.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.5.6: Multiple consecutive cycles showing data consistency</em></p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="./pictures/all_sensor_reading_3.png" style="max-width:100%; height:auto;"/>
-      <p><em>Figure 4.5.7: Extended logging session for stability validation</em></p>
+
+    <!-- Column 2 -->
+   <td align="center" valign="top">
+      <img src="./pictures/Screenshot_Moisture_Data_2.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.5.5: Moisture percentage calculations and consistency validation</em></p>
+<img src="./pictures/all_sensor_reading_3.png" style="max-width:100%; height:auto;"/>
+  <p><em>Figure 4.5.6: Extended logging session for stability validation</em></p>
+
+
+  <img src="./pictures/all_sensor_reading_2.png" style="max-width:100%; height:auto;"/>
+      <p><em>Figure 4.5.7: Multiple consecutive cycles showing data consistency</em></p>
     </td>
   </tr>
 </table>
