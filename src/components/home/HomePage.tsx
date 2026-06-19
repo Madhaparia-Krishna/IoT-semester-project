@@ -1,25 +1,24 @@
 import React from 'react';
 import { Logo } from '../logo/Logo';
 import { GlassCard } from '../ui/GlassCard';
+import { Sidebar } from '../ui/Sidebar';
 import {
   Activity,
-  Cpu,
-  Database,
-  CloudLightning,
-  AlertTriangle,
   ArrowRight,
-  ChevronRight,
-  Layers,
   Thermometer,
   Droplets,
   Wind,
   CalendarDays,
-  Zap,
-  Box
+  Layers,
+  Database,
+  CloudLightning,
+  AlertTriangle,
+  ChevronRight,
+  Cpu,
 } from 'lucide-react';
 
 interface HomePageProps {
-  onNavigate: (page: 'schematic' | 'pcb' | 'wokwi' | 'physical' | 'dashboard') => void;
+  onNavigate: (page: 'home' | 'schematic' | 'pcb' | 'wokwi' | 'physical' | 'dashboard') => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
@@ -38,56 +37,32 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen bg-bg-space font-sans relative overflow-hidden bg-mesh-green select-none">
+      {/* Sidebar */}
+      <Sidebar
+        currentPage="home"
+        onNavigate={onNavigate}
+      />
+
       {/* Background visual glows */}
       <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-emerald-500/5 blur-[160px] rounded-full pointer-events-none" />
       <div className="absolute bottom-10 right-1/4 w-[500px] h-[500px] bg-cyan-500/5 blur-[160px] rounded-full pointer-events-none" />
 
-      {/* Navbar */}
-      <header className="border-b border-white/5 relative z-10 backdrop-blur-md bg-bg-space/40 sticky top-0">
+      {/* Navbar - Simplified without nav buttons */}
+      <header className="border-b border-white/5 relative z-10 backdrop-blur-md bg-bg-space/40 sticky top-0 lg:ml-64">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Logo size="md" />
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => onNavigate('schematic')}
-              className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl transition-all duration-300 border border-white/10 flex items-center gap-1.5 cursor-pointer text-sm"
-            >
-              View Schematic
-              <Zap className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => onNavigate('pcb')}
-              className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl transition-all duration-300 border border-white/10 flex items-center gap-1.5 cursor-pointer text-sm"
-            >
-              View PCB
-              <Box className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => onNavigate('wokwi')}
-              className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl transition-all duration-300 border border-white/10 flex items-center gap-1.5 cursor-pointer text-sm"
-            >
-              View Wokwi
-              <Cpu className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => onNavigate('physical')}
-              className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl transition-all duration-300 border border-white/10 flex items-center gap-1.5 cursor-pointer text-sm"
-            >
-              View Physical
-              <Layers className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => onNavigate('dashboard')}
-              className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-bg-space font-bold rounded-xl transition-all duration-300 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center gap-1.5 cursor-pointer text-sm"
-            >
-              Launch Dashboard
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
+          <Logo size="md" className="lg:hidden" />
+          <button
+            onClick={() => onNavigate('dashboard')}
+            className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-bg-space font-bold rounded-xl transition-all duration-300 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center gap-1.5 cursor-pointer text-sm ml-auto"
+          >
+            Launch Dashboard
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-6 pt-16 pb-24 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <section className="max-w-7xl mx-auto px-6 pt-16 pb-24 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center lg:ml-64">
         <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-semibold text-xs tracking-wider uppercase">
             <Activity className="w-3.5 h-3.5 animate-pulse" />
@@ -107,34 +82,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               Launch Dashboard
               <ArrowRight className="w-5 h-5" />
             </button>
-            <button
-              onClick={() => onNavigate('schematic')}
+            <a
+              href="#features"
               className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl border border-white/5 transition-all text-center flex items-center justify-center gap-2"
             >
-              View Circuit Design
-              <Zap className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => onNavigate('pcb')}
-              className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl border border-white/5 transition-all text-center flex items-center justify-center gap-2"
-            >
-              View PCB Design
-              <Box className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => onNavigate('wokwi')}
-              className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl border border-white/5 transition-all text-center flex items-center justify-center gap-2"
-            >
-              View Wokwi Simulation
-              <Cpu className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => onNavigate('physical')}
-              className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl border border-white/5 transition-all text-center flex items-center justify-center gap-2"
-            >
-              View Physical Implementation
-              <Layers className="w-5 h-5" />
-            </button>
+              Explore Features
+            </a>
           </div>
         </div>
 
@@ -200,7 +153,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       </section>
 
       {/* System Architecture Section */}
-      <section id="architecture" className="border-t border-white/5 py-24 bg-[#090b11]/60 relative">
+      <section id="architecture" className="border-t border-white/5 py-24 bg-[#090b11]/60 relative lg:ml-64">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
             <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-glow-emerald text-white">
@@ -266,7 +219,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       </section>
 
       {/* Feature Grid Section */}
-      <section className="py-24 max-w-7xl mx-auto px-6 relative z-10">
+      <section id="features" className="py-24 max-w-7xl mx-auto px-6 relative z-10 lg:ml-64">
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
           <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white">
             Designed for Agronomic Operations
@@ -310,7 +263,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       </section>
 
       {/* ThingSpeak & Integration CTA */}
-      <section className="bg-[#090b11]/80 py-20 border-t border-b border-white/5 relative z-10 text-center">
+      <section className="bg-[#090b11]/80 py-20 border-t border-b border-white/5 relative z-10 text-center lg:ml-64">
         <div className="max-w-4xl mx-auto px-6 space-y-6">
           <CloudLightning className="w-12 h-12 text-cyan-400 mx-auto animate-pulse" />
           <h2 className="font-display text-3xl font-extrabold text-white">ThingSpeak & Cloud Sync Integration</h2>
@@ -330,7 +283,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-12 relative z-10 bg-bg-space text-slate-500 text-sm">
+      <footer className="border-t border-white/5 py-12 relative z-10 bg-bg-space text-slate-500 text-sm lg:ml-64">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <Logo size="sm" />
           <div>© {new Date().getFullYear()} VermIQ-Lite. Smart Agritech Environmental Systems.</div>
