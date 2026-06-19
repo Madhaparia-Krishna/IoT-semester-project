@@ -316,7 +316,10 @@ export const WokwiPage: React.FC<WokwiPageProps> = ({ onNavigate }) => {
               View Schematic
             </button>
             <button
-              onClick={() => onNavigate('home')}
+              onClick={() => {
+                window.scrollTo(0, 0);
+                onNavigate('home');
+              }}
               className="px-8 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]"
             >
               Return to Home
@@ -352,7 +355,7 @@ export const WokwiPage: React.FC<WokwiPageProps> = ({ onNavigate }) => {
             <img
               src={WOKWI_IMAGES[selectedImageIndex].src}
               alt={WOKWI_IMAGES[selectedImageIndex].title}
-              className="w-full h-auto rounded-lg"
+              className="w-full max-h-[75vh] object-contain rounded-lg"
             />
 
             {/* Image Info */}

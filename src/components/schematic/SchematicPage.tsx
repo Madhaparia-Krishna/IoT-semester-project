@@ -375,7 +375,10 @@ export const SchematicPage: React.FC<SchematicPageProps> = ({ onNavigate }) => {
             This circuit design has been tested in production environments. Visit the dashboard to monitor your nodes in real time or contact support for hardware assembly assistance.
           </p>
           <button
-            onClick={() => onNavigate('home')}
+            onClick={() => {
+              window.scrollTo(0, 0);
+              onNavigate('home');
+            }}
             className="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-bg-space font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(16,185,129,0.3)]"
           >
             Return to Home

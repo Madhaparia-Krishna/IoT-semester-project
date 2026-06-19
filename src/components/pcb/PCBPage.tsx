@@ -361,7 +361,10 @@ export const PCBPage: React.FC<PCBPageProps> = ({ onNavigate }) => {
               View Schematic
             </button>
             <button
-              onClick={() => onNavigate('home')}
+              onClick={() => {
+                window.scrollTo(0, 0);
+                onNavigate('home');
+              }}
               className="px-8 py-3 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]"
             >
               Return to Home
@@ -397,7 +400,7 @@ export const PCBPage: React.FC<PCBPageProps> = ({ onNavigate }) => {
             <img
               src={PCB_IMAGES[selectedImageIndex].src}
               alt={PCB_IMAGES[selectedImageIndex].title}
-              className="w-full h-auto rounded-lg"
+              className="w-full max-h-[75vh] object-contain rounded-lg"
             />
 
             {/* Image Info */}

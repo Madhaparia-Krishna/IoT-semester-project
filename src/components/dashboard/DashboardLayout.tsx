@@ -206,7 +206,7 @@ export const DashboardLayout: React.FC<{ onGoHome?: () => void }> = ({ onGoHome 
         <div className="absolute inset-0 bg-mesh-green opacity-40 pointer-events-none" />
 
         {/* TOPBAR */}
-        <header className="h-20 border-b border-white/5 flex items-center justify-between px-6 sticky top-0 bg-bg-space/80 backdrop-blur-md z-30">
+        <header className="h-20 border-b border-white/5 flex items-center justify-between px-6 sticky top-0 bg-bg-space/80 backdrop-blur-md z-30 pt-4">
           <div className="flex items-center gap-4">
             <button className="lg:hidden text-slate-400 hover:text-white cursor-pointer" onClick={() => setSidebarOpen(true)}>
               <Menu className="w-6 h-6" />
