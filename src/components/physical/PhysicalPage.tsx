@@ -364,7 +364,10 @@ export const PhysicalPage: React.FC<PhysicalPageProps> = ({ onNavigate }) => {
               View Simulation
             </button>
             <button
-              onClick={() => onNavigate('home')}
+              onClick={() => {
+                window.scrollTo(0, 0);
+                onNavigate('home');
+              }}
               className="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(16,185,129,0.3)]"
             >
               Return to Home
@@ -400,7 +403,7 @@ export const PhysicalPage: React.FC<PhysicalPageProps> = ({ onNavigate }) => {
             <img
               src={PHYSICAL_IMAGES[selectedImageIndex].src}
               alt={PHYSICAL_IMAGES[selectedImageIndex].title}
-              className="w-full h-auto rounded-lg"
+              className="w-full max-h-[75vh] object-contain rounded-lg"
             />
 
             {/* Image Info */}
