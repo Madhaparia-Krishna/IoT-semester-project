@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 
 interface HomePageProps {
-  onNavigate: (page: 'schematic' | 'pcb' | 'wokwi' | 'dashboard') => void;
+  onNavigate: (page: 'schematic' | 'pcb' | 'wokwi' | 'physical' | 'dashboard') => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
@@ -67,6 +67,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             >
               View Wokwi
               <Cpu className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => onNavigate('physical')}
+              className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl transition-all duration-300 border border-white/10 flex items-center gap-1.5 cursor-pointer text-sm"
+            >
+              View Physical
+              <Layers className="w-4 h-4" />
             </button>
             <button
               onClick={() => onNavigate('dashboard')}
@@ -120,6 +127,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             >
               View Wokwi Simulation
               <Cpu className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => onNavigate('physical')}
+              className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl border border-white/5 transition-all text-center flex items-center justify-center gap-2"
+            >
+              View Physical Implementation
+              <Layers className="w-5 h-5" />
             </button>
           </div>
         </div>
