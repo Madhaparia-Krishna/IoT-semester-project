@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 
 interface HomePageProps {
-  onNavigate: (page: 'schematic' | 'pcb' | 'auth') => void;
+  onNavigate: (page: 'schematic' | 'pcb' | 'dashboard') => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
@@ -62,7 +62,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <Box className="w-4 h-4" />
             </button>
             <button
-              onClick={() => onNavigate('auth')}
+              onClick={() => onNavigate('dashboard')}
               className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-bg-space font-bold rounded-xl transition-all duration-300 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center gap-1.5 cursor-pointer text-sm"
             >
               Launch Dashboard
@@ -87,10 +87,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
             <button
-              onClick={() => onNavigate('auth')}
+              onClick={() => onNavigate('dashboard')}
               className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-bg-space font-extrabold rounded-xl transition-all duration-300 hover:shadow-[0_0_25px_rgba(16,185,129,0.4)] flex items-center justify-center gap-2 cursor-pointer text-base"
             >
-              Sign In to System
+              Launch Dashboard
               <ArrowRight className="w-5 h-5" />
             </button>
             <button
@@ -291,7 +291,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </p>
           <div className="pt-4">
             <button
-              onClick={() => onNavigate('auth')}
+              onClick={() => onNavigate('dashboard')}
               className="px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-bg-space font-extrabold rounded-xl transition-all duration-300 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] inline-flex items-center gap-2 cursor-pointer text-sm"
             >
               Sign In to Your Station

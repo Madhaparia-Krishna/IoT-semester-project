@@ -59,27 +59,17 @@ function App() {
     setCurrentPage(page);
   };
 
-  // Routing Flow
-  if (user) {
-    return (
-      <>
-        <DashboardLayout />
-        <ToastContainer />
-      </>
-    );
-  }
+  // Routing Flow - Show HomePage by default for everyone (authenticated or not)
+  // Authenticated users can still access dashboard by navigating to it
+  // Unauthenticated users see the public homepage with documentation links
 
-  // Page routing for unauthenticated users
+  // Page routing for all users - Home as default landing page
   return (
     <>
       {currentPage === 'home' && (
         <HomePage
           onNavigate={(page) => {
-            if (page === 'auth') {
-              setCurrentPage('dashboard');
-            } else {
-              setCurrentPage(page);
-            }
+            setCurrentPage(page);
           }}
         />
       )}
@@ -89,7 +79,13 @@ function App() {
       {currentPage === 'pcb' && (
         <PCBPage onNavigate={handleNavigate} />
       )}
-      {currentPage === 'dashboard' && (
+      {currentPage === 'dashboard' && user && (
+        <>
+          <DashboardLayout onGoHome={() => setCurrentPage('home')} />
+          <ToastContainer />
+        </>
+      )}
+      {currentPage === 'dashboard' && !user && (
         <>
           <AuthManager />
           <ToastContainer />
