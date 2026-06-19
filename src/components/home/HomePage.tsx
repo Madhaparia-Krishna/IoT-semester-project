@@ -11,7 +11,6 @@ import {
   CalendarDays,
   Layers,
   Database,
-  CloudLightning,
   AlertTriangle,
   ChevronRight,
   Cpu,
@@ -262,23 +261,127 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         </div>
       </section>
 
-      {/* ThingSpeak & Integration CTA */}
-      <section className="bg-[#090b11]/80 py-20 border-t border-b border-white/5 relative z-10 text-center lg:ml-64">
-        <div className="max-w-4xl mx-auto px-6 space-y-6">
-          <CloudLightning className="w-12 h-12 text-cyan-400 mx-auto animate-pulse" />
-          <h2 className="font-display text-3xl font-extrabold text-white">ThingSpeak & Cloud Sync Integration</h2>
-          <p className="text-slate-400 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
-            Expose read feeds, load secondary data charts, or export raw telemetry tables in CSV/JSON formats for offline analysis.
+      {/* Quick Start / Getting Started Section */}
+      <section className="py-24 max-w-7xl mx-auto px-6 relative z-10 lg:ml-64">
+        <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white">
+            Project Documentation
+          </h2>
+          <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+            Explore the complete VermIQ system design, implementation, and deployment.
           </p>
-          <div className="pt-4">
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <GlassCard>
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-6 text-emerald-400">
+              <Cpu className="w-6 h-6" />
+            </div>
+            <h3 className="font-display font-bold text-lg text-white mb-3">Circuit Schematic</h3>
+            <p className="text-slate-400 text-sm leading-relaxed mb-4">
+              Complete hardware design showing ESP32 microcontroller, sensor connections, and power distribution.
+            </p>
+            <button
+              onClick={() => {
+                window.scrollTo(0, 0);
+                onNavigate('schematic');
+              }}
+              className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 text-sm font-semibold transition-colors"
+            >
+              View Design <ArrowRight className="w-4 h-4" />
+            </button>
+          </GlassCard>
+
+          <GlassCard>
+            <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-6 text-purple-400">
+              <Database className="w-6 h-6" />
+            </div>
+            <h3 className="font-display font-bold text-lg text-white mb-3">PCB Design</h3>
+            <p className="text-slate-400 text-sm leading-relaxed mb-4">
+              3D PCB layout showing component placement, traces, and spatial arrangement from multiple angles.
+            </p>
+            <button
+              onClick={() => {
+                window.scrollTo(0, 0);
+                onNavigate('pcb');
+              }}
+              className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 text-sm font-semibold transition-colors"
+            >
+              View Board <ArrowRight className="w-4 h-4" />
+            </button>
+          </GlassCard>
+
+          <GlassCard>
+            <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-6 text-blue-400">
+              <Cpu className="w-6 h-6" />
+            </div>
+            <h3 className="font-display font-bold text-lg text-white mb-3">Wokwi Simulation</h3>
+            <p className="text-slate-400 text-sm leading-relaxed mb-4">
+              Virtual circuit simulation demonstrating the system operation in VSCode environment.
+            </p>
+            <button
+              onClick={() => {
+                window.scrollTo(0, 0);
+                onNavigate('wokwi');
+              }}
+              className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm font-semibold transition-colors"
+            >
+              View Simulation <ArrowRight className="w-4 h-4" />
+            </button>
+          </GlassCard>
+
+          <GlassCard>
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-6 text-emerald-400">
+              <Layers className="w-6 h-6" />
+            </div>
+            <h3 className="font-display font-bold text-lg text-white mb-3">Physical Implementation</h3>
+            <p className="text-slate-400 text-sm leading-relaxed mb-4">
+              Laboratory deployment showing actual setup, sensor integration, and real-time display.
+            </p>
+            <button
+              onClick={() => {
+                window.scrollTo(0, 0);
+                onNavigate('physical');
+              }}
+              className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 text-sm font-semibold transition-colors"
+            >
+              View Setup <ArrowRight className="w-4 h-4" />
+            </button>
+          </GlassCard>
+
+          <GlassCard>
+            <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-6 text-cyan-400">
+              <Database className="w-6 h-6" />
+            </div>
+            <h3 className="font-display font-bold text-lg text-white mb-3">Image Gallery</h3>
+            <p className="text-slate-400 text-sm leading-relaxed mb-4">
+              Complete collection of all project documentation including schematics, data visualizations, and screenshots.
+            </p>
+            <button
+              onClick={() => {
+                // Gallery opens in sidebar, no navigation needed
+              }}
+              className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 text-sm font-semibold transition-colors"
+            >
+              Browse Gallery <ArrowRight className="w-4 h-4" />
+            </button>
+          </GlassCard>
+
+          <GlassCard>
+            <div className="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-6 text-rose-400">
+              <AlertTriangle className="w-6 h-6" />
+            </div>
+            <h3 className="font-display font-bold text-lg text-white mb-3">Live Dashboard</h3>
+            <p className="text-slate-400 text-sm leading-relaxed mb-4">
+              Real-time monitoring interface with analytics, alerts, and comprehensive system status tracking.
+            </p>
             <button
               onClick={() => onNavigate('dashboard')}
-              className="px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-bg-space font-extrabold rounded-xl transition-all duration-300 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] inline-flex items-center gap-2 cursor-pointer text-sm"
+              className="inline-flex items-center gap-2 text-rose-400 hover:text-rose-300 text-sm font-semibold transition-colors"
             >
-              Sign In to Your Station
-              <ArrowRight className="w-4 h-4" />
+              Launch Dashboard <ArrowRight className="w-4 h-4" />
             </button>
-          </div>
+          </GlassCard>
         </div>
       </section>
 
