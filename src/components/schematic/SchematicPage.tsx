@@ -1,15 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Logo } from '../logo/Logo';
 import { GlassCard } from '../ui/GlassCard';
 import { Sidebar } from '../ui/Sidebar';
-import { Cpu, Radio, Zap, Droplets } from 'lucide-react';
+import { Cpu, Radio, Zap, Droplets, ZoomIn, ZoomOut, Maximize2, ExternalLink, X } from 'lucide-react';
 import schematicImg from '../../assets/schematic.svg';
 
 interface SchematicPageProps {
-  onNavigate: (page: 'home' | 'schematic' | 'pcb' | 'wokwi' | 'physical' | 'dashboard') => void;
+  onNavigate: (page: 'home' | 'schematic' | 'pcb' | 'pcb-3d' | 'wokwi' | 'physical' | 'dashboard') => void;
 }
 
 export const SchematicPage: React.FC<SchematicPageProps> = ({ onNavigate }) => {
+  const [zoomLevel, setZoomLevel] = useState(100);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const handleZoomIn = () => {
+    setZoomLevel(prev => Math.min(prev + 25, 300));
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel(prev => Math.max(prev - 25, 50));
+  };
+
+  const handleResetZoom = () => {
+    setZoomLevel(100);
+  };
+
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen);
+  };
+
+  // Handle ESC key to close fullscreen
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isFullscreen) {
+        setIsFullscreen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isFullscreen]);
+
   return (
     <div className="min-h-screen bg-bg-space font-sans relative overflow-hidden bg-mesh-green select-none">
       {/* Sidebar */}
@@ -43,18 +74,127 @@ export const SchematicPage: React.FC<SchematicPageProps> = ({ onNavigate }) => {
 
       {/* Main Content */}
       <section className="max-w-7xl mx-auto px-6 pb-16 relative z-10 space-y-12 lg:ml-64">
-        {/* Schematic Image */}
+        {/* OSH Lab Link Card */}
+        <GlassCard className="bg-gradient-to-br from-purple-500/5 to-blue-500/5 border-purple-500/20">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex-1">
+              <h3 className="font-display font-bold text-xl text-white mb-2">View on OSH Lab</h3>
+              <p className="text-slate-400 text-sm">
+                Access the complete schematic design, PCB layout, and Bill of Materials on OSH Lab. You can also fork the project and customize it for your needs.
+              </p>
+            </div>
+            <a
+              href="https://oshwlab.com/evaghjiani/project_wsoshhsu"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] flex-shrink-0"
+            >
+              <span>Open in OSH Lab</span>
+              <ExternalLink className="w-5 h-5" />
+            </a>
+          </div>
+        </GlassCard>
+
+        {/* Schematic Image with Zoom Controls */}
         <GlassCard className="overflow-hidden">
-          <div className="bg-white/5 p-8 rounded-lg border border-white/5">
-            <img
-              src={schematicImg}
-              alt="VermIQ Circuit Schematic"
-              className="w-full h-auto object-contain bg-white/2 p-4 rounded-lg"
-            />
+          <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/5">
+            <h3 className="font-display font-bold text-lg text-white">Circuit Schematic</h3>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleZoomOut}
+                disabled={zoomLevel <= 50}
+                className="p-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-slate-300 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Zoom Out"
+              >
+                <ZoomOut className="w-5 h-5" />
+              </button>
+              <button
+                onClick={handleResetZoom}
+                className="px-3 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-slate-300 hover:text-white transition-all text-sm font-semibold min-w-[70px]"
+                title="Reset Zoom"
+              >
+                {zoomLevel}%
+              </button>
+              <button
+                onClick={handleZoomIn}
+                disabled={zoomLevel >= 300}
+                className="p-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-slate-300 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Zoom In"
+              >
+                <ZoomIn className="w-5 h-5" />
+              </button>
+              <button
+                onClick={toggleFullscreen}
+                className="p-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-slate-300 hover:text-white transition-all ml-2"
+                title="Toggle Fullscreen"
+              >
+                <Maximize2 className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          <div className={`bg-white/5 rounded-lg border border-white/5 overflow-auto ${isFullscreen ? 'fixed inset-0 z-[9999] p-0 bg-black flex items-center justify-center' : 'p-8'}`}>
+            {isFullscreen && (
+              <>
+                {/* Close button */}
+                <button
+                  onClick={toggleFullscreen}
+                  className="fixed top-6 right-6 p-3 bg-black/80 hover:bg-black text-white rounded-lg z-[10000] border border-white/20"
+                  title="Exit Fullscreen (ESC)"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+
+                {/* Zoom controls in fullscreen */}
+                <div className="fixed top-6 left-6 z-[10000] flex items-center gap-2">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleZoomOut(); }}
+                    disabled={zoomLevel <= 50}
+                    className="p-2 bg-black/80 hover:bg-black border border-white/20 rounded-lg text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Zoom Out"
+                  >
+                    <ZoomOut className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleResetZoom(); }}
+                    className="px-3 py-2 bg-black/80 hover:bg-black border border-white/20 rounded-lg text-white transition-all text-sm font-semibold min-w-[70px]"
+                    title="Reset Zoom"
+                  >
+                    {zoomLevel}%
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleZoomIn(); }}
+                    disabled={zoomLevel >= 300}
+                    className="p-2 bg-black/80 hover:bg-black border border-white/20 rounded-lg text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Zoom In"
+                  >
+                    <ZoomIn className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Instructions */}
+                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[10000] text-white/60 text-xs text-center">
+                  <p>Click image to zoom • Press ESC or click X to close</p>
+                </div>
+              </>
+            )}
+            <div className={`flex items-center justify-center ${isFullscreen ? 'w-full h-full overflow-auto p-8' : 'min-h-[400px]'}`}>
+              <img
+                src={schematicImg}
+                alt="VermIQ Circuit Schematic"
+                style={{
+                  width: `${zoomLevel}%`,
+                  maxWidth: 'none',
+                  transition: 'width 0.2s ease'
+                }}
+                className={`object-contain p-4 rounded-lg ${isFullscreen ? 'cursor-zoom-in' : 'bg-white/2 cursor-zoom-in'}`}
+                onClick={handleZoomIn}
+              />
+            </div>
           </div>
           <div className="mt-6 pt-6 border-t border-white/5">
             <p className="text-xs text-slate-500 text-center">
-              Complete circuit schematic showing ESP32 microcontroller, sensor modules, power distribution, and communication interfaces
+              Complete circuit schematic showing ESP32 microcontroller, sensor modules, power distribution, and communication interfaces. Click image to zoom in, or use the controls above.
             </p>
           </div>
         </GlassCard>
