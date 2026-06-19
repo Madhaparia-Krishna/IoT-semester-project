@@ -14,11 +14,12 @@ import {
   Droplets,
   Wind,
   CalendarDays,
-  Zap
+  Zap,
+  Box
 } from 'lucide-react';
 
 interface HomePageProps {
-  onNavigate: (page: 'schematic' | 'auth') => void;
+  onNavigate: (page: 'schematic' | 'pcb' | 'auth') => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
@@ -52,6 +53,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             >
               View Schematic
               <Zap className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => onNavigate('pcb')}
+              className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl transition-all duration-300 border border-white/10 flex items-center gap-1.5 cursor-pointer text-sm"
+            >
+              View PCB
+              <Box className="w-4 h-4" />
             </button>
             <button
               onClick={() => onNavigate('auth')}
@@ -91,6 +99,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             >
               View Circuit Design
               <Zap className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => onNavigate('pcb')}
+              className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl border border-white/5 transition-all text-center flex items-center justify-center gap-2"
+            >
+              View PCB Design
+              <Box className="w-5 h-5" />
             </button>
           </div>
         </div>

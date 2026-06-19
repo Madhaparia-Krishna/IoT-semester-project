@@ -5,7 +5,7 @@ import { ArrowLeft, Cpu, Radio, Zap, Droplets } from 'lucide-react';
 import schematicImg from '../../assets/schematic.svg';
 
 interface SchematicPageProps {
-  onNavigate: (page: 'home' | 'schematic') => void;
+  onNavigate: (page: 'home' | 'pcb') => void;
 }
 
 export const SchematicPage: React.FC<SchematicPageProps> = ({ onNavigate }) => {
