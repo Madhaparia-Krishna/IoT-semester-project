@@ -30,7 +30,7 @@ import { HistoryData } from './History';
 import { SettingsPage } from './Settings';
 import { MLAnalytics } from './MLAnalytics';
 
-export const DashboardLayout: React.FC = () => {
+export const DashboardLayout: React.FC<{ onGoHome?: () => void }> = ({ onGoHome }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'beds' | 'analytics' | 'alerts' | 'nodes' | 'history' | 'settings' | 'ml-analytics'>('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -211,6 +211,17 @@ export const DashboardLayout: React.FC = () => {
             <button className="lg:hidden text-slate-400 hover:text-white cursor-pointer" onClick={() => setSidebarOpen(true)}>
               <Menu className="w-6 h-6" />
             </button>
+            
+            {/* Home Button */}
+            {onGoHome && (
+              <button
+                onClick={onGoHome}
+                className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white rounded-xl text-sm font-semibold transition-all cursor-pointer"
+                title="Go back to home page"
+              >
+                ← Home
+              </button>
+            )}
             
             {/* Search Input Mock */}
             <div className="relative hidden md:block w-64">
