@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useStore } from './store/useStore';
 import { authService } from './services/firebase';
-import LandingPage from './components/landing/LandingPage';
+import HomePage from './components/home/HomePage';
+import SchematicPage from './components/schematic/SchematicPage';
 import AuthManager from './components/auth/AuthManager';
 import DashboardLayout from './components/dashboard/DashboardLayout';
 import ToastContainer from './components/ui/ToastContainer';
 import { Loader2 } from 'lucide-react';
 
+type PageType = 'home' | 'schematic' | 'dashboard';
+
 function App() {
   const { user, setUser, authLoading, setAuthLoading, startRealtimeTelemetry } = useStore();
-  const [showAuth, setShowAuth] = useState(false);
+  const [currentPage, setCurrentPage] = useState<PageType>('home');
 
   // Bind Firebase / Local Mock Auth Listener
   useEffect(() => {
@@ -51,6 +54,10 @@ function App() {
     );
   }
 
+  const handleNavigate = (page: PageType) => {
+    setCurrentPage(page);
+  };
+
   // Routing Flow
   if (user) {
     return (
@@ -61,18 +68,29 @@ function App() {
     );
   }
 
-  if (showAuth) {
-    return (
-      <>
-        <AuthManager />
-        <ToastContainer />
-      </>
-    );
-  }
-
+  // Page routing for unauthenticated users
   return (
     <>
-      <LandingPage onStart={() => setShowAuth(true)} />
+      {currentPage === 'home' && (
+        <HomePage
+          onNavigate={(page) => {
+            if (page === 'auth') {
+              setCurrentPage('dashboard');
+            } else {
+              setCurrentPage(page);
+            }
+          }}
+        />
+      )}
+      {currentPage === 'schematic' && (
+        <SchematicPage onNavigate={handleNavigate} />
+      )}
+      {currentPage === 'dashboard' && (
+        <>
+          <AuthManager />
+          <ToastContainer />
+        </>
+      )}
       <ToastContainer />
     </>
   );
