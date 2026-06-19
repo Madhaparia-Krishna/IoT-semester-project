@@ -4,12 +4,13 @@ import { authService } from './services/firebase';
 import HomePage from './components/home/HomePage';
 import SchematicPage from './components/schematic/SchematicPage';
 import PCBPage from './components/pcb/PCBPage';
+import WokwiPage from './components/wokwi/WokwiPage';
 import AuthManager from './components/auth/AuthManager';
 import DashboardLayout from './components/dashboard/DashboardLayout';
 import ToastContainer from './components/ui/ToastContainer';
 import { Loader2 } from 'lucide-react';
 
-type PageType = 'home' | 'schematic' | 'pcb' | 'dashboard';
+type PageType = 'home' | 'schematic' | 'pcb' | 'wokwi' | 'dashboard';
 
 function App() {
   const { user, setUser, authLoading, setAuthLoading, startRealtimeTelemetry } = useStore();
@@ -78,6 +79,9 @@ function App() {
       )}
       {currentPage === 'pcb' && (
         <PCBPage onNavigate={handleNavigate} />
+      )}
+      {currentPage === 'wokwi' && (
+        <WokwiPage onNavigate={handleNavigate} />
       )}
       {currentPage === 'dashboard' && user && (
         <>
