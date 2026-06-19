@@ -1,35 +1,36 @@
 import React from 'react';
 import { Logo } from '../logo/Logo';
 import { GlassCard } from '../ui/GlassCard';
-import { ArrowLeft, Cpu, Radio, Zap, Droplets } from 'lucide-react';
+import { Sidebar } from '../ui/Sidebar';
+import { Cpu, Radio, Zap, Droplets } from 'lucide-react';
 import schematicImg from '../../assets/schematic.svg';
 
 interface SchematicPageProps {
-  onNavigate: (page: 'home' | 'pcb') => void;
+  onNavigate: (page: 'home' | 'schematic' | 'pcb' | 'wokwi' | 'physical' | 'dashboard') => void;
 }
 
 export const SchematicPage: React.FC<SchematicPageProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-bg-space font-sans relative overflow-hidden bg-mesh-green select-none">
+      {/* Sidebar */}
+      <Sidebar
+        currentPage="schematic"
+        onNavigate={onNavigate}
+      />
+
       {/* Background visual glows */}
       <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-emerald-500/5 blur-[160px] rounded-full pointer-events-none" />
       <div className="absolute bottom-10 right-1/4 w-[500px] h-[500px] bg-cyan-500/5 blur-[160px] rounded-full pointer-events-none" />
 
       {/* Navbar */}
-      <header className="border-b border-white/5 relative z-10 backdrop-blur-md bg-bg-space/40 sticky top-0">
+      <header className="border-b border-white/5 relative z-10 backdrop-blur-md bg-bg-space/40 sticky top-0 lg:ml-64">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <button
-            onClick={() => onNavigate('home')}
-            className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            <Logo size="md" />
-          </button>
+          <Logo size="md" className="lg:hidden" />
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-6 pt-12 pb-8 relative z-10">
+      <section className="max-w-7xl mx-auto px-6 pt-12 pb-8 relative z-10 lg:ml-64">
         <div className="space-y-4">
           <h1 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-white text-glow-emerald">
             Circuit Schematic & Hardware Architecture
@@ -41,7 +42,7 @@ export const SchematicPage: React.FC<SchematicPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* Main Content */}
-      <section className="max-w-7xl mx-auto px-6 pb-16 relative z-10 space-y-12">
+      <section className="max-w-7xl mx-auto px-6 pb-16 relative z-10 space-y-12 lg:ml-64">
         {/* Schematic Image */}
         <GlassCard className="overflow-hidden">
           <div className="bg-white/5 p-8 rounded-lg border border-white/5">
@@ -383,7 +384,7 @@ export const SchematicPage: React.FC<SchematicPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-12 relative z-10 bg-bg-space text-slate-500 text-sm">
+      <footer className="border-t border-white/5 py-12 relative z-10 bg-bg-space text-slate-500 text-sm lg:ml-64">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <Logo size="sm" />
           <div>© {new Date().getFullYear()} VermIQ-Lite. Smart Agritech Environmental Systems.</div>
