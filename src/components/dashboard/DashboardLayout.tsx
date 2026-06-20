@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../../store/useStore';
-import { SIMULATED_NODES, generateTelemetry } from '../../services/simulator';
 import { Logo } from '../logo/Logo';
 import {
   LayoutDashboard,
@@ -54,22 +53,10 @@ export const DashboardLayout: React.FC<{ onGoHome?: () => void }> = ({ onGoHome 
       return;
     }
 
-    console.log('Using simulated data mode');
-    
-    // Immediate initial tick
-    SIMULATED_NODES.forEach((node) => {
-      const data = generateTelemetry(node);
-      updateTelemetry(node.id, data);
-    });
+    console.log('Using simulated data mode - Node is offline, showing historical data only');
 
-    const interval = setInterval(() => {
-      SIMULATED_NODES.forEach((node) => {
-        const data = generateTelemetry(node);
-        updateTelemetry(node.id, data);
-      });
-    }, 2500);
-
-    return () => clearInterval(interval);
+    // No real-time updates - node is offline
+    // Historical data is already loaded from initialization in useStore.ts
   }, [updateTelemetry, realtimeDataMode]);
 
   // 2. DB FIRESTORE ALERTS SYNC (Disabled for now)
@@ -114,16 +101,18 @@ export const DashboardLayout: React.FC<{ onGoHome?: () => void }> = ({ onGoHome 
     { id: 'beds', name: 'Beds', icon: <Database className="w-5 h-5" /> },
     { id: 'analytics', name: 'Analytics', icon: <LineChart className="w-5 h-5" /> },
     { id: 'ml-analytics', name: 'Machine Learning', icon: <Brain className="w-5 h-5" /> },
-    { id: 'alerts', name: 'Alerts', icon: (
-      <div className="relative">
-        <Bell className="w-5 h-5" />
-        {activeAlertsCount > 0 && (
-          <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-rose-500 rounded-full text-[9px] flex items-center justify-center text-white font-bold animate-pulse">
-            {activeAlertsCount}
-          </span>
-        )}
-      </div>
-    ) },
+    {
+      id: 'alerts', name: 'Alerts', icon: (
+        <div className="relative">
+          <Bell className="w-5 h-5" />
+          {activeAlertsCount > 0 && (
+            <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-rose-500 rounded-full text-[9px] flex items-center justify-center text-white font-bold animate-pulse">
+              {activeAlertsCount}
+            </span>
+          )}
+        </div>
+      )
+    },
     { id: 'nodes', name: 'Nodes', icon: <Cpu className="w-5 h-5" /> },
     { id: 'history', name: 'Historical Data', icon: <History className="w-5 h-5" /> },
     { id: 'settings', name: 'Settings', icon: <Settings className="w-5 h-5" /> },
@@ -141,9 +130,8 @@ export const DashboardLayout: React.FC<{ onGoHome?: () => void }> = ({ onGoHome 
 
       {/* SIDEBAR */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-64 glass-panel border-r border-white/5 flex flex-col justify-between transition-transform duration-300 lg:translate-x-0 lg:static lg:z-auto shrink-0 ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        className={`fixed inset-y-0 left-0 z-40 w-64 glass-panel border-r border-white/5 flex flex-col justify-between transition-transform duration-300 lg:translate-x-0 lg:static lg:z-auto shrink-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
       >
         <div>
           {/* Logo Brand Header */}
@@ -165,11 +153,10 @@ export const DashboardLayout: React.FC<{ onGoHome?: () => void }> = ({ onGoHome 
                     setActiveTab(item.id as any);
                     setSidebarOpen(false);
                   }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all cursor-pointer ${
-                    isActive
-                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                      : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
-                  }`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all cursor-pointer ${isActive
+                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                    : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                    }`}
                 >
                   {item.icon}
                   {item.name}
@@ -211,7 +198,7 @@ export const DashboardLayout: React.FC<{ onGoHome?: () => void }> = ({ onGoHome 
             <button className="lg:hidden text-slate-400 hover:text-white cursor-pointer" onClick={() => setSidebarOpen(true)}>
               <Menu className="w-6 h-6" />
             </button>
-            
+
             {/* Home Button */}
             {onGoHome && (
               <button
@@ -222,7 +209,7 @@ export const DashboardLayout: React.FC<{ onGoHome?: () => void }> = ({ onGoHome 
                 ← Home
               </button>
             )}
-            
+
             {/* Search Input Mock */}
             <div className="relative hidden md:block w-64">
               <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
@@ -240,13 +227,12 @@ export const DashboardLayout: React.FC<{ onGoHome?: () => void }> = ({ onGoHome 
 
           <div className="flex items-center gap-4 relative">
             {/* Connection Sync Indicator */}
-            <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border ${
-              realtimeDataMode 
-                ? 'bg-emerald-500/10 border-emerald-500/20' 
-                : firebaseConnected 
-                ? 'bg-cyan-500/10 border-cyan-500/20' 
+            <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border ${realtimeDataMode
+              ? 'bg-emerald-500/10 border-emerald-500/20'
+              : firebaseConnected
+                ? 'bg-cyan-500/10 border-cyan-500/20'
                 : 'bg-slate-500/10 border-slate-500/20'
-            }`}>
+              }`}>
               {realtimeDataMode ? (
                 <>
                   <RefreshCw className="w-3.5 h-3.5 text-emerald-400 animate-spin" style={{ animationDuration: '2s' }} />
@@ -275,11 +261,10 @@ export const DashboardLayout: React.FC<{ onGoHome?: () => void }> = ({ onGoHome 
             <div className="relative">
               <button
                 onClick={() => setNotificationsOpen(!notificationsOpen)}
-                className={`p-2 rounded-xl border transition-all cursor-pointer ${
-                  notificationsOpen
-                    ? 'bg-white/10 border-white/10 text-white'
-                    : 'bg-white/5 border-white/5 text-slate-400 hover:text-white'
-                }`}
+                className={`p-2 rounded-xl border transition-all cursor-pointer ${notificationsOpen
+                  ? 'bg-white/10 border-white/10 text-white'
+                  : 'bg-white/5 border-white/5 text-slate-400 hover:text-white'
+                  }`}
                 aria-label="Toggle notifications"
               >
                 <Bell className="w-5 h-5" />

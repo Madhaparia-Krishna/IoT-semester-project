@@ -53,7 +53,7 @@ interface VermIQState {
   mlSimScenario: string | null;
   predictionResult: PredictionResult | null;
   historicalPredictions: Array<PredictionResult & { timestamp: string }>;
-  
+
   // Actions
   setUser: (user: UserSession | null) => void;
   setAuthLoading: (loading: boolean) => void;
@@ -122,18 +122,18 @@ export const useStore = create<VermIQState>((set, get) => ({
   updateTelemetry: (nodeId, reading) => {
     set((state) => {
       const updatedTelemetry = { ...state.telemetry, [nodeId]: reading };
-      
+
       // Update history inline by appending, keeping size capped at 200 points for Firebase data
       const currentHistory = state.history[nodeId] || [];
       const updatedHistory = [...currentHistory];
-      
+
       // Avoid inserting duplicates based on timestamp
       const lastPoint = currentHistory[currentHistory.length - 1];
       const isDuplicate = lastPoint && (
         lastPoint.timestamp === reading.timestamp ||
         (lastPoint.timestamp_epoch_ms && reading.timestamp_epoch_ms && lastPoint.timestamp_epoch_ms === reading.timestamp_epoch_ms)
       );
-      
+
       if (!isDuplicate) {
         updatedHistory.push(reading);
         // Keep latest 200 records for Firebase mode, 50 for simulation
@@ -297,11 +297,11 @@ export const useStore = create<VermIQState>((set, get) => ({
       }
 
       reading = {
-        dht22_temp:      liveReading.temperature ?? 25,
-        dht22_humidity:  liveReading.humidity ?? 70,
+        dht22_temp: liveReading.temperature ?? 25,
+        dht22_humidity: liveReading.humidity ?? 70,
         moisture_percent: liveReading.moisture ?? 65,
-        ph:              liveReading.ph ?? 6.8,
-        timestamp:       liveReading.timestamp,
+        ph: liveReading.ph ?? 6.8,
+        timestamp: liveReading.timestamp,
       };
 
       // Convert history for stability calculations
@@ -309,11 +309,11 @@ export const useStore = create<VermIQState>((set, get) => ({
       mlHistory = nodeHistory
         .filter(h => h.temperature != null && h.moisture != null)
         .map(h => ({
-          dht22_temp:      h.temperature as number,
-          dht22_humidity:  h.humidity ?? 70,
+          dht22_temp: h.temperature as number,
+          dht22_humidity: h.humidity ?? 70,
           moisture_percent: h.moisture as number,
-          ph:              h.ph ?? 6.8,
-          timestamp:       h.timestamp,
+          ph: h.ph ?? 6.8,
+          timestamp: h.timestamp,
         }));
     } else {
       // Simulation mode — use slider values
@@ -321,11 +321,11 @@ export const useStore = create<VermIQState>((set, get) => ({
 
       // Build a small synthetic history for confidence calculation
       mlHistory = state.historicalPredictions.slice(-10).map(p => ({
-        dht22_temp:      p.timestamp ? state.mlSimValues.temp : state.mlSimValues.temp,
-        dht22_humidity:  state.mlSimValues.humidity,
+        dht22_temp: p.timestamp ? state.mlSimValues.temp : state.mlSimValues.temp,
+        dht22_humidity: state.mlSimValues.humidity,
         moisture_percent: state.mlSimValues.moisture,
-        ph:              state.mlSimValues.ph,
-        timestamp:       p.timestamp,
+        ph: state.mlSimValues.ph,
+        timestamp: p.timestamp,
       }));
     }
 
@@ -346,11 +346,11 @@ export const useStore = create<VermIQState>((set, get) => ({
 
   startRealtimeTelemetry: () => {
     console.log('🚀 Starting realtime telemetry subscription...');
-    
+
     if (!realtimeTelemetryService.isRealtimeDbAvailable()) {
       console.warn('⚠️ Realtime Database not available, staying in simulation mode');
       set({ realtimeDataMode: false });
-      return () => {};
+      return () => { };
     }
 
     set({ realtimeDataMode: true });
@@ -361,9 +361,6 @@ export const useStore = create<VermIQState>((set, get) => ({
 
     // Helper function to convert Firebase reading to TelemetryReading
     const convertFirebaseReading = (data: FirebaseSensorReading, daysElapsed: number = 45): TelemetryReading => {
-      const harvestStatus = daysElapsed >= node.maturityTotalDays ? 'Harvest Ready' : 
-                          daysElapsed >= node.maturityTotalDays * 0.8 ? 'Ready Soon' : 'Monitoring';
-      
       return {
         timestamp: data.timestamp_iso,
         moisture: data.moisture_percent || null,
@@ -371,10 +368,11 @@ export const useStore = create<VermIQState>((set, get) => ({
         humidity: data.dht22_humidity || null,
         ph: data.ph || null,
         daysElapsed,
-        harvestStatus,
-        status: 'online',
-        rssi: -65, // Default values - can be added to Firebase if needed
-        battery: 3.9,
+        harvestStatus: 'Offline', // Force offline since node is not currently transmitting
+        status: 'offline', // Force offline status
+        rssi: 0,
+        battery: 0,
+        lastOnline: data.timestamp_iso, // Use the data timestamp as last online time
         // Extended Firebase fields
         reading_number: data.reading_number,
         moisture_raw: data.moisture_raw,
@@ -438,12 +436,29 @@ export const useStore = create<VermIQState>((set, get) => ({
 
 // Initialize initial cache histories
 SIMULATED_NODES.forEach((node) => {
-  if (node.id !== 'ESP32-NODE-04') {
-    useStore.setState((state) => ({
-      history: {
-        ...state.history,
-        [node.id]: generateHistory(node, 24, 30) // 24 hours of history, 30 min intervals
+  const history = generateHistory(node, 24, 30); // 24 hours of history, 30 min intervals
+  const lastHistoricalReading = history.length > 0 ? history[history.length - 1] : null;
+
+  useStore.setState((state) => ({
+    history: {
+      ...state.history,
+      [node.id]: history
+    },
+    telemetry: {
+      ...state.telemetry,
+      [node.id]: {
+        timestamp: new Date().toISOString(),
+        moisture: null,
+        temperature: null,
+        humidity: null,
+        ph: null,
+        daysElapsed: 0,
+        harvestStatus: 'Offline' as const,
+        status: 'offline' as const,
+        rssi: 0,
+        battery: 0,
+        lastOnline: lastHistoricalReading?.timestamp || new Date().toISOString()
       }
-    }));
-  }
+    }
+  }));
 });

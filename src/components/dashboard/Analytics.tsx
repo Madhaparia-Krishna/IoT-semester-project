@@ -56,11 +56,11 @@ export const Analytics: React.FC = () => {
   const calculateStability = () => {
     const reading = telemetry[activeNodeId];
     if (!reading || !reading.moisture || !reading.temperature) return 0;
-    
+
     // Deviation from ideal values (70% moisture, 21C temp)
     const mDev = Math.abs(reading.moisture - 70) / 70;
     const tDev = Math.abs(reading.temperature - 21.5) / 21.5;
-    
+
     const stability = Math.max(0, 100 - (mDev * 50 + tDev * 50));
     return Math.round(stability);
   };
@@ -93,9 +93,8 @@ export const Analytics: React.FC = () => {
             <button
               key={r}
               onClick={() => setTimeRange(r)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
-                timeRange === r ? 'bg-emerald-500 text-bg-space font-bold' : 'text-slate-400 hover:text-white'
-              }`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${timeRange === r ? 'bg-emerald-500 text-bg-space font-bold' : 'text-slate-400 hover:text-white'
+                }`}
             >
               {r === '1h' ? '1 Hour' : r === '6h' ? '6 Hours' : '24 Hours'}
             </button>
@@ -109,7 +108,7 @@ export const Analytics: React.FC = () => {
         <GlassCard variant="cyan">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-display font-bold text-white text-base">Moisture Trend Graph</h3>
-            <StatusBadge status="online" label="Real-time Feed" />
+            <StatusBadge status="offline" label="Historical Data" />
           </div>
           <div className="h-64">
             {chartData.length === 0 ? (
@@ -121,8 +120,8 @@ export const Analytics: React.FC = () => {
                 <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                   <defs>
                     <linearGradient id="moistureGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.25}/>
-                      <stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="#06b6d4" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
@@ -144,7 +143,7 @@ export const Analytics: React.FC = () => {
         <GlassCard variant="emerald">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-display font-bold text-white text-base">Core Temperature Trend</h3>
-            <StatusBadge status="online" label="Stable Core" />
+            <StatusBadge status="offline" label="Historical Data" />
           </div>
           <div className="h-64">
             {chartData.length === 0 ? (
@@ -156,8 +155,8 @@ export const Analytics: React.FC = () => {
                 <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                   <defs>
                     <linearGradient id="tempGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.25}/>
-                      <stop offset="95%" stopColor="#f59e0b" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />

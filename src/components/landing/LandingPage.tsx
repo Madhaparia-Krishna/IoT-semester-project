@@ -95,7 +95,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Active Node</span>
                 <h4 className="font-display font-bold text-white text-lg">ESP32-NODE-01</h4>
               </div>
-              <StatusBadge status="online" label="Telemetry Live" />
+              <StatusBadge status="offline" label="Offline" />
             </div>
 
             {/* Live Telemetry Display */}
@@ -136,7 +136,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
               <span>Syncing to Firebase: 2.5s ago</span>
             </div>
           </GlassCard>
-          
+
           {/* Decorative Float elements */}
           <div className="absolute -top-6 -right-6 p-3 bg-[#0d121f] border border-white/5 rounded-xl shadow-xl flex items-center gap-2 animate-float">
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
@@ -160,7 +160,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
           {/* Interactive SVG Flow Chart */}
           <div className="max-w-4xl mx-auto p-8 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-md relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-cyan-500/5 pointer-events-none" />
-            
+
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-4 items-center text-center relative z-10">
               {/* Step 1 */}
               <div className="flex flex-col items-center p-4">

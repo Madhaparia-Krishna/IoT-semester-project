@@ -9,6 +9,7 @@ export interface TelemetryReading {
   status: 'online' | 'offline';
   rssi: number;
   battery: number;
+  lastOnline?: string; // Last time node was online
   // Extended Firebase fields
   reading_number?: number;
   moisture_raw?: number;
@@ -39,41 +40,35 @@ export const SIMULATED_NODES: NodeConfig[] = [
     targetTempMin: 18,
     targetTempMax: 25,
     maturityTotalDays: 60,
-  },
-  {
-    id: 'ESP32-NODE-02',
-    name: 'Node Beta (Seedbed)',
-    bedName: 'Vermicompost Bed #2',
-    targetMoistureMin: 60,
-    targetMoistureMax: 80,
-    targetTempMin: 18,
-    targetTempMax: 25,
-    maturityTotalDays: 90,
-  },
-  {
-    id: 'ESP32-NODE-03',
-    name: 'Node Gamma (Experimental)',
-    bedName: 'Vermicompost Bed #3',
-    targetMoistureMin: 60,
-    targetMoistureMax: 80,
-    targetTempMin: 18,
-    targetTempMax: 25,
-    maturityTotalDays: 45,
-  },
-  {
-    id: 'ESP32-NODE-04',
-    name: 'Node Delta (Offline Test)',
-    bedName: 'Vermicompost Bed #4',
-    targetMoistureMin: 60,
-    targetMoistureMax: 80,
-    targetTempMin: 18,
-    targetTempMax: 25,
-    maturityTotalDays: 60,
   }
 ];
 
 // Helper to generate a single telemetry data point with minor fluctuation
 export function generateTelemetry(
+  _node: NodeConfig,
+  timeOffsetMs: number = 0,
+  _overrideTime?: Date
+): TelemetryReading {
+  const timestamp = new Date(Date.now() - timeOffsetMs);
+
+  // Node is offline - return offline status with last known data timestamp
+  return {
+    timestamp: timestamp.toISOString(),
+    moisture: null,
+    temperature: null,
+    humidity: null,
+    ph: null,
+    daysElapsed: 0,
+    harvestStatus: 'Offline',
+    status: 'offline',
+    rssi: 0,
+    battery: 0,
+    lastOnline: timestamp.toISOString(), // Use timestamp as last online time
+  };
+}
+
+// Helper to generate historical data (when node was online)
+function generateHistoricalTelemetry(
   node: NodeConfig,
   timeOffsetMs: number = 0,
   overrideTime?: Date
@@ -81,47 +76,12 @@ export function generateTelemetry(
   const timestamp = new Date(Date.now() - timeOffsetMs);
   const timeSec = (overrideTime ? overrideTime.getTime() : timestamp.getTime()) / 1000;
 
-  // Let's create different behavior for different nodes
-  if (node.id === 'ESP32-NODE-04') {
-    // Offline node
-    return {
-      timestamp: timestamp.toISOString(),
-      moisture: null,
-      temperature: null,
-      humidity: null,
-      daysElapsed: 60,
-      harvestStatus: 'Offline',
-      status: 'offline',
-      rssi: -98,
-      battery: 0.0,
-    };
-  }
-
-  let baseMoisture = 70; // Stable
-  let baseTemp = 21.5;   // Stable
-  let baseHumidity = 80; // Stable
-  let daysElapsed = Math.floor((timeSec / 86400) % node.maturityTotalDays);
-  
-  if (node.id === 'ESP32-NODE-01') {
-    // Healthy cycle, near completion
-    daysElapsed = Math.min(node.maturityTotalDays - 12 + Math.floor(timeSec / 100000) % 10, node.maturityTotalDays);
-    // Smooth oscillation for stable bed
-    baseMoisture = 72 + Math.sin(timeSec / 3600) * 3 + Math.cos(timeSec / 600) * 0.5;
-    baseTemp = 21.2 + Math.sin(timeSec / 7200) * 1.5 + Math.cos(timeSec / 1200) * 0.3;
-    baseHumidity = 82 + Math.sin(timeSec / 3600) * 2;
-  } else if (node.id === 'ESP32-NODE-02') {
-    // Dry warning state: moisture dropping below threshold (60)
-    daysElapsed = Math.min(85 + Math.floor(timeSec / 200000) % 5, node.maturityTotalDays);
-    baseMoisture = 52 + Math.sin(timeSec / 3600) * 2 + Math.cos(timeSec / 900) * 0.4;
-    baseTemp = 25.8 + Math.sin(timeSec / 7200) * 1.2;
-    baseHumidity = 65 + Math.sin(timeSec / 3600) * 3;
-  } else if (node.id === 'ESP32-NODE-03') {
-    // Critical state: moisture extremely low, temperature climbing (hot compost)
-    daysElapsed = 15;
-    baseMoisture = 34 + Math.sin(timeSec / 5000) * 1.5;
-    baseTemp = 32.4 + Math.sin(timeSec / 3600) * 2.0;
-    baseHumidity = 52 + Math.sin(timeSec / 4000) * 4;
-  }
+  // Healthy cycle, near completion
+  let daysElapsed = Math.min(node.maturityTotalDays - 12 + Math.floor(timeSec / 100000) % 10, node.maturityTotalDays);
+  // Smooth oscillation for stable bed
+  let baseMoisture = 72 + Math.sin(timeSec / 3600) * 3 + Math.cos(timeSec / 600) * 0.5;
+  let baseTemp = 21.2 + Math.sin(timeSec / 7200) * 1.5 + Math.cos(timeSec / 1200) * 0.3;
+  let baseHumidity = 82 + Math.sin(timeSec / 3600) * 2;
 
   // Harvest readiness state determination
   let harvestStatus: TelemetryReading['harvestStatus'] = 'Monitoring';
@@ -133,18 +93,10 @@ export function generateTelemetry(
   }
 
   // Signal strength (RSSI) simulation (-50 to -85 is typical)
-  const rssi = node.id === 'ESP32-NODE-01'
-    ? -55 - Math.floor(Math.random() * 5)
-    : node.id === 'ESP32-NODE-02'
-    ? -68 - Math.floor(Math.random() * 6)
-    : -75 - Math.floor(Math.random() * 8);
+  const rssi = -55 - Math.floor(Math.random() * 5);
 
   // Battery depletion (simulated, lithium-ion rechargeable 3.7V - 4.2V)
-  const battery = node.id === 'ESP32-NODE-01'
-    ? 4.12
-    : node.id === 'ESP32-NODE-02'
-    ? 3.82
-    : 3.65;
+  const battery = 4.12;
 
   return {
     timestamp: (overrideTime || timestamp).toISOString(),
@@ -167,11 +119,11 @@ export function generateHistory(
 ): TelemetryReading[] {
   const history: TelemetryReading[] = [];
   const totalPoints = (hours * 60) / intervalMinutes;
-  
+
   for (let i = totalPoints; i >= 0; i--) {
     const timeOffsetMs = i * intervalMinutes * 60 * 1000;
-    history.push(generateTelemetry(node, timeOffsetMs));
+    history.push(generateHistoricalTelemetry(node, timeOffsetMs));
   }
-  
+
   return history;
 }

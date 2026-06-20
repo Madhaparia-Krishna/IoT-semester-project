@@ -11,8 +11,26 @@ import {
   Activity,
   ArrowRight,
   TrendingUp,
-  Cpu
+  Cpu,
+  Clock
 } from 'lucide-react';
+
+// Helper function to calculate relative time
+const getRelativeTime = (dateString: string): string => {
+  const now = new Date();
+  const past = new Date(dateString);
+  const diffMs = now.getTime() - past.getTime();
+
+  const seconds = Math.floor(diffMs / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
+  if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+  return 'just now';
+};
 
 interface OverviewProps {
   setActiveTab: (tab: any) => void;
@@ -64,7 +82,7 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
             )}
           </p>
         </div>
-        
+
         {/* Dropdown Node Switcher */}
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <span className="text-xs font-bold text-slate-400 uppercase tracking-wide shrink-0">Monitored Bed:</span>
@@ -81,6 +99,19 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
           </select>
         </div>
       </div>
+
+      {/* Last Updated Banner - Show when offline */}
+      {nodeReading.status === 'offline' && nodeReading.lastOnline && (
+        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center gap-3">
+          <Clock className="w-5 h-5 text-amber-400" />
+          <div>
+            <span className="text-sm font-semibold text-amber-400">Node Offline</span>
+            <span className="text-xs text-slate-400 ml-2">
+              Last Updated: {getRelativeTime(nodeReading.lastOnline)}
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Harvest Ready Banner */}
       {isHarvestReady && (
@@ -123,8 +154,8 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
                 getMoistureStatus(nodeReading.moisture) === 'critical'
                   ? 'critical'
                   : getMoistureStatus(nodeReading.moisture) === 'warning'
-                  ? 'warning'
-                  : 'online'
+                    ? 'warning'
+                    : 'online'
               }
               label={nodeReading.moisture === null ? 'Offline' : getMoistureStatus(nodeReading.moisture) === 'critical' ? 'Critically Dry' : 'Moisture Safe'}
             />
@@ -221,67 +252,8 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
 
       {/* Progress & Stats Details Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Compost maturity duration bar */}
-        <GlassCard className="lg:col-span-8 flex flex-col justify-between">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h3 className="font-display font-bold text-white text-lg">Maturation Cycle Progress</h3>
-              <p className="text-xs text-slate-400">Biological decomposition and casting accumulation counter</p>
-            </div>
-            <span className="text-xs px-2.5 py-1 rounded-full bg-white/5 border border-white/5 font-semibold text-slate-300">
-              {activeNode.maturityTotalDays} Days Cycle
-            </span>
-          </div>
-
-          <div className="my-6 space-y-4">
-            <div className="flex justify-between items-baseline text-sm font-semibold">
-              <span className="text-slate-400">MATURITY DAYS COMPLETED</span>
-              <span className="text-emerald-400 text-lg font-display">
-                {nodeReading.daysElapsed} <span className="text-slate-500 text-xs">/ {activeNode.maturityTotalDays} days</span>
-              </span>
-            </div>
-
-            <div className="w-full h-4 bg-white/5 rounded-full overflow-hidden border border-white/5 p-0.5">
-              <div
-                className="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 rounded-full transition-all duration-1000"
-                style={{ width: `${Math.min(100, (nodeReading.daysElapsed / activeNode.maturityTotalDays) * 100)}%` }}
-              />
-            </div>
-
-            <div className="grid grid-cols-3 gap-2 text-center pt-2">
-              <div className="p-2.5 rounded-xl bg-white/5 border border-white/5">
-                <span className="text-[10px] font-bold text-slate-500 uppercase">Status</span>
-                <p className="text-sm font-bold text-slate-200 mt-0.5 capitalize">{nodeReading.harvestStatus}</p>
-              </div>
-              <div className="p-2.5 rounded-xl bg-white/5 border border-white/5">
-                <span className="text-[10px] font-bold text-slate-500 uppercase">Phase</span>
-                <p className="text-sm font-bold text-slate-200 mt-0.5">
-                  {nodeReading.daysElapsed < 15 ? 'Initial Feed' : nodeReading.daysElapsed < 45 ? 'Decomp' : 'Finishing'}
-                </p>
-              </div>
-              <div className="p-2.5 rounded-xl bg-white/5 border border-white/5">
-                <span className="text-[10px] font-bold text-slate-500 uppercase">Progress</span>
-                <p className="text-sm font-bold text-slate-200 mt-0.5">
-                  {Math.round((nodeReading.daysElapsed / activeNode.maturityTotalDays) * 100)}%
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center border-t border-white/5 pt-4">
-            <span className="text-xs text-slate-500">Worm species: Eisenia fetida (Red Wigglers)</span>
-            <button
-              onClick={() => setActiveTab('beds')}
-              className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1 transition-colors cursor-pointer"
-            >
-              Configure Bed Cycle
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </GlassCard>
-
         {/* Dynamic Nodes status summary */}
-        <GlassCard className="lg:col-span-4 flex flex-col justify-between">
+        <GlassCard className="lg:col-span-12 flex flex-col justify-between">
           <div>
             <h3 className="font-display font-bold text-white text-lg">ESP32 Hardware Node Registry</h3>
             <p className="text-xs text-slate-400 mb-6">Device connections and link parameters</p>

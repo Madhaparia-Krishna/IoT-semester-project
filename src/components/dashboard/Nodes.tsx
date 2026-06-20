@@ -53,7 +53,7 @@ export const Nodes: React.FC = () => {
             rssi: -100,
             battery: 0
           };
-          
+
           const isOnline = reading.status === 'online';
           const rssiInfo = getRssiLabel(reading.rssi);
           const wifiBars = getRssiWifiBars(reading.rssi);
@@ -97,11 +97,10 @@ export const Nodes: React.FC = () => {
                           {[1, 2, 3, 4].map((bar) => (
                             <span
                               key={bar}
-                              className={`w-1 rounded-t-sm transition-colors ${
-                                bar <= wifiBars
+                              className={`w-1 rounded-t-sm transition-colors ${bar <= wifiBars
                                   ? 'bg-emerald-400'
                                   : 'bg-white/5'
-                              }`}
+                                }`}
                               style={{ height: `${bar * 25}%` }}
                             />
                           ))}
@@ -122,13 +121,12 @@ export const Nodes: React.FC = () => {
                         {/* Visual Battery Shell */}
                         <div className="w-7 h-3.5 border border-slate-500 rounded-sm p-0.5 relative flex items-center">
                           <div
-                            className={`h-full rounded-2xs ${
-                              batteryPct > 50
+                            className={`h-full rounded-2xs ${batteryPct > 50
                                 ? 'bg-emerald-400'
                                 : batteryPct > 20
-                                ? 'bg-amber-400'
-                                : 'bg-rose-400 animate-pulse'
-                            }`}
+                                  ? 'bg-amber-400'
+                                  : 'bg-rose-400 animate-pulse'
+                              }`}
                             style={{ width: `${batteryPct}%` }}
                           />
                           <span className="w-0.5 h-1.5 bg-slate-500 rounded-r-xs absolute -right-1" />
@@ -157,8 +155,18 @@ export const Nodes: React.FC = () => {
                     </div>
                   </>
                 ) : (
-                  <div className="py-8 text-center text-slate-500 border-t border-white/5 pt-6 mt-2">
-                    Heartbeat signal timeout. No packet received.
+                  <div className="space-y-3 border-t border-white/5 pt-4 mt-2">
+                    <div className="py-4 text-center text-slate-500">
+                      Heartbeat signal timeout. No packet received.
+                    </div>
+                    {reading.lastOnline && (
+                      <div className="flex justify-between items-center py-1 text-xs">
+                        <span className="text-slate-500">Last Online</span>
+                        <span className="font-semibold text-slate-400">
+                          {new Date(reading.lastOnline).toLocaleString()}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

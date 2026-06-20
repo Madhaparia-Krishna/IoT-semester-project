@@ -16,7 +16,7 @@ export const Beds: React.FC = () => {
   const [wateringMap, setWateringMap] = useState<Record<string, boolean>>({});
 
   const activeNode = SIMULATED_NODES.find((n) => n.id === selectedBedId) || SIMULATED_NODES[0];
-  
+
   // Trigger simulated watering
   const handleWatering = (nodeId: string, bedName: string) => {
     setWateringMap((prev) => ({ ...prev, [nodeId]: true }));
@@ -74,11 +74,10 @@ export const Beds: React.FC = () => {
               <div
                 key={node.id}
                 onClick={() => setSelectedBedId(node.id)}
-                className={`p-4 rounded-2xl cursor-pointer border transition-all text-left flex items-center justify-between ${
-                  isSelected
+                className={`p-4 rounded-2xl cursor-pointer border transition-all text-left flex items-center justify-between ${isSelected
                     ? 'bg-emerald-500/10 border-emerald-500/35 text-white shadow-[0_0_15px_rgba(16,185,129,0.08)]'
                     : 'bg-card-glass border-white/5 text-slate-400 hover:bg-white/5'
-                }`}
+                  }`}
               >
                 <div className="space-y-1 min-w-0 flex-1 pr-3">
                   <div className="flex items-center gap-2">
@@ -98,10 +97,10 @@ export const Beds: React.FC = () => {
                       reading.status === 'offline'
                         ? 'offline'
                         : reading.harvestStatus === 'Harvest Ready'
-                        ? 'success'
-                        : reading.moisture && reading.moisture < settings.moistureMin
-                        ? 'critical'
-                        : 'online'
+                          ? 'success'
+                          : reading.moisture && reading.moisture < settings.moistureMin
+                            ? 'critical'
+                            : 'online'
                     }
                     label={reading.status === 'offline' ? 'Offline' : `${progressPercent}%`}
                     className="text-[10px]"
@@ -114,7 +113,7 @@ export const Beds: React.FC = () => {
 
         {/* Selected Bed Controls View (Right 7 Cols on Widescreen) */}
         <div className="lg:col-span-7">
-          <GlassCard className="h-full flex flex-col justify-between" variant={activeNode.id === 'ESP32-NODE-04' ? 'default' : 'emerald'}>
+          <GlassCard className="h-full flex flex-col justify-between" variant="emerald">
             <div>
               {/* Header */}
               <div className="flex justify-between items-start pb-4 border-b border-white/5 mb-6">

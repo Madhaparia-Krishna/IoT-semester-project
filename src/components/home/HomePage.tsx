@@ -2,37 +2,63 @@ import React from 'react';
 import { Logo } from '../logo/Logo';
 import { GlassCard } from '../ui/GlassCard';
 import { Sidebar } from '../ui/Sidebar';
+import { useStore } from '../../store/useStore';
+import { SIMULATED_NODES } from '../../services/simulator';
 import {
   Activity,
   ArrowRight,
   Thermometer,
   Droplets,
   Wind,
-  CalendarDays,
   Layers,
   Database,
   AlertTriangle,
   ChevronRight,
   Cpu,
+  Clock,
 } from 'lucide-react';
+
+// Helper function to calculate relative time
+const getRelativeTime = (dateString: string): string => {
+  const now = new Date();
+  const past = new Date(dateString);
+  const diffMs = now.getTime() - past.getTime();
+
+  const seconds = Math.floor(diffMs / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
+  if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+  return 'just now';
+};
 
 interface HomePageProps {
   onNavigate: (page: 'home' | 'schematic' | 'pcb' | 'wokwi' | 'physical' | 'dashboard') => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
-  const [moisture, setMoisture] = React.useState(72.4);
-  const [temp, setTemp] = React.useState(21.8);
-  const [humidity, setHumidity] = React.useState(81.2);
+  const { history, telemetry } = useStore();
+  const node = SIMULATED_NODES[0]; // Get the first (and only) node
 
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setMoisture((m) => parseFloat((m + (Math.random() - 0.5) * 0.4).toFixed(1)));
-      setTemp((t) => parseFloat((t + (Math.random() - 0.5) * 0.2).toFixed(1)));
-      setHumidity((h) => parseFloat((h + (Math.random() - 0.5) * 0.3).toFixed(1)));
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
+  // Get the historical readings
+  const nodeHistory = history[node.id] || [];
+
+  // Get the LAST reading from history (most recent)
+  const lastReading = nodeHistory.length > 0 ? nodeHistory[nodeHistory.length - 1] : null;
+  const currentTelemetry = telemetry[node.id];
+
+  // Use last historical data with null checks
+  // These should have values from either Firebase or simulated historical data
+  const moisture = lastReading?.moisture;
+  const temp = lastReading?.temperature;
+  const humidity = lastReading?.humidity;
+
+  // Calculate relative time from last online
+  const lastOnline = currentTelemetry?.lastOnline || (lastReading?.timestamp || new Date().toISOString());
+  const relativeTime = getRelativeTime(lastOnline);
 
   return (
     <div className="min-h-screen bg-bg-space font-sans relative overflow-hidden bg-mesh-green select-none">
@@ -97,11 +123,19 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             <div className="flex justify-between items-center mb-6">
               <div className="space-y-0.5">
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Active Node</span>
-                <h4 className="font-display font-bold text-white text-lg">ESP32-NODE-01</h4>
+                <h4 className="font-display font-bold text-white text-lg">{node.id}</h4>
               </div>
-              <div className="px-3 py-1 bg-emerald-500/20 border border-emerald-500/40 rounded-full text-emerald-400 text-xs font-bold">
-                Telemetry Live
+              <div className="px-3 py-1 bg-slate-500/20 border border-slate-500/40 rounded-full text-slate-400 text-xs font-bold">
+                Offline
               </div>
+            </div>
+
+            {/* Last Updated Display */}
+            <div className="mb-4 p-2 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-center gap-2">
+              <Clock className="w-4 h-4 text-amber-400" />
+              <span className="text-xs text-amber-400 font-semibold">
+                Last Updated: {relativeTime}
+              </span>
             </div>
 
             {/* Live Telemetry Display */}
@@ -109,40 +143,32 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <div className="p-3 bg-white/5 border border-white/5 rounded-xl text-center">
                 <Droplets className="w-5 h-5 text-cyan-400 mx-auto mb-1.5" />
                 <span className="text-[10px] uppercase font-bold text-slate-500">Moisture</span>
-                <p className="text-lg font-display font-bold text-white text-glow-cyan">{moisture}%</p>
+                <p className="text-lg font-display font-bold text-white text-glow-cyan">
+                  {moisture !== null ? `${moisture}%` : 'N/A'}
+                </p>
               </div>
               <div className="p-3 bg-white/5 border border-white/5 rounded-xl text-center">
                 <Thermometer className="w-5 h-5 text-amber-500 mx-auto mb-1.5" />
                 <span className="text-[10px] uppercase font-bold text-slate-500">Temp</span>
-                <p className="text-lg font-display font-bold text-white">{temp}°C</p>
+                <p className="text-lg font-display font-bold text-white">
+                  {temp !== null ? `${temp}°C` : 'N/A'}
+                </p>
               </div>
               <div className="p-3 bg-white/5 border border-white/5 rounded-xl text-center">
                 <Wind className="w-5 h-5 text-emerald-400 mx-auto mb-1.5" />
                 <span className="text-[10px] uppercase font-bold text-slate-500">Humidity</span>
-                <p className="text-lg font-display font-bold text-white">{humidity}%</p>
-              </div>
-            </div>
-
-            {/* Harvest Progress */}
-            <div className="space-y-2 mb-4">
-              <div className="flex justify-between text-xs font-medium">
-                <span className="text-slate-400 flex items-center gap-1">
-                  <CalendarDays className="w-3.5 h-3.5" />
-                  Maturity Progress
-                </span>
-                <span className="text-emerald-400">48 / 60 Days (80%)</span>
-              </div>
-              <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden border border-white/5">
-                <div className="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 rounded-full" style={{ width: '80%' }} />
+                <p className="text-lg font-display font-bold text-white">
+                  {humidity !== null ? `${humidity}%` : 'N/A'}
+                </p>
               </div>
             </div>
 
             <div className="text-[11px] text-slate-500 border-t border-white/5 pt-4 flex justify-between">
-              <span>MQTT Client: Connected</span>
-              <span>Syncing to Firebase: 2.5s ago</span>
+              <span>Node Status: Offline</span>
+              <span>Historical Data Available</span>
             </div>
           </GlassCard>
-          
+
           {/* Decorative Float elements */}
           <div className="absolute -top-6 -right-6 p-3 bg-[#0d121f] border border-white/5 rounded-xl shadow-xl flex items-center gap-2 animate-float">
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
@@ -166,7 +192,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           {/* Interactive SVG Flow Chart */}
           <div className="max-w-4xl mx-auto p-8 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-md relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-cyan-500/5 pointer-events-none" />
-            
+
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-4 items-center text-center relative z-10">
               {/* Step 1 */}
               <div className="flex flex-col items-center p-4">

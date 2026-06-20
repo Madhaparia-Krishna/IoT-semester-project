@@ -11,7 +11,7 @@ import DashboardLayout from './components/dashboard/DashboardLayout';
 import ToastContainer from './components/ui/ToastContainer';
 import { Loader2 } from 'lucide-react';
 
-type PageType = 'home' | 'schematic' | 'pcb' | 'wokwi' | 'physical' | 'dashboard';
+type PageType = 'home' | 'schematic' | 'pcb' | 'pcb-3d' | 'wokwi' | 'physical' | 'dashboard';
 
 function App() {
   const { user, setUser, authLoading, setAuthLoading, startRealtimeTelemetry } = useStore();
@@ -37,7 +37,7 @@ function App() {
     if (user) {
       console.log('User authenticated, starting real-time telemetry...');
       const unsubscribe = startRealtimeTelemetry();
-      
+
       return () => {
         console.log('Stopping real-time telemetry subscription...');
         unsubscribe();
