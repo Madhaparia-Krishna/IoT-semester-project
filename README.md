@@ -211,7 +211,7 @@ VermIQ-Lite is an enterprise-grade IoT monitoring platform designed for precisio
 - Harvest readiness prediction models
 - Anomaly detection in sensor patterns
 - Environmental trend analysis
-- Optimal vermiculture condition recommendations
+- Crop recommendations based on soil conditions and environmental data
 - Historical Firebase/Firestore data integration for ML training
 
 #### Planned Future Enhancements
