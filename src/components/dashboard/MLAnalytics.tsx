@@ -162,7 +162,6 @@ export const MLAnalytics: React.FC = () => {
   const chartData = historicalPredictions.slice(-20).map((p, i) => ({
     index: i + 1,
     envScore: p.environmentalScore,
-    harvest: p.harvestReadiness,
     confidence: p.confidence,
     label: new Date(p.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
   }));
@@ -201,11 +200,10 @@ export const MLAnalytics: React.FC = () => {
           <button
             id="ml-mode-live"
             onClick={() => setMLMode('live')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all cursor-pointer ${
-              mlMode === 'live'
-                ? 'bg-emerald-500 text-bg-space'
-                : 'text-slate-400 hover:text-white'
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all cursor-pointer ${mlMode === 'live'
+              ? 'bg-emerald-500 text-bg-space'
+              : 'text-slate-400 hover:text-white'
+              }`}
           >
             <Wifi className="w-3.5 h-3.5" />
             Live Firebase
@@ -213,11 +211,10 @@ export const MLAnalytics: React.FC = () => {
           <button
             id="ml-mode-sim"
             onClick={() => setMLMode('simulation')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all cursor-pointer ${
-              mlMode === 'simulation'
-                ? 'bg-violet-500 text-white'
-                : 'text-slate-400 hover:text-white'
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all cursor-pointer ${mlMode === 'simulation'
+              ? 'bg-violet-500 text-white'
+              : 'text-slate-400 hover:text-white'
+              }`}
           >
             <FlaskConical className="w-3.5 h-3.5" />
             Simulation
@@ -227,11 +224,10 @@ export const MLAnalytics: React.FC = () => {
 
       {/* ── Live Mode Info Banner ─────────────────────────────────────────────── */}
       {mlMode === 'live' && (
-        <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border text-sm ${
-          realtimeDataMode
-            ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300'
-            : 'bg-amber-500/10 border-amber-500/20 text-amber-300'
-        }`}>
+        <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border text-sm ${realtimeDataMode
+          ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300'
+          : 'bg-amber-500/10 border-amber-500/20 text-amber-300'
+          }`}>
           {realtimeDataMode ? (
             <RefreshCw className="w-4 h-4 animate-spin shrink-0" style={{ animationDuration: '2s' }} />
           ) : (
@@ -275,11 +271,10 @@ export const MLAnalytics: React.FC = () => {
                     key={preset.name}
                     id={`preset-${preset.name.toLowerCase().replace(/\s+/g, '-')}`}
                     onClick={() => applyPreset(preset)}
-                    className={`w-full text-left px-4 py-3 rounded-xl border transition-all cursor-pointer group ${
-                      isActive
-                        ? riskBorders[preset.expectedRisk]
-                        : 'border-white/5 bg-white/[0.02] hover:bg-white/5'
-                    }`}
+                    className={`w-full text-left px-4 py-3 rounded-xl border transition-all cursor-pointer group ${isActive
+                      ? riskBorders[preset.expectedRisk]
+                      : 'border-white/5 bg-white/[0.02] hover:bg-white/5'
+                      }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1 min-w-0">
@@ -287,9 +282,8 @@ export const MLAnalytics: React.FC = () => {
                           <span className={`text-xs font-bold ${isActive ? 'text-white' : 'text-slate-200'}`}>
                             {preset.name}
                           </span>
-                          <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border ${
-                            isActive ? riskBorders[preset.expectedRisk] : 'border-white/10 text-slate-500'
-                          } ${isActive ? riskColors[preset.expectedRisk] : ''}`}>
+                          <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border ${isActive ? riskBorders[preset.expectedRisk] : 'border-white/10 text-slate-500'
+                            } ${isActive ? riskColors[preset.expectedRisk] : ''}`}>
                             {preset.expectedRisk}
                           </span>
                         </div>
@@ -394,7 +388,7 @@ export const MLAnalytics: React.FC = () => {
           <TrendingUp className="w-4 h-4 text-slate-400" />
           <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Prediction Summary</h3>
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
 
           {/* Environmental Score */}
           <GlassCard className="flex flex-col items-center py-5 relative overflow-hidden">
@@ -413,26 +407,6 @@ export const MLAnalytics: React.FC = () => {
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-3">Env. Score</span>
             <span className="text-sm font-bold mt-1 font-display" style={{ color: envColor }}>
               {result?.environmentClass ?? '—'}
-            </span>
-          </GlassCard>
-
-          {/* Harvest Readiness */}
-          <GlassCard className="flex flex-col items-center py-5 relative overflow-hidden">
-            <div className="absolute inset-0 opacity-20 pointer-events-none"
-              style={{ background: 'radial-gradient(circle at 50% 0%, rgba(6,182,212,0.2) 0%, transparent 70%)' }}
-            />
-            <div className="relative">
-              <ScoreRing value={result?.harvestReadiness ?? 0} color="#06b6d4" size={100} />
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-2xl font-display font-extrabold text-white">
-                  {result?.harvestReadiness ?? '--'}
-                </span>
-                <span className="text-[9px] text-slate-500 uppercase font-bold">%</span>
-              </div>
-            </div>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-3">Harvest Ready</span>
-            <span className="text-sm font-bold mt-1 text-cyan-400 font-display">
-              {result ? (result.harvestReadiness >= 80 ? 'Ready Soon' : result.harvestReadiness >= 60 ? 'Developing' : 'Early Stage') : '—'}
             </span>
           </GlassCard>
 
@@ -497,24 +471,21 @@ export const MLAnalytics: React.FC = () => {
               )}
               <h3 className="font-display font-bold text-white text-base">Anomaly Detection</h3>
             </div>
-            <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${
-              result?.anomalyDetected
-                ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
-                : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-            }`}>
+            <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${result?.anomalyDetected
+              ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+              : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+              }`}>
               {result?.anomalyDetected ? 'ANOMALY DETECTED' : 'ALL NORMAL'}
             </span>
           </div>
 
           {/* Status indicator */}
-          <div className={`flex items-center gap-3 p-3 rounded-xl mb-4 ${
-            result?.anomalyDetected
-              ? 'bg-rose-500/5 border border-rose-500/15'
-              : 'bg-emerald-500/5 border border-emerald-500/15'
-          }`}>
-            <div className={`w-3 h-3 rounded-full shrink-0 ${
-              result?.anomalyDetected ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500'
-            }`} />
+          <div className={`flex items-center gap-3 p-3 rounded-xl mb-4 ${result?.anomalyDetected
+            ? 'bg-rose-500/5 border border-rose-500/15'
+            : 'bg-emerald-500/5 border border-emerald-500/15'
+            }`}>
+            <div className={`w-3 h-3 rounded-full shrink-0 ${result?.anomalyDetected ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500'
+              }`} />
             <span className="text-sm font-medium text-slate-300">
               {result?.anomalyDetected
                 ? `${result.anomalyReasons.length} anomal${result.anomalyReasons.length === 1 ? 'y' : 'ies'} found in current readings`
@@ -586,7 +557,7 @@ export const MLAnalytics: React.FC = () => {
             <p className="text-slate-600 text-xs mt-1">Adjust sliders or switch scenarios to build history</p>
           </GlassCard>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
             {/* Environmental Score Trend */}
             <GlassCard>
@@ -613,36 +584,6 @@ export const MLAnalytics: React.FC = () => {
                       formatter={(v: unknown) => [`${v ?? 0}/100`, 'Env Score']}
                     />
                     <Area type="monotone" dataKey="envScore" stroke={envColor} strokeWidth={2} fillOpacity={1} fill="url(#envGrad)" dot={false} />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </GlassCard>
-
-            {/* Harvest Readiness Trend */}
-            <GlassCard>
-              <div className="flex justify-between items-center mb-3">
-                <h4 className="font-display font-bold text-white text-sm">Harvest Readiness</h4>
-                <span className="text-[10px] text-slate-500 font-mono">0–100%</span>
-              </div>
-              <div className="h-48">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={chartData} margin={{ top: 5, right: 5, left: -30, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="harvestGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#06b6d4" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
-                    <XAxis dataKey="label" stroke="rgba(255,255,255,0.15)" fontSize={9} tickLine={false} interval="preserveStartEnd" />
-                    <YAxis domain={[0, 100]} stroke="rgba(255,255,255,0.15)" fontSize={9} tickLine={false} />
-                    <Tooltip
-                      contentStyle={{ backgroundColor: '#090c15', borderColor: 'rgba(255,255,255,0.05)', borderRadius: '8px', fontSize: '11px' }}
-                      labelStyle={{ color: '#9ca3af', fontSize: '10px' }}
-                      itemStyle={{ color: '#06b6d4' }}
-                      formatter={(v: unknown) => [`${v ?? 0}%`, 'Harvest']}
-                    />
-                    <Area type="monotone" dataKey="harvest" stroke="#06b6d4" strokeWidth={2} fillOpacity={1} fill="url(#harvestGrad)" dot={false} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
