@@ -239,7 +239,7 @@ export const CROP_DATABASE: CropRequirements[] = [
         category: 'fruit',
         tempMin: 15, tempMax: 26,
         humidityMin: 60, humidityMax: 80,
-        moistureMin: 60, humidityMax: 80,
+        moistureMin: 60, moistureMax: 80,
         phMin: 5.5, phMax: 6.5,
         description: 'High-value berry fruit, perennial producer',
         benefits: ['Premium pricing', 'Extended harvest', 'High market value'],

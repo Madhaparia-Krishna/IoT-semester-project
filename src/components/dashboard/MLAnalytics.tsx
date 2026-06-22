@@ -556,14 +556,14 @@ export const MLAnalytics: React.FC = () => {
                 dht22_humidity: mlSimValues.humidity,
                 moisture_percent: mlSimValues.moisture,
                 ph: mlSimValues.ph,
-                timestamp: Date.now(),
+                timestamp: Date.now().toString(),
               }
               : {
                 dht22_temp: telemetry[activeNodeId]?.temperature ?? mlSimValues.temp,
                 dht22_humidity: telemetry[activeNodeId]?.humidity ?? mlSimValues.humidity,
                 moisture_percent: telemetry[activeNodeId]?.moisture ?? mlSimValues.moisture,
                 ph: telemetry[activeNodeId]?.ph ?? mlSimValues.ph,
-                timestamp: Date.now(),
+                timestamp: Date.now().toString(),
               }
           }
         />
