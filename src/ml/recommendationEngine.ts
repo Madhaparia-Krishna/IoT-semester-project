@@ -3,10 +3,12 @@
  *
  * Generates context-aware, human-readable recommendations based on
  * current sensor readings, detected anomalies, and risk level.
+ * Now includes intelligent crop recommendations based on environmental conditions.
  */
 
 import type { SensorReading, PredictionResult } from './types';
 import { IDEAL_RANGES, HARVEST_IDEAL } from './constants';
+import { recommendCrops } from './cropRecommendation';
 
 // ─── Recommendation Rules ─────────────────────────────────────────────────────
 
@@ -125,6 +127,7 @@ const RULES: RecommendationRule[] = [
 
 /**
  * Generate a sorted list of actionable recommendations.
+ * Now includes crop recommendations based on environmental suitability.
  * Always returns at least one message.
  */
 export function generateRecommendations(
@@ -137,6 +140,21 @@ export function generateRecommendations(
     .sort((a, b) => a.priority - b.priority)
     .map(rule => rule.message);
 
+  // Get top 3 crop recommendations
+  const cropRecs = recommendCrops(reading, 3);
+
+  // Add crop recommendations if conditions are reasonable (not critical)
+  if (riskLevel !== 'CRITICAL' && cropRecs.length > 0) {
+    const topCrops = cropRecs
+      .filter(rec => rec.matchScore >= 50) // Only show decent matches
+      .slice(0, 3);
+
+    if (topCrops.length > 0) {
+      const cropNames = topCrops.map(rec => rec.crop.name).join(', ');
+      matched.push(`🌱 Recommended crops for current conditions: ${cropNames}. These vegetables are well-suited to your environmental parameters.`);
+    }
+  }
+
   // Deduplicate (in case multiple conditions produce the same message)
-  return [...new Set(matched)].slice(0, 6); // cap at 6 recommendations
+  return [...new Set(matched)].slice(0, 8); // Increased cap to 8 to accommodate crop recommendations
 }

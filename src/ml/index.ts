@@ -25,6 +25,8 @@ export { predictHarvestReadiness } from './harvestPredictor';
 export { classifyEnvironment, scoreToRiskLevel, getEnvClassColor, getRiskLevelConfig } from './environmentScorer';
 export { generateRecommendations } from './recommendationEngine';
 export { generateMLReading, DEFAULT_SIM_VALUES } from './simulator';
+export { recommendCrops, getCategoryDistribution, CROP_DATABASE } from './cropRecommendation';
+export type { CropRequirements, CropRecommendation } from './cropRecommendation';
 
 // ── Re-exports for scoring constants ─────────────────────────────────────────
 export { RISK_LEVELS, ENV_CLASSES } from './constants';
@@ -60,8 +62,8 @@ export function runPrediction(
 
   // 3. Environmental scoring
   const environmentalScore = features.environmentalHealthIndex;
-  const environmentClass   = classifyEnvironment(environmentalScore);
-  const riskLevel          = scoreToRiskLevel(environmentalScore);
+  const environmentClass = classifyEnvironment(environmentalScore);
+  const riskLevel = scoreToRiskLevel(environmentalScore);
 
   // 4. Harvest readiness prediction
   const { score: harvestReadiness, confidence } = predictHarvestReadiness(features);

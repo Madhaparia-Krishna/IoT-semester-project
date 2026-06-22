@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useStore } from '../../store/useStore';
 import { GlassCard } from '../ui/GlassCard';
+import { CropRecommendations } from './CropRecommendations';
 import {
   SCENARIO_PRESETS,
   getRiskLevelConfig,
@@ -122,6 +123,8 @@ export const MLAnalytics: React.FC = () => {
     predictionResult,
     historicalPredictions,
     realtimeDataMode,
+    telemetry,
+    activeNodeId,
     setMLMode,
     setMLSimValues,
     setMLSimScenario,
@@ -542,6 +545,29 @@ export const MLAnalytics: React.FC = () => {
           )}
         </GlassCard>
       </div>
+
+      {/* ── SECTION 3: Crop Recommendations ──────────────────────────────────── */}
+      {result && (
+        <CropRecommendations
+          reading={
+            mlMode === 'simulation'
+              ? {
+                dht22_temp: mlSimValues.temp,
+                dht22_humidity: mlSimValues.humidity,
+                moisture_percent: mlSimValues.moisture,
+                ph: mlSimValues.ph,
+                timestamp: Date.now(),
+              }
+              : {
+                dht22_temp: telemetry[activeNodeId]?.temperature ?? mlSimValues.temp,
+                dht22_humidity: telemetry[activeNodeId]?.humidity ?? mlSimValues.humidity,
+                moisture_percent: telemetry[activeNodeId]?.moisture ?? mlSimValues.moisture,
+                ph: telemetry[activeNodeId]?.ph ?? mlSimValues.ph,
+                timestamp: Date.now(),
+              }
+          }
+        />
+      )}
 
       {/* ── SECTION 4: Trend Charts ───────────────────────────────────────────── */}
       <div>
