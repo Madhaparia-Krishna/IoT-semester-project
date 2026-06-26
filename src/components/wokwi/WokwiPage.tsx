@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Logo } from '../logo/Logo';
 import { GlassCard } from '../ui/GlassCard';
 import { Sidebar } from '../ui/Sidebar';
-import { ChevronLeft, ChevronRight, X, Zap, Cpu } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Zap, Cpu, ExternalLink } from 'lucide-react';
 import vscodeImage from '../../assets/wokwi/wowki-simulation-vscode.png';
 import enlargedImage from '../../assets/wokwi/enlarged-wowki-simulation.png';
 
@@ -86,7 +86,7 @@ export const WokwiPage: React.FC<WokwiPageProps> = ({ onNavigate }) => {
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-6 pt-12 pb-8 relative z-10 lg:ml-64">
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 font-semibold text-xs tracking-wider uppercase">
             <Cpu className="w-3.5 h-3.5" />
             Wokwi Simulation
@@ -97,6 +97,27 @@ export const WokwiPage: React.FC<WokwiPageProps> = ({ onNavigate }) => {
           <p className="text-slate-400 text-base sm:text-lg max-w-3xl">
             Explore the Wokwi circuit simulation environment where the ESP32 IoT system is prototyped and tested. This virtual environment allows for safe experimentation and validation of hardware configurations before physical deployment.
           </p>
+          <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <a
+              href="https://wokwi.com/projects/465181219780428801"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl transition-all duration-300 hover:shadow-[0_0_25px_rgba(59,130,246,0.4)]"
+            >
+              Launch Wokwi Project
+              <ExternalLink className="w-5 h-5" />
+            </a>
+            <button
+              type="button"
+              onClick={() => {
+                window.scrollTo(0, 0);
+                onNavigate('home');
+              }}
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl border border-white/5 transition-all"
+            >
+              Back to Home
+            </button>
+          </div>
         </div>
       </section>
 
@@ -310,12 +331,14 @@ export const WokwiPage: React.FC<WokwiPageProps> = ({ onNavigate }) => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
+              type="button"
               onClick={() => onNavigate('schematic')}
               className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-all border border-white/20"
             >
               View Schematic
             </button>
             <button
+              type="button"
               onClick={() => {
                 window.scrollTo(0, 0);
                 onNavigate('home');
@@ -333,7 +356,6 @@ export const WokwiPage: React.FC<WokwiPageProps> = ({ onNavigate }) => {
         <div 
           className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
           onClick={closeImageModal}
-          onKeyDown={(e) => e.key === 'Escape' && closeImageModal()}
           role="dialog"
           aria-modal="true"
         >
@@ -343,6 +365,7 @@ export const WokwiPage: React.FC<WokwiPageProps> = ({ onNavigate }) => {
           >
             {/* Close Button */}
             <button
+              type="button"
               onClick={closeImageModal}
               className="absolute -top-16 right-0 z-60 p-3 text-white hover:text-slate-200 hover:bg-white/10 rounded-lg transition-all duration-200"
               aria-label="Close image viewer"
@@ -374,14 +397,20 @@ export const WokwiPage: React.FC<WokwiPageProps> = ({ onNavigate }) => {
             {/* Navigation Buttons */}
             <div className="mt-6 flex justify-center gap-4">
               <button
+                type="button"
                 onClick={prevImage}
                 className="p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all"
+                aria-label="Previous image"
+                title="Previous (←)"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
+                type="button"
                 onClick={nextImage}
                 className="p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all"
+                aria-label="Next image"
+                title="Next (→)"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
