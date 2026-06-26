@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useStore } from '../../store/useStore';
 import { SIMULATED_NODES } from '../../services/simulator';
 import { GlassCard } from '../ui/GlassCard';
@@ -19,24 +19,16 @@ import {
 } from 'recharts';
 import {
   LineChart as ChartIcon,
-  HeartPulse,
-  Grid
+  HeartPulse
 } from 'lucide-react';
 
 export const Analytics: React.FC = () => {
   const { activeNodeId, history, telemetry } = useStore();
-  const [timeRange, setTimeRange] = useState<'1h' | '6h' | '24h'>('6h');
 
   const fullHistory = history[activeNodeId] || [];
 
-  // Filter history data points based on selected range
-  const getFilteredData = () => {
-    if (timeRange === '1h') return fullHistory.slice(-12); // Last 1 hour (approx 12 points at 5 min steps)
-    if (timeRange === '6h') return fullHistory.slice(-36); // Last 6 hours (approx 36 points)
-    return fullHistory; // Full 24 hours
-  };
-
-  const chartData = getFilteredData().map((pt) => ({
+  // Use all available history data
+  const chartData = fullHistory.map((pt) => ({
     ...pt,
     timeLabel: new Date(pt.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }));
@@ -65,41 +57,12 @@ export const Analytics: React.FC = () => {
     return Math.round(stability);
   };
 
-  // Mock Probe Grid (Moisture Heatmap)
-  const probeHeatmapValues = [
-    { id: 1, val: telemetry[activeNodeId]?.moisture ? parseFloat((telemetry[activeNodeId]!.moisture! - 1.2).toFixed(1)) : 70.2 },
-    { id: 2, val: telemetry[activeNodeId]?.moisture ? parseFloat((telemetry[activeNodeId]!.moisture! + 0.8).toFixed(1)) : 72.2 },
-    { id: 3, val: telemetry[activeNodeId]?.moisture ? parseFloat((telemetry[activeNodeId]!.moisture! - 0.4).toFixed(1)) : 71.0 },
-    { id: 4, val: telemetry[activeNodeId]?.moisture ? parseFloat((telemetry[activeNodeId]!.moisture! - 2.5).toFixed(1)) : 68.9 },
-    { id: 5, val: telemetry[activeNodeId]?.moisture ? parseFloat((telemetry[activeNodeId]!.moisture!).toFixed(1)) : 71.4 }, // center probe
-    { id: 6, val: telemetry[activeNodeId]?.moisture ? parseFloat((telemetry[activeNodeId]!.moisture! + 1.6).toFixed(1)) : 73.0 },
-    { id: 7, val: telemetry[activeNodeId]?.moisture ? parseFloat((telemetry[activeNodeId]!.moisture! + 0.3).toFixed(1)) : 71.7 },
-    { id: 8, val: telemetry[activeNodeId]?.moisture ? parseFloat((telemetry[activeNodeId]!.moisture! - 1.8).toFixed(1)) : 69.6 },
-    { id: 9, val: telemetry[activeNodeId]?.moisture ? parseFloat((telemetry[activeNodeId]!.moisture! + 2.1).toFixed(1)) : 73.5 }
-  ];
-
   return (
     <div className="space-y-6 font-sans pb-12">
-      {/* Tab controls */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h2 className="text-2xl font-bold font-display text-white">Sensor Analytics</h2>
-          <p className="text-slate-400 text-sm">Deep-dive telemetry graphing and sensor heatmaps</p>
-        </div>
-
-        {/* Time filters */}
-        <div className="flex gap-1.5 p-1 rounded-xl bg-white/5 border border-white/5">
-          {(['1h', '6h', '24h'] as const).map((r) => (
-            <button
-              key={r}
-              onClick={() => setTimeRange(r)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${timeRange === r ? 'bg-emerald-500 text-bg-space font-bold' : 'text-slate-400 hover:text-white'
-                }`}
-            >
-              {r === '1h' ? '1 Hour' : r === '6h' ? '6 Hours' : '24 Hours'}
-            </button>
-          ))}
-        </div>
+      {/* Header */}
+      <div>
+        <h2 className="text-2xl font-bold font-display text-white">Sensor Analytics</h2>
+        <p className="text-slate-400 text-sm">Deep-dive telemetry graphing and sensor insights</p>
       </div>
 
       {/* Row 1: Area Trends (Moisture & Temperature) */}
@@ -235,44 +198,8 @@ export const Analytics: React.FC = () => {
         </GlassCard>
       </div>
 
-      {/* Row 3: Heatmap Visual & Stability Index */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Heatmap probe matrix */}
-        <GlassCard>
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h3 className="font-display font-bold text-white text-base">Soil Moisture Probe Heatmap</h3>
-              <p className="text-xs text-slate-500 mt-0.5">3x3 sensor grid matrix variance reading</p>
-            </div>
-            <Grid className="w-5 h-5 text-slate-500" />
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 max-w-xs mx-auto pb-4">
-            {probeHeatmapValues.map((probe) => {
-              const val = probe.val;
-              // determine color scale: 70% is dark emerald, lower moisture is dryer brown/gray, high moisture is bright cyan
-              let bgGlow = 'bg-emerald-950/40 border-emerald-500/20 text-emerald-400';
-              if (val < 45) {
-                bgGlow = 'bg-rose-950/40 border-red-500/30 text-red-400';
-              } else if (val < 60) {
-                bgGlow = 'bg-amber-950/40 border-amber-500/30 text-amber-400';
-              } else if (val > 80) {
-                bgGlow = 'bg-cyan-950/40 border-cyan-500/30 text-cyan-400';
-              }
-
-              return (
-                <div
-                  key={probe.id}
-                  className={`aspect-square rounded-xl border flex flex-col items-center justify-center p-2 font-display transition-all duration-300 hover:scale-102 ${bgGlow}`}
-                >
-                  <span className="text-[10px] text-slate-500 font-bold uppercase">Probe {probe.id}</span>
-                  <span className="text-sm font-extrabold mt-1">{val}%</span>
-                </div>
-              );
-            })}
-          </div>
-        </GlassCard>
-
+      {/* Row 3: Environmental Stability Index */}
+      <div className="grid grid-cols-1 gap-6">
         {/* Environmental Stability Score */}
         <GlassCard className="flex flex-col justify-between">
           <div>
