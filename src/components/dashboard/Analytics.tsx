@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useStore } from '../../store/useStore';
 import { SIMULATED_NODES } from '../../services/simulator';
 import { GlassCard } from '../ui/GlassCard';
@@ -24,18 +24,11 @@ import {
 
 export const Analytics: React.FC = () => {
   const { activeNodeId, history, telemetry } = useStore();
-  const [timeRange, setTimeRange] = useState<'1h' | '6h' | '24h'>('6h');
 
   const fullHistory = history[activeNodeId] || [];
 
-  // Filter history data points based on selected range
-  const getFilteredData = () => {
-    if (timeRange === '1h') return fullHistory.slice(-12); // Last 1 hour (approx 12 points at 5 min steps)
-    if (timeRange === '6h') return fullHistory.slice(-36); // Last 6 hours (approx 36 points)
-    return fullHistory; // Full 24 hours
-  };
-
-  const chartData = getFilteredData().map((pt) => ({
+  // Use all available history data
+  const chartData = fullHistory.map((pt) => ({
     ...pt,
     timeLabel: new Date(pt.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }));
@@ -66,26 +59,10 @@ export const Analytics: React.FC = () => {
 
   return (
     <div className="space-y-6 font-sans pb-12">
-      {/* Tab controls */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h2 className="text-2xl font-bold font-display text-white">Sensor Analytics</h2>
-          <p className="text-slate-400 text-sm">Deep-dive telemetry graphing and sensor heatmaps</p>
-        </div>
-
-        {/* Time filters */}
-        <div className="flex gap-1.5 p-1 rounded-xl bg-white/5 border border-white/5">
-          {(['1h', '6h', '24h'] as const).map((r) => (
-            <button
-              key={r}
-              onClick={() => setTimeRange(r)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${timeRange === r ? 'bg-emerald-500 text-bg-space font-bold' : 'text-slate-400 hover:text-white'
-                }`}
-            >
-              {r === '1h' ? '1 Hour' : r === '6h' ? '6 Hours' : '24 Hours'}
-            </button>
-          ))}
-        </div>
+      {/* Header */}
+      <div>
+        <h2 className="text-2xl font-bold font-display text-white">Sensor Analytics</h2>
+        <p className="text-slate-400 text-sm">Deep-dive telemetry graphing and sensor insights</p>
       </div>
 
       {/* Row 1: Area Trends (Moisture & Temperature) */}
