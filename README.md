@@ -16,65 +16,18 @@
 
 ---
 
-## 👥 Team Members & Contributions
+## 👥 Team Members
 
-## Full-Stack Development
-# **Krishna Madhaparia** (ID: 166980)
-- Complete website backend architecture and API integration
-- Full frontend development with React + TypeScript
-- Firebase Realtime Database and Firestore integration
-- State management with Zustand
-- Real-time data synchronization implementation
-- CSV/JSON export functionality
-- Dashboard UI/UX design and implementation
 
-### Hardware Simulation & Wokwi Integration
-# **Parneet Kaur** (ID: 166985)
-- Live circuit simulation on Wokwi platform
-- Virtual hardware testing and validation
-- Component connectivity verification
-- Sensor behavior simulation
-- **Live Wokwi Project Publish:** https://wokwi.com/projects/465181219780428801
+Krishna Madhaparia - 166980
+Parneet Kaur - 166985
+Eeshan Vaghjiani - 166981
+Dhruvin Bhudia - 169646
+Philip Tait - 166384
+Tevin Ngiru - 166289
 
-### PCB Design & Hardware Architecture
-# **Eeshan Vaghjiani** (ID: 166981)
-- Complete schematic design and documentation
-- 3D PCB design from scratch using design tools
-- Component placement optimization
-- Power distribution planning
-- Signal routing and trace layout
-- **OSHWLAB Project Publish:** https://oshwlab.com/evaghjiani/project_wsoshhsu
 
-### Machine Learning & Predictive Analytics
-# **Dhruvin Bhudia** (ID: 169646)
-- Data preprocessing and feature engineering
-- ML model development for sensor data analysis
-- Predictive analytics integration
-- Model deployment to web application
-- Pattern recognition in environmental data
-- Anomaly detection system
-
-### Security & Authentication
-# **Philip Tait** (ID: 166384)
-- Secure communication protocols implementation
-- Firebase authentication system setup
-- Data encryption and security measures
-- API key management and protection
-- Secure WebSocket connections
-- User access control implementation
-
-### Documentation & Physical Implementation
-# **Tevin Ngiru** (ID: 166289)
-- Complete project documentation
-- Physical hardware assembly and testing
-- Laboratory implementation coordination
-- Hardware debugging and troubleshooting
-- Integration testing with support from team members
-- Technical report compilation
-
----
-
-## 📖 Table of Contents
+## Table of Contents
 
 1. [Project Overview](#project-overview)
 2. [System Architecture](#system-architecture)
@@ -228,17 +181,17 @@ VermIQ-Lite is an enterprise-grade IoT monitoring platform designed for precisio
 - Troubleshooting guide
 
 **Machine Learning (Implemented — Phase 1):**
-- ✅ Complete client-side ML engine (`src/ml/` — 9 TypeScript modules)
-- ✅ Feature engineering pipeline (stability, rolling averages, variance, Environmental Health Index)
-- ✅ Explainable anomaly detection (hard thresholds + rapid-change detection)
-- ✅ Harvest readiness predictor (0–100% weighted scoring with confidence)
-- ✅ Environmental health scorer and classifier (5 qualitative tiers)
-- ✅ Intelligent recommendation engine (17 contextual rules)
-- ✅ ML Simulation mode with 5 preset scenarios + manual sliders
-- ✅ Live Firebase → ML pipeline (same engine, real sensor data)
-- ✅ Prediction history tracking (last 50 predictions with trend charts)
-- ✅ Unified `/ml-analytics` dashboard page integrated into navigation
-- ✅ Zustand ML state slice (mode, values, results, history, actions)
+- Complete client-side ML engine (`src/ml/` — 9 TypeScript modules)
+- Feature engineering pipeline (stability, rolling averages, variance, Environmental Health Index)
+- Explainable anomaly detection (hard thresholds + rapid-change detection)
+- Harvest readiness predictor (0–100% weighted scoring with confidence)
+- Environmental health scorer and classifier (5 qualitative tiers)
+- Intelligent recommendation engine (17 contextual rules)
+- ML Simulation mode with 5 preset scenarios + manual sliders
+- Live Firebase → ML pipeline (same engine, real sensor data)
+- Prediction history tracking (last 50 predictions with trend charts)
+- Unified `/ml-analytics` dashboard page integrated into navigation
+- Zustand ML state slice (mode, values, results, history, actions)
 
 #### Planned Future Enhancements
 
@@ -692,11 +645,11 @@ src/
 │   │   ├── Nodes.tsx            # ESP32 node registry
 │   │   ├── Beds.tsx             # Vermiculture bed manager
 │   │   ├── Settings.tsx         # Firebase config & thresholds
-│   │   └── MLAnalytics.tsx      # 🧠 ML Analytics page
+│   │   └── MLAnalytics.tsx      # ML Analytics page
 │   ├── landing/           # Landing page
 │   ├── logo/              # Branding components
 │   └── ui/                # Reusable UI components (GlassCard, StatusBadge, Toast)
-├── ml/                    # 🧠 Machine Learning Engine
+├── ml/                    # Machine Learning Engine
 │   ├── types.ts           # SensorReading, PredictionResult, FeatureVector interfaces
 │   ├── constants.ts       # Ideal ranges, weights, thresholds, scenario presets
 │   ├── preprocessing.ts   # Feature engineering pipeline
