@@ -7,7 +7,6 @@ import { StatusBadge } from '../ui/StatusBadge';
 import {
   Sliders,
   Database,
-  CloudLightning,
   User,
   Save,
   AlertTriangle
@@ -38,10 +37,6 @@ export const SettingsPage: React.FC = () => {
   const [tempMin, setTempMin] = useState(settings.tempMin);
   const [tempMax, setTempMax] = useState(settings.tempMax);
 
-  // ThingSpeak settings inputs
-  const [tsChannelId, setTsChannelId] = useState(settings.thingSpeakChannelId);
-  const [tsApiKey, setTsApiKey] = useState(settings.thingSpeakApiKey);
-
   const handleSaveThresholds = (e: React.FormEvent) => {
     e.preventDefault();
     updateSettings({
@@ -71,15 +66,6 @@ export const SettingsPage: React.FC = () => {
     saveFirebaseConfig(fbConfig);
     reconnectFirebase();
     addNotification('Firebase configurations saved. System attempting sync connection...', 'success');
-  };
-
-  const handleSaveThingSpeak = (e: React.FormEvent) => {
-    e.preventDefault();
-    updateSettings({
-      thingSpeakChannelId: tsChannelId,
-      thingSpeakApiKey: tsApiKey
-    });
-    addNotification('ThingSpeak API synchronization preferences saved.', 'success');
   };
 
   return (
@@ -246,7 +232,7 @@ export const SettingsPage: React.FC = () => {
           </GlassCard>
         </div>
 
-        {/* Right Column (4 cols): User Profile & ThingSpeak API */}
+        {/* Right Column (4 cols): User Profile */}
         <div className="lg:col-span-4 space-y-6">
           {/* User profile details */}
           <GlassCard>
@@ -283,55 +269,6 @@ export const SettingsPage: React.FC = () => {
                 />
               </div>
             </div>
-          </GlassCard>
-
-          {/* ThingSpeak API panel */}
-          <GlassCard variant="cyan">
-            <div className="flex gap-2.5 items-center mb-6">
-              <CloudLightning className="w-5 h-5 text-cyan-400" />
-              <h3 className="font-display font-bold text-white text-base">ThingSpeak Sync</h3>
-            </div>
-
-            <form onSubmit={handleSaveThingSpeak} className="space-y-4">
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Channel ID</label>
-                <input
-                  type="text"
-                  value={tsChannelId}
-                  onChange={(e) => setTsChannelId(e.target.value)}
-                  placeholder="2456789"
-                  className="w-full px-3.5 py-2.5 bg-[#0d1017] border border-white/5 rounded-xl text-white text-xs focus:outline-none focus:border-cyan-500/40"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Read API Key</label>
-                <input
-                  type="password"
-                  value={tsApiKey}
-                  onChange={(e) => setTsApiKey(e.target.value)}
-                  placeholder="X1Y2Z3A4B5C6..."
-                  className="w-full px-3.5 py-2.5 bg-[#0d1017] border border-white/5 rounded-xl text-white text-xs focus:outline-none focus:border-cyan-500/40"
-                />
-              </div>
-
-              {tsChannelId && (
-                <div className="p-3 bg-white/5 border border-white/5 rounded-xl text-[10px] space-y-1">
-                  <span className="text-slate-450 font-bold block">Embedded Source URL:</span>
-                  <code className="text-cyan-400 break-all">
-                    https://thingspeak.com/channels/{tsChannelId}/charts/1
-                  </code>
-                </div>
-              )}
-
-              <button
-                type="submit"
-                className="w-full py-2.5 bg-cyan-500 hover:bg-cyan-600 text-bg-space font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-              >
-                <Save className="w-3.5 h-3.5" />
-                Sync ThingSpeak API
-              </button>
-            </form>
           </GlassCard>
         </div>
       </div>
