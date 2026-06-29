@@ -75,7 +75,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       {/* Navbar - Simplified without nav buttons */}
       <header className="border-b border-white/5 relative z-10 backdrop-blur-md bg-bg-space/40 sticky top-0 lg:ml-64">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Logo size="md" className="lg:hidden" />
+          <Logo size="md" className="lg:hidden" onClick={() => {
+            window.scrollTo(0, 0);
+            onNavigate('home');
+          }} />
           <button
             onClick={() => onNavigate('dashboard')}
             className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-bg-space font-bold rounded-xl transition-all duration-300 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center gap-1.5 cursor-pointer text-sm ml-auto"
@@ -414,7 +417,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       {/* Footer */}
       <footer className="border-t border-white/5 py-12 relative z-10 bg-bg-space text-slate-500 text-sm lg:ml-64">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-          <Logo size="sm" />
+          <Logo size="sm" onClick={() => {
+            window.scrollTo(0, 0);
+            onNavigate('home');
+          }} />
           <div>© {new Date().getFullYear()} VermIQ-Lite. Smart Agritech Environmental Systems.</div>
           <div className="flex gap-4">
             <span className="hover:text-white transition-colors cursor-pointer">Security</span>

@@ -136,7 +136,10 @@ export const DashboardLayout: React.FC<{ onGoHome?: () => void }> = ({ onGoHome 
         <div>
           {/* Logo Brand Header */}
           <div className="h-20 px-6 border-b border-white/5 flex items-center justify-between">
-            <Logo size="md" />
+            <Logo size="md" onClick={() => {
+              window.scrollTo(0, 0);
+              if (onGoHome) onGoHome();
+            }} />
             <button className="lg:hidden text-slate-400 hover:text-white" onClick={() => setSidebarOpen(false)}>
               <X className="w-6 h-6" />
             </button>

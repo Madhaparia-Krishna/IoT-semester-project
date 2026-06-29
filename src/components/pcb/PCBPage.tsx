@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Logo } from '../logo/Logo';
 import { GlassCard } from '../ui/GlassCard';
 import { Sidebar } from '../ui/Sidebar';
-import { ChevronLeft, ChevronRight, X, Zap, Box } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Zap, Box, ArrowRight } from 'lucide-react';
 import pcb1 from '../../assets/pcb/3D_PCB-ESP32_1.png';
 import pcb2 from '../../assets/pcb/3D_PCB-ESP32_2.png';
 import pcb3 from '../../assets/pcb/3D_PCB-ESP32_3.png';
@@ -75,7 +75,18 @@ export const PCBPage: React.FC<PCBPageProps> = ({ onNavigate }) => {
       {/* Navbar */}
       <header className="border-b border-white/5 relative z-10 backdrop-blur-md bg-bg-space/40 sticky top-0 lg:ml-64">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Logo size="md" className="lg:hidden" />
+          <Logo size="md" className="lg:hidden" onClick={() => {
+            window.scrollTo(0, 0);
+            onNavigate('home');
+          }} />
+          <button
+            type="button"
+            onClick={() => onNavigate('dashboard')}
+            className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-bg-space font-bold rounded-xl transition-all duration-300 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center gap-1.5 cursor-pointer text-sm ml-auto"
+          >
+            Launch Dashboard
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
       </header>
 
@@ -104,24 +115,22 @@ export const PCBPage: React.FC<PCBPageProps> = ({ onNavigate }) => {
               <Box className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="font-display text-2xl font-bold text-white mb-3">About This PCB Design</h2>
-              <div className="space-y-3 text-sm text-slate-400">
-                <p>
-                  The VermIQ PCB is a custom-designed circuit board optimized for environmental monitoring in vermiculture applications. It integrates the ESP32 microcontroller with precision analog and digital sensors for comprehensive data collection.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                  <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
-                    <p className="text-xs font-semibold text-purple-400 mb-1">Board Size</p>
-                    <p className="font-display text-white">Custom Fit</p>
-                  </div>
-                  <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
-                    <p className="text-xs font-semibold text-blue-400 mb-1">Layers</p>
-                    <p className="font-display text-white">2-Layer PCB</p>
-                  </div>
-                  <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
-                    <p className="text-xs font-semibold text-cyan-400 mb-1">Manufacturing</p>
-                    <p className="font-display text-white">Prototype Ready</p>
-                  </div>
+              <h2 className="font-display text-2xl font-bold text-white mb-3">About This PCB</h2>
+              <p className="text-sm text-slate-400 mb-4">
+                Custom PCB optimized for environmental monitoring in vermiculture. Integrates ESP32 with precision analog and digital sensors for comprehensive data collection.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
+                  <p className="text-xs font-semibold text-purple-400 mb-1">Board Size</p>
+                  <p className="font-display text-white">Custom Fit</p>
+                </div>
+                <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
+                  <p className="text-xs font-semibold text-blue-400 mb-1">Layers</p>
+                  <p className="font-display text-white">2-Layer PCB</p>
+                </div>
+                <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
+                  <p className="text-xs font-semibold text-cyan-400 mb-1">Status</p>
+                  <p className="font-display text-white">Prototype Ready</p>
                 </div>
               </div>
             </div>
@@ -166,63 +175,31 @@ export const PCBPage: React.FC<PCBPageProps> = ({ onNavigate }) => {
 
         {/* PCB Manufacturing Details */}
         <div>
-          <h2 className="font-display text-3xl font-bold text-white mb-8">PCB Manufacturing Specifications</h2>
+          <h2 className="font-display text-3xl font-bold text-white mb-8">PCB Specifications</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <GlassCard>
               <h3 className="font-display font-bold text-lg text-white mb-4 flex items-center gap-2">
                 <Zap className="w-5 h-5 text-purple-400" />
-                Electrical Specifications
+                Electrical
               </h3>
-              <ul className="space-y-3 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-purple-400 font-bold">•</span>
-                  <span><strong className="text-white">Operating Voltage:</strong> 5V DC (USB powered)</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-purple-400 font-bold">•</span>
-                  <span><strong className="text-white">Logic Voltage:</strong> 3.3V (ESP32 native)</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-purple-400 font-bold">•</span>
-                  <span><strong className="text-white">Current Draw:</strong> ~150-200mA typical</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-purple-400 font-bold">•</span>
-                  <span><strong className="text-white">Trace Width:</strong> 12-16 mil for signal, 24 mil for power</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-purple-400 font-bold">•</span>
-                  <span><strong className="text-white">Impedance Control:</strong> Controlled 50Ω traces for WiFi antenna</span>
-                </li>
+              <ul className="space-y-2 text-sm text-slate-400">
+                <li><span className="text-white font-semibold">Operating Voltage:</span> 5V DC (USB powered)</li>
+                <li><span className="text-white font-semibold">Logic Voltage:</span> 3.3V (ESP32)</li>
+                <li><span className="text-white font-semibold">Current Draw:</span> ~150-200mA typical</li>
+                <li><span className="text-white font-semibold">Trace Width:</span> 12-16 mil signal, 24 mil power</li>
               </ul>
             </GlassCard>
 
             <GlassCard>
               <h3 className="font-display font-bold text-lg text-white mb-4 flex items-center gap-2">
                 <Box className="w-5 h-5 text-blue-400" />
-                Physical Specifications
+                Physical
               </h3>
-              <ul className="space-y-3 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-blue-400 font-bold">•</span>
-                  <span><strong className="text-white">PCB Material:</strong> FR-4 (standard PCB laminate)</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-blue-400 font-bold">•</span>
-                  <span><strong className="text-white">Copper Weight:</strong> 1 oz (35 micrometers)</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-blue-400 font-bold">•</span>
-                  <span><strong className="text-white">Solder Mask:</strong> Green (standard)</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-blue-400 font-bold">•</span>
-                  <span><strong className="text-white">Silkscreen:</strong> White, component labeling</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-blue-400 font-bold">•</span>
-                  <span><strong className="text-white">Via Size:</strong> 0.3mm (12 mil) diameter</span>
-                </li>
+              <ul className="space-y-2 text-sm text-slate-400">
+                <li><span className="text-white font-semibold">Material:</span> FR-4 PCB laminate</li>
+                <li><span className="text-white font-semibold">Copper Weight:</span> 1 oz (35µm)</li>
+                <li><span className="text-white font-semibold">Solder Mask:</span> Green</li>
+                <li><span className="text-white font-semibold">Via Size:</span> 0.3mm diameter</li>
               </ul>
             </GlassCard>
           </div>
@@ -233,21 +210,21 @@ export const PCBPage: React.FC<PCBPageProps> = ({ onNavigate }) => {
           <h3 className="font-display font-bold text-xl text-white mb-4">Assembly & Testing</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <p className="text-xs font-semibold text-cyan-400 uppercase tracking-widest mb-2">Assembly Method</p>
+              <p className="text-xs font-semibold text-cyan-400 uppercase tracking-widest mb-2">Assembly</p>
               <p className="text-white font-display text-sm">
-                Surface Mount Technology (SMT) for precision components, through-hole for connectors and large components
+                SMT for precision components, through-hole for connectors
               </p>
             </div>
             <div>
               <p className="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-2">Quality Control</p>
               <p className="text-white font-display text-sm">
-                Automated Optical Inspection (AOI), continuity testing, and functional verification before shipping
+                AOI, continuity testing, functional verification
               </p>
             </div>
             <div>
               <p className="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-2">Compliance</p>
               <p className="text-white font-display text-sm">
-                RoHS compliant, lead-free soldering, ESD protective measures during assembly
+                RoHS compliant, lead-free, ESD protective measures
               </p>
             </div>
           </div>
@@ -255,93 +232,45 @@ export const PCBPage: React.FC<PCBPageProps> = ({ onNavigate }) => {
 
         {/* Design Considerations */}
         <div>
-          <h2 className="font-display text-3xl font-bold text-white mb-8">Design Considerations</h2>
+          <h2 className="font-display text-3xl font-bold text-white mb-8">Design Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <GlassCard>
               <h3 className="font-display font-bold text-lg text-white mb-4 text-emerald-400">Signal Integrity</h3>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-emerald-400">✓</span>
-                  <span>Ground plane for RF shielding and EMI reduction</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-emerald-400">✓</span>
-                  <span>Separate analog and digital ground planes with single-point connection</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-emerald-400">✓</span>
-                  <span>Decoupling capacitors close to each IC power pin</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-emerald-400">✓</span>
-                  <span>Differential pair routing for I2C and SPI buses</span>
-                </li>
+                <li>Ground plane for RF shielding and EMI reduction</li>
+                <li>Separate analog and digital ground planes</li>
+                <li>Decoupling capacitors near each IC power pin</li>
+                <li>Differential pair routing for I2C and SPI buses</li>
               </ul>
             </GlassCard>
 
             <GlassCard>
               <h3 className="font-display font-bold text-lg text-white mb-4 text-purple-400">Thermal Management</h3>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-purple-400">✓</span>
-                  <span>Thermal vias under ESP32 for heat dissipation</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-purple-400">✓</span>
-                  <span>Copper flood in non-signal areas for improved thermal conductivity</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-purple-400">✓</span>
-                  <span>Component spacing prevents thermal concentration</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-purple-400">✓</span>
-                  <span>Airflow considerations in enclosure design</span>
-                </li>
+                <li>Thermal vias under ESP32 for heat dissipation</li>
+                <li>Copper flood in non-signal areas</li>
+                <li>Component spacing prevents thermal concentration</li>
+                <li>Airflow considerations in enclosure</li>
               </ul>
             </GlassCard>
 
             <GlassCard>
               <h3 className="font-display font-bold text-lg text-white mb-4 text-cyan-400">Reliability</h3>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  <span>Serpentine routing for analog sensor traces</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  <span>Ferrite beads on power supply inputs</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  <span>Protection diodes on high-voltage sensor inputs</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  <span>Test points for troubleshooting and debugging</span>
-                </li>
+                <li>Serpentine routing for analog sensor traces</li>
+                <li>Ferrite beads on power supply inputs</li>
+                <li>Protection diodes on high-voltage inputs</li>
+                <li>Test points for troubleshooting</li>
               </ul>
             </GlassCard>
 
             <GlassCard>
-              <h3 className="font-display font-bold text-lg text-white mb-4 text-rose-400">Cost Optimization</h3>
+              <h3 className="font-display font-bold text-lg text-white mb-4 text-rose-400">Optimization</h3>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-rose-400">✓</span>
-                  <span>Standardized component footprints for availability</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-rose-400">✓</span>
-                  <span>Design for manufacturability (DFM) optimization</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-rose-400">✓</span>
-                  <span>Minimum trace spacing for cost-effective production</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-rose-400">✓</span>
-                  <span>Bulk component ordering for volume discounts</span>
-                </li>
+                <li>Standardized component footprints</li>
+                <li>Design for manufacturability (DFM)</li>
+                <li>Minimum trace spacing for cost-effective production</li>
+                <li>Bulk component ordering for discounts</li>
               </ul>
             </GlassCard>
           </div>
@@ -355,12 +284,21 @@ export const PCBPage: React.FC<PCBPageProps> = ({ onNavigate }) => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
+              type="button"
+              onClick={() => onNavigate('dashboard')}
+              className="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-bg-space font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+            >
+              Launch Dashboard
+            </button>
+            <button
+              type="button"
               onClick={() => onNavigate('schematic')}
               className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-all border border-white/20"
             >
               View Schematic
             </button>
             <button
+              type="button"
               onClick={() => {
                 window.scrollTo(0, 0);
                 onNavigate('home');
@@ -388,6 +326,7 @@ export const PCBPage: React.FC<PCBPageProps> = ({ onNavigate }) => {
           >
             {/* Close Button - Top Right, Always Visible */}
             <button
+              type="button"
               onClick={closeImageModal}
               className="absolute -top-16 right-0 z-60 p-3 text-white hover:text-slate-200 hover:bg-white/10 rounded-lg transition-all duration-200"
               aria-label="Close image viewer"
@@ -419,14 +358,20 @@ export const PCBPage: React.FC<PCBPageProps> = ({ onNavigate }) => {
             {/* Navigation Buttons */}
             <div className="mt-6 flex justify-center gap-4">
               <button
+                type="button"
                 onClick={prevImage}
                 className="p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all"
+                aria-label="Previous image"
+                title="Previous (←)"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
+                type="button"
                 onClick={nextImage}
                 className="p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all"
+                aria-label="Next image"
+                title="Next (→)"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
@@ -438,7 +383,10 @@ export const PCBPage: React.FC<PCBPageProps> = ({ onNavigate }) => {
       {/* Footer */}
       <footer className="border-t border-white/5 py-12 relative z-10 bg-bg-space text-slate-500 text-sm lg:ml-64">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-          <Logo size="sm" />
+          <Logo size="sm" onClick={() => {
+            window.scrollTo(0, 0);
+            onNavigate('home');
+          }} />
           <div>© {new Date().getFullYear()} VermIQ-Lite. Smart Agritech Environmental Systems.</div>
           <div className="flex gap-4">
             <span className="hover:text-white transition-colors cursor-pointer">Security</span>

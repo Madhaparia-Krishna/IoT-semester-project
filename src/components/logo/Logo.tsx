@@ -5,6 +5,7 @@ interface LogoProps {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   animated?: boolean;
+  onClick?: () => void;
 }
 
 export const Logo: React.FC<LogoProps> = ({
@@ -12,6 +13,7 @@ export const Logo: React.FC<LogoProps> = ({
   size = 'md',
   className = '',
   animated = true,
+  onClick,
 }) => {
   const getDimensions = () => {
     switch (size) {
@@ -125,11 +127,11 @@ export const Logo: React.FC<LogoProps> = ({
   );
 
   if (variant === 'icon') {
-    return <div className={`inline-flex items-center justify-center ${className}`}>{svgIcon}</div>;
+    return <button type="button" onClick={onClick} className={`inline-flex items-center justify-center ${onClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''} ${className}`}>{svgIcon}</button>;
   }
 
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
+    <button type="button" onClick={onClick} className={`flex items-center gap-3 ${onClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''} ${className}`}>
       {svgIcon}
       <span
         className={`font-display font-extrabold tracking-tight select-none flex items-center ${dim.text} ${
@@ -142,7 +144,7 @@ export const Logo: React.FC<LogoProps> = ({
           Lite
         </span>
       </span>
-    </div>
+    </button>
   );
 };
 export default Logo;
