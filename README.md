@@ -1,6 +1,8 @@
 # VermIQ-Lite: Smart Vermiculture IoT Monitoring System
 ## Complete Implementation Documentation
 
+<!-- Deployment trigger: Updated offline node display with last Firebase data -->
+
 ---
 
 ## 📋 Project Information
