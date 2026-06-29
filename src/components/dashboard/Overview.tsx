@@ -16,16 +16,44 @@ import {
 } from 'lucide-react';
 
 // Helper function to calculate relative time
-const getRelativeTime = (dateString: string): string => {
+const getRelativeTime = (dateString: string | number | undefined): string => {
+  if (!dateString) return 'unknown';
+
   const now = new Date();
-  const past = new Date(dateString);
+  let past: Date;
+
+  // Handle different timestamp formats
+  if (typeof dateString === 'number') {
+    // Unix timestamp in milliseconds
+    past = new Date(dateString);
+  } else if (typeof dateString === 'string') {
+    // ISO string or other date string
+    past = new Date(dateString);
+  } else {
+    return 'unknown';
+  }
+
+  // Validate the date
+  if (isNaN(past.getTime())) {
+    return 'unknown';
+  }
+
   const diffMs = now.getTime() - past.getTime();
+
+  // Handle negative differences (future dates)
+  if (diffMs < 0) {
+    return 'just now';
+  }
 
   const seconds = Math.floor(diffMs / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
+  const weeks = Math.floor(days / 7);
+  const months = Math.floor(days / 30);
 
+  if (months > 0) return `${months} month${months > 1 ? 's' : ''} ago`;
+  if (weeks > 0) return `${weeks} week${weeks > 1 ? 's' : ''} ago`;
   if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
   if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
   if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
@@ -37,7 +65,7 @@ interface OverviewProps {
 }
 
 export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
-  const { activeNodeId, setActiveNodeId, telemetry, settings, realtimeDataMode } = useStore();
+  const { activeNodeId, setActiveNodeId, telemetry, settings, realtimeDataMode, history } = useStore();
 
   const activeNode = SIMULATED_NODES.find((n) => n.id === activeNodeId) || SIMULATED_NODES[0];
   const nodeReading = telemetry[activeNodeId] || {
@@ -51,20 +79,36 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
     rssi: -100
   };
 
+  // Get the last reading from history for display when offline
+  const nodeHistory = history[activeNodeId] || [];
+  const lastHistoricalReading = nodeHistory.length > 0 ? nodeHistory[nodeHistory.length - 1] : null;
+
+  // Use last historical reading if node is offline and has no current data
+  const displayReading = nodeReading.status === 'offline' &&
+    (nodeReading.moisture === null || nodeReading.moisture === 0) &&
+    lastHistoricalReading
+    ? {
+      ...nodeReading,
+      ...lastHistoricalReading, // Copy all fields from historical reading including pH
+      status: 'offline' as const, // Force offline status
+      lastOnline: lastHistoricalReading.timestamp_epoch_ms || lastHistoricalReading.timestamp
+    }
+    : nodeReading;
+
   const getMoistureStatus = (val: number | null) => {
-    if (val === null) return 'offline';
+    if (val === null || val === 0) return 'offline';
     if (val < settings.moistureMin) return 'critical';
     if (val > settings.moistureMax) return 'warning';
     return 'success';
   };
 
   const getTempStatus = (val: number | null) => {
-    if (val === null) return 'offline';
+    if (val === null || val === 0) return 'offline';
     if (val < settings.tempMin || val > settings.tempMax) return 'critical';
     return 'success';
   };
 
-  const isHarvestReady = nodeReading.harvestStatus === 'Harvest Ready';
+  const isHarvestReady = displayReading.harvestStatus === 'Harvest Ready';
 
   return (
     <div className="space-y-6 font-sans">
@@ -101,14 +145,24 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
       </div>
 
       {/* Last Updated Banner - Show when offline */}
-      {nodeReading.status === 'offline' && nodeReading.lastOnline && (
+      {displayReading.status === 'offline' && displayReading.lastOnline && (
         <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center gap-3">
           <Clock className="w-5 h-5 text-amber-400" />
-          <div>
-            <span className="text-sm font-semibold text-amber-400">Node Offline</span>
-            <span className="text-xs text-slate-400 ml-2">
-              Last Updated: {getRelativeTime(nodeReading.lastOnline)}
-            </span>
+          <div className="flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-sm font-semibold text-amber-400">Node Offline</span>
+              <span className="text-xs text-slate-500">•</span>
+              <span className="text-xs text-slate-300 font-medium">
+                Last Updated: {getRelativeTime(displayReading.lastOnline)}
+              </span>
+              <span className="text-xs text-slate-500">•</span>
+              <span className="text-xs text-slate-500 font-mono">
+                {typeof displayReading.lastOnline === 'number'
+                  ? new Date(displayReading.lastOnline).toLocaleString()
+                  : new Date(displayReading.lastOnline).toLocaleString()}
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 mt-0.5">Showing last recorded sensor data from Firebase</p>
           </div>
         </div>
       )}
@@ -123,7 +177,7 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
             <div>
               <h4 className="font-display font-bold text-white text-base">Compost Harvest Cycle Complete!</h4>
               <p className="text-xs text-emerald-300/80 leading-relaxed mt-0.5">
-                {activeNode.bedName} has elapsed {nodeReading.daysElapsed} days of vermiculture maturation. Environmental stats are highly stable.
+                {activeNode.bedName} has elapsed {displayReading.daysElapsed} days of vermiculture maturation. Environmental stats are highly stable.
               </p>
             </div>
           </div>
@@ -141,7 +195,7 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Moisture */}
         <GlassCard
-          variant={getMoistureStatus(nodeReading.moisture) === 'critical' ? 'rose' : getMoistureStatus(nodeReading.moisture) === 'warning' ? 'cyan' : 'emerald'}
+          variant={getMoistureStatus(displayReading.moisture) === 'critical' ? 'rose' : getMoistureStatus(displayReading.moisture) === 'warning' ? 'cyan' : 'emerald'}
           className="relative overflow-hidden group"
         >
           <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-cyan-500/10 transition-colors" />
@@ -151,21 +205,23 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
             </div>
             <StatusBadge
               status={
-                getMoistureStatus(nodeReading.moisture) === 'critical'
+                getMoistureStatus(displayReading.moisture) === 'critical'
                   ? 'critical'
-                  : getMoistureStatus(nodeReading.moisture) === 'warning'
+                  : getMoistureStatus(displayReading.moisture) === 'warning'
                     ? 'warning'
-                    : 'online'
+                    : displayReading.status === 'offline'
+                      ? 'offline'
+                      : 'online'
               }
-              label={nodeReading.moisture === null ? 'Offline' : getMoistureStatus(nodeReading.moisture) === 'critical' ? 'Critically Dry' : 'Moisture Safe'}
+              label={displayReading.moisture === null || displayReading.moisture === 0 ? 'Offline' : getMoistureStatus(displayReading.moisture) === 'critical' ? 'Critically Dry' : 'Moisture Safe'}
             />
           </div>
           <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest block">Soil Moisture</span>
           <div className="flex items-baseline gap-2 mt-2">
             <h3 className="text-4xl font-display font-extrabold text-white text-glow-cyan">
-              {nodeReading.moisture !== null ? `${nodeReading.moisture}%` : 'N/A'}
+              {displayReading.moisture !== null && displayReading.moisture !== 0 ? `${displayReading.moisture}%` : 'N/A'}
             </h3>
-            {nodeReading.moisture !== null && (
+            {displayReading.moisture !== null && displayReading.moisture !== 0 && (
               <span className="text-xs text-slate-400 flex items-center gap-0.5">
                 <TrendingUp className="w-3 h-3 text-cyan-400" />
                 Target: {settings.moistureMin}-{settings.moistureMax}%
@@ -176,7 +232,7 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
 
         {/* Temperature */}
         <GlassCard
-          variant={getTempStatus(nodeReading.temperature) === 'critical' ? 'rose' : 'emerald'}
+          variant={getTempStatus(displayReading.temperature) === 'critical' ? 'rose' : 'emerald'}
           className="relative overflow-hidden group"
         >
           <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-amber-500/10 transition-colors" />
@@ -185,16 +241,16 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
               <Thermometer className="w-6 h-6" />
             </div>
             <StatusBadge
-              status={getTempStatus(nodeReading.temperature) === 'critical' ? 'critical' : 'online'}
-              label={nodeReading.temperature === null ? 'Offline' : getTempStatus(nodeReading.temperature) === 'critical' ? 'Temp Alarm' : 'Stable Temp'}
+              status={getTempStatus(displayReading.temperature) === 'critical' ? 'critical' : displayReading.status === 'offline' ? 'offline' : 'online'}
+              label={displayReading.temperature === null || displayReading.temperature === 0 ? 'Offline' : getTempStatus(displayReading.temperature) === 'critical' ? 'Temp Alarm' : 'Stable Temp'}
             />
           </div>
           <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest block">Core Temperature</span>
           <div className="flex items-baseline gap-2 mt-2">
             <h3 className="text-4xl font-display font-extrabold text-white">
-              {nodeReading.temperature !== null ? `${nodeReading.temperature}°C` : 'N/A'}
+              {displayReading.temperature !== null && displayReading.temperature !== 0 ? `${displayReading.temperature}°C` : 'N/A'}
             </h3>
-            {nodeReading.temperature !== null && (
+            {displayReading.temperature !== null && displayReading.temperature !== 0 && (
               <span className="text-xs text-slate-400 flex items-center gap-0.5">
                 <Activity className="w-3 h-3 text-amber-500" />
                 Target: {settings.tempMin}-{settings.tempMax}°C
@@ -210,14 +266,14 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
             <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-400">
               <Wind className="w-6 h-6" />
             </div>
-            <StatusBadge status={nodeReading.status === 'online' ? 'online' : 'offline'} />
+            <StatusBadge status={displayReading.status === 'online' ? 'online' : 'offline'} />
           </div>
           <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest block">Air Humidity</span>
           <div className="flex items-baseline gap-2 mt-2">
             <h3 className="text-4xl font-display font-extrabold text-white text-glow-emerald">
-              {nodeReading.humidity !== null ? `${nodeReading.humidity}%` : 'N/A'}
+              {displayReading.humidity !== null && displayReading.humidity !== 0 ? `${displayReading.humidity}%` : 'N/A'}
             </h3>
-            {nodeReading.humidity !== null && (
+            {displayReading.humidity !== null && displayReading.humidity !== 0 && (
               <span className="text-xs text-slate-400">
                 Range: {settings.humidityMin}-{settings.humidityMax}%
               </span>
@@ -226,23 +282,23 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
         </GlassCard>
 
         {/* pH Level */}
-        {nodeReading.ph !== undefined && (
+        {displayReading.ph !== undefined && (
           <GlassCard className="relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-purple-500/10 transition-colors" />
             <div className="flex justify-between items-start mb-4">
               <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/25 text-purple-400">
                 <Activity className="w-6 h-6" />
               </div>
-              <StatusBadge status={nodeReading.status === 'online' ? 'online' : 'offline'} />
+              <StatusBadge status={displayReading.status === 'online' ? 'online' : 'offline'} />
             </div>
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest block">Soil pH Level</span>
             <div className="flex items-baseline gap-2 mt-2">
               <h3 className="text-4xl font-display font-extrabold text-white text-glow-purple">
-                {nodeReading.ph !== null ? nodeReading.ph.toFixed(2) : 'N/A'}
+                {displayReading.ph !== null && displayReading.ph !== 0 ? displayReading.ph.toFixed(2) : 'N/A'}
               </h3>
-              {nodeReading.ph !== null && (
+              {displayReading.ph !== null && displayReading.ph !== 0 && (
                 <span className="text-xs text-slate-400">
-                  {nodeReading.ph >= 6.0 && nodeReading.ph <= 7.5 ? 'Optimal' : 'Monitor'}
+                  {displayReading.ph >= 6.0 && displayReading.ph <= 7.5 ? 'Optimal' : 'Monitor'}
                 </span>
               )}
             </div>
@@ -279,19 +335,19 @@ export const Overview: React.FC<OverviewProps> = ({ setActiveTab }) => {
             <div className="flex justify-between items-center text-xs">
               <span className="text-slate-400 font-medium">Last Updated</span>
               <span className="text-slate-200 font-mono text-[10px]">
-                {nodeReading.timestamp ? new Date(nodeReading.timestamp).toLocaleTimeString() : 'N/A'}
+                {displayReading.timestamp ? new Date(displayReading.timestamp).toLocaleTimeString() : 'N/A'}
               </span>
             </div>
             <div className="flex justify-between items-center text-xs">
               <span className="text-slate-400 font-medium">Node Wi-Fi RSSI</span>
-              <span className={`font-bold ${nodeReading.rssi > -65 ? 'text-emerald-400' : nodeReading.rssi > -80 ? 'text-amber-400' : 'text-slate-500'}`}>
-                {nodeReading.rssi} dBm
+              <span className={`font-bold ${displayReading.rssi > -65 ? 'text-emerald-400' : displayReading.rssi > -80 ? 'text-amber-400' : 'text-slate-500'}`}>
+                {displayReading.rssi} dBm
               </span>
             </div>
             <div className="flex justify-between items-center text-xs">
               <span className="text-slate-400 font-medium">Battery Voltage</span>
-              <span className={`font-bold ${nodeReading.battery > 3.7 ? 'text-emerald-400' : nodeReading.battery > 3.4 ? 'text-amber-400' : 'text-slate-500'}`}>
-                {nodeReading.battery} V
+              <span className={`font-bold ${displayReading.battery > 3.7 ? 'text-emerald-400' : displayReading.battery > 3.4 ? 'text-amber-400' : 'text-slate-500'}`}>
+                {displayReading.battery} V
               </span>
             </div>
             <div className="flex justify-between items-center text-xs border-t border-white/5 pt-3">

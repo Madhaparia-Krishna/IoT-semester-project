@@ -103,6 +103,7 @@ function generateHistoricalTelemetry(
     moisture: parseFloat(baseMoisture.toFixed(1)),
     temperature: parseFloat(baseTemp.toFixed(1)),
     humidity: parseFloat(baseHumidity.toFixed(1)),
+    ph: 5.9, // Static pH value for screenshots
     daysElapsed,
     harvestStatus,
     status: 'online',
