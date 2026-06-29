@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Logo } from '../logo/Logo';
 import { GlassCard } from '../ui/GlassCard';
 import { Sidebar } from '../ui/Sidebar';
-import { ChevronLeft, ChevronRight, X, Layers, Image } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Layers, Image, ArrowRight } from 'lucide-react';
 import phys1 from '../../assets/physical/Full_physical_lab_1.jpeg';
 import phys2 from '../../assets/physical/Full_physical_lab_2.jpeg';
 import phys3 from '../../assets/physical/Full_physical_lab_3.jpeg';
@@ -74,7 +74,18 @@ export const PhysicalPage: React.FC<PhysicalPageProps> = ({ onNavigate }) => {
       {/* Navbar */}
       <header className="border-b border-white/5 relative z-10 backdrop-blur-md bg-bg-space/40 sticky top-0 lg:ml-64">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Logo size="md" />
+          <Logo size="md" onClick={() => {
+            window.scrollTo(0, 0);
+            onNavigate('home');
+          }} />
+          <button
+            type="button"
+            onClick={() => onNavigate('dashboard')}
+            className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-bg-space font-bold rounded-xl transition-all duration-300 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center gap-1.5 cursor-pointer text-sm ml-auto"
+          >
+            Launch Dashboard
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
       </header>
 
@@ -104,23 +115,21 @@ export const PhysicalPage: React.FC<PhysicalPageProps> = ({ onNavigate }) => {
             </div>
             <div>
               <h2 className="font-display text-2xl font-bold text-white mb-3">About This Implementation</h2>
-              <div className="space-y-3 text-sm text-slate-400">
-                <p>
-                  The VermIQ physical system integrates hardware sensors, microcontrollers, and real-time data display into a practical vermiculture monitoring solution. The complete setup demonstrates how environmental parameters are continuously measured and displayed for optimal worm habitat management.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                  <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
-                    <p className="text-xs font-semibold text-emerald-400 mb-1">Setup Type</p>
-                    <p className="font-display text-white">Laboratory Test Bed</p>
-                  </div>
-                  <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
-                    <p className="text-xs font-semibold text-cyan-400 mb-1">Deployment Status</p>
-                    <p className="font-display text-white">Active & Operational</p>
-                  </div>
-                  <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
-                    <p className="text-xs font-semibold text-blue-400 mb-1">Monitoring Type</p>
-                    <p className="font-display text-white">Real-time Continuous</p>
-                  </div>
+              <p className="text-sm text-slate-400 mb-4">
+                Complete system integrating hardware sensors, microcontrollers, and real-time display for practical vermiculture monitoring. Demonstrates continuous environmental parameter measurement for optimal worm habitat management.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
+                  <p className="text-xs font-semibold text-emerald-400 mb-1">Setup Type</p>
+                  <p className="font-display text-white">Laboratory Test Bed</p>
+                </div>
+                <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
+                  <p className="text-xs font-semibold text-cyan-400 mb-1">Status</p>
+                  <p className="font-display text-white">Active & Operational</p>
+                </div>
+                <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
+                  <p className="text-xs font-semibold text-blue-400 mb-1">Monitoring</p>
+                  <p className="font-display text-white">Real-time Continuous</p>
                 </div>
               </div>
             </div>
@@ -172,23 +181,11 @@ export const PhysicalPage: React.FC<PhysicalPageProps> = ({ onNavigate }) => {
                 <Image className="w-5 h-5 text-emerald-400" />
                 Sensors & Probes
               </h3>
-              <ul className="space-y-3 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-emerald-400 font-bold">•</span>
-                  <span><strong className="text-white">Moisture Sensors:</strong> Analog capacitive probes for accurate soil moisture measurement</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-emerald-400 font-bold">•</span>
-                  <span><strong className="text-white">Temperature Sensors:</strong> DS18B20 digital temperature sensors for precise readings</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-emerald-400 font-bold">•</span>
-                  <span><strong className="text-white">Humidity Sensors:</strong> DHT22 sensors for ambient humidity monitoring</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-emerald-400 font-bold">•</span>
-                  <span><strong className="text-white">pH Sensors:</strong> Analog pH probes for compost acidity monitoring</span>
-                </li>
+              <ul className="space-y-2 text-sm text-slate-400">
+                <li><span className="text-white font-semibold">Moisture Sensors:</span> Analog capacitive probes</li>
+                <li><span className="text-white font-semibold">Temperature:</span> DS18B20 digital sensors</li>
+                <li><span className="text-white font-semibold">Humidity:</span> DHT22 sensors</li>
+                <li><span className="text-white font-semibold">pH Probes:</span> Analog pH sensors</li>
               </ul>
             </GlassCard>
 
@@ -197,23 +194,11 @@ export const PhysicalPage: React.FC<PhysicalPageProps> = ({ onNavigate }) => {
                 <Layers className="w-5 h-5 text-cyan-400" />
                 Display & Interface
               </h3>
-              <ul className="space-y-3 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-cyan-400 font-bold">•</span>
-                  <span><strong className="text-white">OLED Display:</strong> 128x64 pixel monochrome display for local readouts</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400 font-bold">•</span>
-                  <span><strong className="text-white">Real-time Updates:</strong> Sensor data refreshes every 2 seconds on display</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400 font-bold">•</span>
-                  <span><strong className="text-white">Status Indicators:</strong> WiFi, MQTT, and data sync status LEDs</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400 font-bold">•</span>
-                  <span><strong className="text-white">Alert System:</strong> Visual and audio alerts for threshold violations</span>
-                </li>
+              <ul className="space-y-2 text-sm text-slate-400">
+                <li><span className="text-white font-semibold">OLED Display:</span> 128x64 pixel screen</li>
+                <li><span className="text-white font-semibold">Updates:</span> Refreshes every 2 seconds</li>
+                <li><span className="text-white font-semibold">Status:</span> WiFi, MQTT, sync LEDs</li>
+                <li><span className="text-white font-semibold">Alerts:</span> Visual and audio notifications</li>
               </ul>
             </GlassCard>
           </div>
@@ -226,19 +211,19 @@ export const PhysicalPage: React.FC<PhysicalPageProps> = ({ onNavigate }) => {
             <div>
               <p className="text-xs font-semibold text-cyan-400 uppercase tracking-widest mb-2">Vermiculture Setup</p>
               <p className="text-white font-display text-sm">
-                Standard plastic bin (28L) with drainage holes, bedding material (coconut coir + peat), and 1kg of Eisenia fetida worms
+                28L plastic bin with drainage, bedding material, 1kg of Eisenia fetida worms
               </p>
             </div>
             <div>
               <p className="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-2">Sensor Placement</p>
               <p className="text-white font-display text-sm">
-                Probes positioned at depths of 5cm, 10cm, and 15cm for stratified environmental monitoring throughout the bin
+                Probes at 5cm, 10cm, 15cm depths for stratified monitoring
               </p>
             </div>
             <div>
-              <p className="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-2">Data Collection Period</p>
+              <p className="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-2">Data Collection</p>
               <p className="text-white font-display text-sm">
-                Continuous monitoring with 5-minute interval data logging and real-time Firebase synchronization
+                5-minute interval logging with real-time Firebase sync
               </p>
             </div>
           </div>
@@ -251,88 +236,40 @@ export const PhysicalPage: React.FC<PhysicalPageProps> = ({ onNavigate }) => {
             <GlassCard>
               <h3 className="font-display font-bold text-lg text-white mb-4 text-emerald-400">Environmental Monitoring</h3>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-emerald-400">✓</span>
-                  <span>Continuous temperature logging (range: 15°C - 28°C optimal)</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-emerald-400">✓</span>
-                  <span>Moisture level tracking (range: 60% - 80% optimal)</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-emerald-400">✓</span>
-                  <span>Humidity monitoring for ambient conditions</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-emerald-400">✓</span>
-                  <span>pH tracking for compost maturity assessment</span>
-                </li>
+                <li>Continuous temperature logging (15°C - 28°C optimal)</li>
+                <li>Moisture level tracking (60% - 80% optimal)</li>
+                <li>Humidity monitoring for ambient conditions</li>
+                <li>pH tracking for compost maturity assessment</li>
               </ul>
             </GlassCard>
 
             <GlassCard>
               <h3 className="font-display font-bold text-lg text-white mb-4 text-purple-400">Connectivity & Syncing</h3>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-purple-400">✓</span>
-                  <span>WiFi connection for data transmission to cloud</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-purple-400">✓</span>
-                  <span>MQTT broker for reliable message queueing</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-purple-400">✓</span>
-                  <span>Firebase Realtime Database for instant updates</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-purple-400">✓</span>
-                  <span>Offline capability with local storage fallback</span>
-                </li>
+                <li>WiFi connection for cloud data transmission</li>
+                <li>MQTT broker for reliable message queueing</li>
+                <li>Firebase Realtime Database for instant updates</li>
+                <li>Offline capability with local storage fallback</li>
               </ul>
             </GlassCard>
 
             <GlassCard>
               <h3 className="font-display font-bold text-lg text-white mb-4 text-cyan-400">Data Accuracy</h3>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  <span>Calibrated sensors for precise measurements</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  <span>Multi-point averaging for noise reduction</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  <span>Automatic error detection and logging</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  <span>Timestamp validation for data integrity</span>
-                </li>
+                <li>Calibrated sensors for precise measurements</li>
+                <li>Multi-point averaging for noise reduction</li>
+                <li>Automatic error detection and logging</li>
+                <li>Timestamp validation for data integrity</li>
               </ul>
             </GlassCard>
 
             <GlassCard>
               <h3 className="font-display font-bold text-lg text-white mb-4 text-rose-400">Maintenance & Reliability</h3>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-rose-400">✓</span>
-                  <span>Watchdog timer for automatic system recovery</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-rose-400">✓</span>
-                  <span>Regular sensor recalibration schedule</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-rose-400">✓</span>
-                  <span>Probe cleaning protocol to maintain accuracy</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-rose-400">✓</span>
-                  <span>Battery backup for critical functions</span>
-                </li>
+                <li>Watchdog timer for automatic recovery</li>
+                <li>Regular sensor recalibration schedule</li>
+                <li>Probe cleaning protocol to maintain accuracy</li>
+                <li>Battery backup for critical functions</li>
               </ul>
             </GlassCard>
           </div>
@@ -346,29 +283,40 @@ export const PhysicalPage: React.FC<PhysicalPageProps> = ({ onNavigate }) => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
+              type="button"
+              onClick={() => onNavigate('dashboard')}
+              className="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-bg-space font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+            >
+              Launch Dashboard
+            </button>
+            <button
+              type="button"
               onClick={() => onNavigate('schematic')}
               className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-all border border-white/20"
             >
               View Schematic
             </button>
             <button
+              type="button"
               onClick={() => onNavigate('pcb')}
               className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-all border border-white/20"
             >
               View PCB Design
             </button>
             <button
+              type="button"
               onClick={() => onNavigate('wokwi')}
               className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-all border border-white/20"
             >
               View Simulation
             </button>
             <button
+              type="button"
               onClick={() => {
                 window.scrollTo(0, 0);
                 onNavigate('home');
               }}
-              className="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+              className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-all border border-white/20"
             >
               Return to Home
             </button>
@@ -391,6 +339,7 @@ export const PhysicalPage: React.FC<PhysicalPageProps> = ({ onNavigate }) => {
           >
             {/* Close Button - Top Right, Always Visible */}
             <button
+              type="button"
               onClick={closeImageModal}
               className="absolute -top-16 right-0 z-60 p-3 text-white hover:text-slate-200 hover:bg-white/10 rounded-lg transition-all duration-200"
               aria-label="Close image viewer"
@@ -422,14 +371,20 @@ export const PhysicalPage: React.FC<PhysicalPageProps> = ({ onNavigate }) => {
             {/* Navigation Buttons */}
             <div className="mt-6 flex justify-center gap-4">
               <button
+                type="button"
                 onClick={prevImage}
                 className="p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all"
+                aria-label="Previous image"
+                title="Previous (←)"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
+                type="button"
                 onClick={nextImage}
                 className="p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all"
+                aria-label="Next image"
+                title="Next (→)"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
@@ -441,7 +396,10 @@ export const PhysicalPage: React.FC<PhysicalPageProps> = ({ onNavigate }) => {
       {/* Footer */}
       <footer className="border-t border-white/5 py-12 relative z-10 bg-bg-space text-slate-500 text-sm lg:ml-64">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-          <Logo size="sm" />
+          <Logo size="sm" onClick={() => {
+            window.scrollTo(0, 0);
+            onNavigate('home');
+          }} />
           <div>© {new Date().getFullYear()} VermIQ-Lite. Smart Agritech Environmental Systems.</div>
           <div className="flex gap-4">
             <span className="hover:text-white transition-colors cursor-pointer">Security</span>

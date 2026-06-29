@@ -219,7 +219,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
       >
         {/* Logo */}
         <div className="p-6 border-b border-white/5 sticky top-0 bg-gradient-to-b from-bg-space to-[#0a0c12]">
-          <Logo size="md" />
+          <Logo size="md" onClick={() => {
+            window.scrollTo(0, 0);
+            onNavigate('home');
+            setIsOpen(false);
+          }} />
         </div>
 
         {/* Navigation Items */}

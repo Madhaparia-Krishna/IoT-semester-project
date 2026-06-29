@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Logo } from '../logo/Logo';
 import { GlassCard } from '../ui/GlassCard';
 import { Sidebar } from '../ui/Sidebar';
-import { ChevronLeft, ChevronRight, X, Zap, Cpu, ExternalLink } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Zap, Cpu, ExternalLink, ArrowRight } from 'lucide-react';
 import vscodeImage from '../../assets/wokwi/wowki-simulation-vscode.png';
 import enlargedImage from '../../assets/wokwi/enlarged-wowki-simulation.png';
 
@@ -80,7 +80,18 @@ export const WokwiPage: React.FC<WokwiPageProps> = ({ onNavigate }) => {
       {/* Navbar */}
       <header className="border-b border-white/5 relative z-10 backdrop-blur-md bg-bg-space/40 sticky top-0 lg:ml-64">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Logo size="md" />
+          <Logo size="md" onClick={() => {
+            window.scrollTo(0, 0);
+            onNavigate('home');
+          }} />
+          <button
+            type="button"
+            onClick={() => onNavigate('dashboard')}
+            className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-bg-space font-bold rounded-xl transition-all duration-300 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center gap-1.5 cursor-pointer text-sm ml-auto"
+          >
+            Launch Dashboard
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
       </header>
 
@@ -131,35 +142,25 @@ export const WokwiPage: React.FC<WokwiPageProps> = ({ onNavigate }) => {
             </div>
             <div>
               <h2 className="font-display text-2xl font-bold text-white mb-3">About Wokwi Simulation</h2>
-              <div className="space-y-3 text-sm text-slate-400">
-                <p>
-                  Wokwi is an online simulator for Arduino and ESP32 projects that allows developers to test circuit designs and firmware without physical hardware. Our VermIQ system was prototyped and validated using Wokwi before physical implementation.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                  <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
-                    <p className="text-xs font-semibold text-blue-400 mb-1">Virtual Testing</p>
-                    <p className="font-display text-white text-sm">
-                      Safe environment for circuit design validation
-                    </p>
-                  </div>
-                  <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
-                    <p className="text-xs font-semibold text-cyan-400 mb-1">Rapid Prototyping</p>
-                    <p className="font-display text-white text-sm">
-                      Quick iteration cycles without component costs
-                    </p>
-                  </div>
-                  <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
-                    <p className="text-xs font-semibold text-emerald-400 mb-1">Real-time Monitoring</p>
-                    <p className="font-display text-white text-sm">
-                      Live visualization of sensor data and signals
-                    </p>
-                  </div>
-                  <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
-                    <p className="text-xs font-semibold text-purple-400 mb-1">VSCode Integration</p>
-                    <p className="font-display text-white text-sm">
-                      Seamless development within VS Code editor
-                    </p>
-                  </div>
+              <p className="text-sm text-slate-400 mb-4">
+                Online simulator for Arduino and ESP32 projects enabling safe circuit testing and firmware validation without physical hardware. VermIQ was prototyped and validated here before physical implementation.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
+                  <p className="text-xs font-semibold text-blue-400 mb-1">Virtual Testing</p>
+                  <p className="text-white text-sm">Safe circuit design validation</p>
+                </div>
+                <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
+                  <p className="text-xs font-semibold text-cyan-400 mb-1">Rapid Prototyping</p>
+                  <p className="text-white text-sm">Quick iterations without costs</p>
+                </div>
+                <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
+                  <p className="text-xs font-semibold text-emerald-400 mb-1">Real-time Monitoring</p>
+                  <p className="text-white text-sm">Live sensor data visualization</p>
+                </div>
+                <div className="p-3 bg-white/5 border border-white/5 rounded-lg">
+                  <p className="text-xs font-semibold text-purple-400 mb-1">VSCode Integration</p>
+                  <p className="text-white text-sm">Development in VS Code editor</p>
                 </div>
               </div>
             </div>
@@ -204,71 +205,35 @@ export const WokwiPage: React.FC<WokwiPageProps> = ({ onNavigate }) => {
 
         {/* Key Components Tested */}
         <div>
-          <h2 className="font-display text-3xl font-bold text-white mb-8">Components Tested in Simulation</h2>
+          <h2 className="font-display text-3xl font-bold text-white mb-8">Components Tested</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <GlassCard>
               <h3 className="font-display font-bold text-lg text-white mb-4 text-blue-400">ESP32 Microcontroller</h3>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-blue-400">✓</span>
-                  <span>GPIO configuration and control</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-blue-400">✓</span>
-                  <span>ADC analog input reading</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-blue-400">✓</span>
-                  <span>WiFi connectivity simulation</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-blue-400">✓</span>
-                  <span>Serial communication testing</span>
-                </li>
+                <li>GPIO configuration and control</li>
+                <li>ADC analog input reading</li>
+                <li>WiFi connectivity simulation</li>
+                <li>Serial communication testing</li>
               </ul>
             </GlassCard>
 
             <GlassCard>
               <h3 className="font-display font-bold text-lg text-white mb-4 text-cyan-400">Sensor Integration</h3>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  <span>Moisture sensor signal processing</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  <span>DHT22 temperature/humidity reading</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  <span>I2C protocol communication</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400">✓</span>
-                  <span>Sensor data validation</span>
-                </li>
+                <li>Moisture sensor signal processing</li>
+                <li>DHT22 temperature/humidity reading</li>
+                <li>I2C protocol communication</li>
+                <li>Sensor data validation</li>
               </ul>
             </GlassCard>
 
             <GlassCard>
               <h3 className="font-display font-bold text-lg text-white mb-4 text-emerald-400">Software Validation</h3>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-emerald-400">✓</span>
-                  <span>Firmware logic testing</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-emerald-400">✓</span>
-                  <span>Data collection cycles</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-emerald-400">✓</span>
-                  <span>Error handling verification</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-emerald-400">✓</span>
-                  <span>Performance profiling</span>
-                </li>
+                <li>Firmware logic testing</li>
+                <li>Data collection cycles</li>
+                <li>Error handling verification</li>
+                <li>Performance profiling</li>
               </ul>
             </GlassCard>
           </div>
@@ -279,45 +244,21 @@ export const WokwiPage: React.FC<WokwiPageProps> = ({ onNavigate }) => {
           <h3 className="font-display text-2xl font-bold text-white mb-6">Benefits of Virtual Prototyping</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-display font-bold text-white mb-3 text-blue-400">Development Advantages</h4>
+              <h4 className="font-display font-bold text-white mb-3 text-blue-400">Development</h4>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-blue-400 font-bold">•</span>
-                  <span>Faster iteration cycles without hardware constraints</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-blue-400 font-bold">•</span>
-                  <span>No risk of component damage during development</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-blue-400 font-bold">•</span>
-                  <span>Easy modification and testing of circuit variations</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-blue-400 font-bold">•</span>
-                  <span>Reduced prototyping costs and component expenses</span>
-                </li>
+                <li>Faster iteration cycles without hardware constraints</li>
+                <li>No risk of component damage during development</li>
+                <li>Easy modification and testing of circuit variations</li>
+                <li>Reduced prototyping costs and expenses</li>
               </ul>
             </div>
             <div>
-              <h4 className="font-display font-bold text-white mb-3 text-cyan-400">Validation Benefits</h4>
+              <h4 className="font-display font-bold text-white mb-3 text-cyan-400">Validation</h4>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="flex gap-2">
-                  <span className="text-cyan-400 font-bold">•</span>
-                  <span>Verify firmware logic before deployment</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400 font-bold">•</span>
-                  <span>Test edge cases and error conditions safely</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400 font-bold">•</span>
-                  <span>Validate sensor integration and data accuracy</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400 font-bold">•</span>
-                  <span>Benchmark performance under various conditions</span>
-                </li>
+                <li>Verify firmware logic before deployment</li>
+                <li>Test edge cases and error conditions safely</li>
+                <li>Validate sensor integration and data accuracy</li>
+                <li>Benchmark performance under various conditions</li>
               </ul>
             </div>
           </div>
@@ -330,6 +271,13 @@ export const WokwiPage: React.FC<WokwiPageProps> = ({ onNavigate }) => {
             Check out the hardware schematic and PCB design, or return to the home page to explore other documentation sections.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              type="button"
+              onClick={() => onNavigate('dashboard')}
+              className="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-bg-space font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+            >
+              Launch Dashboard
+            </button>
             <button
               type="button"
               onClick={() => onNavigate('schematic')}
@@ -422,7 +370,10 @@ export const WokwiPage: React.FC<WokwiPageProps> = ({ onNavigate }) => {
       {/* Footer */}
       <footer className="border-t border-white/5 py-12 relative z-10 bg-bg-space text-slate-500 text-sm lg:ml-64">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-          <Logo size="sm" />
+          <Logo size="sm" onClick={() => {
+            window.scrollTo(0, 0);
+            onNavigate('home');
+          }} />
           <div>© {new Date().getFullYear()} VermIQ-Lite. Smart Agritech Environmental Systems.</div>
           <div className="flex gap-4">
             <span className="hover:text-white transition-colors cursor-pointer">Security</span>
