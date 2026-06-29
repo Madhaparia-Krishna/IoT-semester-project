@@ -12,7 +12,7 @@
 **Semester:** Year 4.1  
 **Submission Date:** June 16, 2026
 
-**Publishments:**  
+** Publications:**  
 🔗 https://wokwi.com/projects/465181219780428801  
 🔗 https://oshwlab.com/evaghjiani/project_wsoshhsu
 
