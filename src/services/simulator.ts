@@ -43,13 +43,16 @@ export const SIMULATED_NODES: NodeConfig[] = [
   }
 ];
 
+// Static base date for historical data (June 16, 2026)
+const STATIC_BASE_DATE = new Date('2026-06-16T12:00:00+03:00');
+
 // Helper to generate a single telemetry data point with minor fluctuation
 export function generateTelemetry(
   _node: NodeConfig,
   timeOffsetMs: number = 0,
   _overrideTime?: Date
 ): TelemetryReading {
-  const timestamp = new Date(Date.now() - timeOffsetMs);
+  const timestamp = new Date(STATIC_BASE_DATE.getTime() - timeOffsetMs);
 
   // Node is offline - return offline status with last known data timestamp
   return {
@@ -73,7 +76,7 @@ function generateHistoricalTelemetry(
   timeOffsetMs: number = 0,
   overrideTime?: Date
 ): TelemetryReading {
-  const timestamp = new Date(Date.now() - timeOffsetMs);
+  const timestamp = new Date(STATIC_BASE_DATE.getTime() - timeOffsetMs);
   const timeSec = (overrideTime ? overrideTime.getTime() : timestamp.getTime()) / 1000;
 
   // Healthy cycle, near completion
@@ -109,6 +112,7 @@ function generateHistoricalTelemetry(
     status: 'online',
     rssi,
     battery: parseFloat(battery.toFixed(2)),
+    timestamp_epoch_ms: (overrideTime || timestamp).getTime(),
   };
 }
 
