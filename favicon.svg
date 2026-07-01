@@ -1,0 +1,62 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with gradient -->
+  <rect width="64" height="64" rx="12" fill="url(#bgGradient)"/>
+  
+  <!-- Subtle glow effect -->
+  <rect width="64" height="64" rx="12" fill="url(#glowGradient)" opacity="0.3"/>
+  
+  <!-- Leaf outline -->
+  <path 
+    d="M 32 12 C 32 12 16 24 16 40 C 16 48 24 54 32 54 C 40 54 48 48 48 40 C 48 24 32 12 32 12 Z" 
+    stroke="#FFFFFF" 
+    stroke-width="2.5" 
+    stroke-linecap="round" 
+    fill="rgba(255, 255, 255, 0.08)"
+  />
+  
+  <!-- Main vein -->
+  <path 
+    d="M 32 54 V 18" 
+    stroke="#FFFFFF" 
+    stroke-width="2.5" 
+    stroke-linecap="round"
+    opacity="0.9"
+  />
+  
+  <!-- Left branch -->
+  <path 
+    d="M 32 44 Q 22 38 18 32" 
+    stroke="#06B6D4" 
+    stroke-width="2.5" 
+    stroke-linecap="round"
+  />
+  
+  <!-- Right branch -->
+  <path 
+    d="M 32 36 Q 42 32 44 26" 
+    stroke="#34D399" 
+    stroke-width="2.5" 
+    stroke-linecap="round"
+  />
+  
+  <!-- Sensor nodes -->
+  <circle cx="18" cy="32" r="3" fill="#06B6D4"/>
+  <circle cx="44" cy="26" r="3" fill="#10B981"/>
+  <circle cx="32" cy="18" r="3.5" fill="#34D399"/>
+  
+  <!-- Corner accent -->
+  <circle cx="54" cy="10" r="4" fill="#06B6D4" opacity="0.6"/>
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="50%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
+    </linearGradient>
+    <radialGradient id="glowGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
