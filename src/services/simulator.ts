@@ -119,14 +119,15 @@ function generateHistoricalTelemetry(
 // Generate historical readings for standard charts (e.g., 24 hours or 7 days)
 export function generateHistory(
   node: NodeConfig,
-  hours: number = 24,
-  intervalMinutes: number = 30
+  hours: number = 24
 ): TelemetryReading[] {
   const history: TelemetryReading[] = [];
-  const totalPoints = (hours * 60) / intervalMinutes;
+  // Use 2-second intervals for more granular data
+  const intervalSeconds = 2;
+  const totalPoints = (hours * 60 * 60) / intervalSeconds; // Total seconds / interval
 
   for (let i = totalPoints; i >= 0; i--) {
-    const timeOffsetMs = i * intervalMinutes * 60 * 1000;
+    const timeOffsetMs = i * intervalSeconds * 1000;
     history.push(generateHistoricalTelemetry(node, timeOffsetMs));
   }
 

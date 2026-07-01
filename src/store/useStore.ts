@@ -436,7 +436,7 @@ export const useStore = create<VermIQState>((set, get) => ({
 
 // Initialize initial cache histories
 SIMULATED_NODES.forEach((node) => {
-  const history = generateHistory(node, 24, 30); // 24 hours of history, 30 min intervals
+  const history = generateHistory(node, 1); // 1 hour of history with 2-second intervals
   const lastHistoricalReading = history.length > 0 ? history[history.length - 1] : null;
 
   useStore.setState((state) => ({
